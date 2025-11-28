@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Khách Sạn Cao Cấp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(to bottom, #e0f7fa 0%, #ffffff 100%); }
+        
+        /* Header */
+        header { background: linear-gradient(135deg, #0277bd 0%, #01579b 100%); box-shadow: 0 8px 32px rgba(1,87,155,0.2); position: sticky; top: 0; z-index: 1000; }
+        .header-container { max-width: 1200px; margin: 0 auto; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { color: white; font-size: 26px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 12px; }
+        .logo i { font-size: 32px; }
+        .nav-menu { display: flex; gap: 35px; align-items: center; }
+        .nav-item { color: white; text-decoration: none; font-weight: 500; transition: all 0.3s; padding: 8px 16px; border-radius: 8px; }
+        .nav-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+        .auth-buttons { display: flex; gap: 15px; align-items: center; }
+        .btn-register { background: transparent; color: white; padding: 10px 25px; border-radius: 25px; font-weight: 600; transition: all 0.3s; border: 2px solid white; }
+        .btn-register:hover { background: white; color: #0277bd; transform: scale(1.05); }
+        .btn-login { background: white; color: #0277bd; padding: 10px 25px; border-radius: 25px; font-weight: 600; transition: all 0.3s; border: 2px solid white; }
+        .btn-login:hover { background: transparent; color: white; transform: scale(1.05); }
+        
+        /* Main Content */
+        main { min-height: calc(100vh - 200px); padding: 40px 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        /* Footer */
+        footer { background: linear-gradient(135deg, #01579b 0%, #0277bd 100%); color: white; padding: 40px 20px; margin-top: 60px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+        .footer-section h3 { margin-bottom: 20px; font-size: 18px; color: #4dd0e1; }
+        .footer-section p, .footer-section a { color: #cbd5e0; line-height: 1.8; text-decoration: none; display: block; transition: color 0.3s; }
+        .footer-section a:hover { color: white; padding-left: 5px; }
+        .footer-bottom { text-align: center; padding-top: 30px; margin-top: 30px; border-top: 1px solid #2d3748; color: #a0aec0; }
+        
+        /* Mobile Menu */
+        .mobile-toggle { display: none; background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+        @@media (max-width: 768px) {
+            .nav-menu { display: none; flex-direction: column; position: absolute; top: 80px; left: 0; right: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; }
+            .nav-menu.active { display: flex; }
+            .mobile-toggle { display: block; }
+            .footer-container { grid-template-columns: 1fr; }
+        }
+        
+        /* Animations */
+        @@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        main { animation: fadeIn 0.5s ease; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <a href="@Url.Action("Index", "Home")" class="logo">
+                <i class="fas fa-hotel"></i>
+                <span>Khách Sạn Cao Cấp</span>
+            </a>
+            <button class="mobile-toggle" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav-menu" id="navMenu">
+                <a href="@Url.Action("Index", "Home")" class="nav-item">
+                    <i class="fas fa-home"></i> Trang chủ
+                </a>
+                <a href="@Url.Action("DanhSachPhong", "Phong")" class="nav-item">
+                    <i class="fas fa-bed"></i> Phòng
+                </a>
+                <a href="@Url.Action("DichVu", "DichVu")" class="nav-item">
+                    <i class="fas fa-concierge-bell"></i> Dịch vụ
+                </a>
+                <a href="@Url.Action("GioiThieu", "Home")" class="nav-item">
+                    <i class="fas fa-info-circle"></i> Giới thiệu
+                </a>
+                <a href="@Url.Action("LienHe", "Home")" class="nav-item">
+                    <i class="fas fa-phone"></i> Liên hệ
+                </a>
+                <div class="auth-buttons">
+                    <a href="@Url.Action("Register", "Account")" class="nav-item btn-register">
+                        <i class="fas fa-user-plus"></i> Đăng ký
+                    </a>
+                    <a href="@Url.Action("Login", "Account")" class="nav-item btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3><i class="fas fa-hotel"></i> Khách Sạn Cao Cấp</h3>
+                <p>Mang đến trải nghiệm nghỉ dưỡng đẳng cấp với dịch vụ tận tâm và cơ sở vật chất hiện đại.</p>
+                <p style="margin-top: 15px;">
+                    <i class="fas fa-map-marker-alt"></i> 123 Đường ABC, Quận 1, TP.HCM<br>
+                    <i class="fas fa-phone"></i> 0123 456 789<br>
+                    <i class="fas fa-envelope"></i> info@khachsan.com
+                </p>
+            </div>
+            <div class="footer-section">
+                <h3>Liên kết nhanh</h3>
+                <a href="@Url.Action("DanhSachPhong", "Phong")">Đặt phòng</a>
+                <a href="@Url.Action("DichVu", "DichVu")">Dịch vụ</a>
+                <a href="@Url.Action("GioiThieu", "Home")">Về chúng tôi</a>
+                <a href="@Url.Action("ChinhSach", "Home")">Chính sách</a>
+                <a href="@Url.Action("LienHe", "Home")">Liên hệ</a>
+            </div>
+            <div class="footer-section">
+                <h3>Hỗ trợ</h3>
+                <a href="#">Câu hỏi thường gặp</a>
+                <a href="#">Hướng dẫn đặt phòng</a>
+                <a href="#">Chính sách hủy phòng</a>
+                <a href="#">Chính sách thanh toán</a>
+                <a href="#">Điều khoản sử dụng</a>
+            </div>
+            <div class="footer-section">
+                <h3>Kết nối với chúng tôi</h3>
+                <p>
+                    <a href="#" style="display: inline-block; margin-right: 15px;"><i class="fab fa-facebook fa-2x"></i></a>
+                    <a href="#" style="display: inline-block; margin-right: 15px;"><i class="fab fa-instagram fa-2x"></i></a>
+                    <a href="#" style="display: inline-block; margin-right: 15px;"><i class="fab fa-twitter fa-2x"></i></a>
+                    <a href="#" style="display: inline-block;"><i class="fab fa-youtube fa-2x"></i></a>
+                </p>
+                <h3 style="margin-top: 25px;">Đăng ký nhận tin</h3>
+                <p>Nhận thông tin ưu đãi mới nhất</p>
+                <input type="email" placeholder="Email của bạn" style="width: 100%; padding: 10px; border-radius: 5px; border: none; margin-top: 10px;">
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; @DateTime.Now.Year Khách Sạn Cao Cấp. All rights reserved.</p>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script>
+        function toggleMenu() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

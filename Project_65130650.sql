@@ -23,7 +23,6 @@ CREATE TABLE NguoiDung (
     ngayCapNhat DATETIME DEFAULT GETDATE()
 );
 GO
-
 -- =============================================
 -- Bảng: LoaiPhong
 -- Mô tả: Loại phòng khách sạn
@@ -42,7 +41,6 @@ CREATE TABLE LoaiPhong (
     ngayTao DATETIME DEFAULT GETDATE()
 );
 GO
-
 -- =============================================
 -- Bảng: Phong
 -- Mô tả: Phòng khách sạn
@@ -61,7 +59,6 @@ CREATE TABLE Phong (
     FOREIGN KEY (maLoaiPhong) REFERENCES LoaiPhong(maLoaiPhong)
 );
 GO
-
 -- =============================================
 -- Bảng: DatPhong
 -- Mô tả: Quản lý đặt phòng
@@ -73,7 +70,7 @@ CREATE TABLE DatPhong (
     ngayNhanPhong DATETIME NOT NULL,
     ngayTraPhong DATETIME NOT NULL,
     soKhach INT NOT NULL,
-    tongTien DECIMAL(18,2) NOT NULL,
+    tienPhong DECIMAL(18,2) NOT NULL,  -- Đổi tên từ tongTien: Tiền phòng đã thỏa thuận tại thời điểm đặt
     tienDatCoc DECIMAL(18,2) DEFAULT 0,
     trangThaiDatPhong NVARCHAR(20) NOT NULL DEFAULT N'Chờ xác nhận'
         CHECK (trangThaiDatPhong IN (N'Chờ xác nhận', N'Đã xác nhận', N'Đã nhận phòng', N'Đã trả phòng', N'Đã hủy')),
@@ -81,15 +78,15 @@ CREATE TABLE DatPhong (
     ngayDat DATETIME DEFAULT GETDATE(),
     nguoiTao VARCHAR(5), -- Người tạo đặt phòng: Admin hoặc chính khách hàng
     ngayCapNhat DATETIME DEFAULT GETDATE(),
-    lyDoHuy NVARCHAR(500),
+    lyDoHuy NVARCHAR(500),  
     ngayHuy DATETIME,
     FOREIGN KEY (maKhachHang) REFERENCES NguoiDung(maNguoiDung),
     FOREIGN KEY (maPhong) REFERENCES Phong(maPhong),
     FOREIGN KEY (nguoiTao) REFERENCES NguoiDung(maNguoiDung),
-    CONSTRAINT CHK_ngayDatPhong CHECK (ngayTraPhong > ngayNhanPhong)
+    CONSTRAINT CHK_ngayDatPhong CHECK (ngayTraPhong > ngayNhanPhong),
+    CONSTRAINT CHK_tienDatCoc CHECK (tienDatCoc <= tienPhong AND tienDatCoc >= 0)
 );
 GO
-
 -- =============================================
 -- Bảng: DichVu
 -- Mô tả: Dịch vụ khách sạn
@@ -99,13 +96,12 @@ CREATE TABLE DichVu (
     tenDichVu NVARCHAR(100) NOT NULL,
     moTa NVARCHAR(500),
     giaDichVu DECIMAL(18,2) NOT NULL,
-    loaiDichVu NVARCHAR(50), -- Spa, Nhà hàng, Giặt là, Phục vụ phòng.
+    loaiDichVu NVARCHAR(50), -- Spa, Nhà hàng, Giặt ủi, Phục vụ phòng.
     trangThaiHoatDong BIT DEFAULT 1,
     hinhAnh NVARCHAR(255),
     ngayTao DATETIME DEFAULT GETDATE()
 );
 GO
-
 -- =============================================
 -- Bảng: DichVuDatPhong
 -- Mô tả: Dịch vụ được sử dụng trong đặt phòng
@@ -120,28 +116,40 @@ CREATE TABLE DichVuDatPhong (
     ngaySuDung DATETIME DEFAULT GETDATE(),
     ghiChu NVARCHAR(500),
     FOREIGN KEY (maDatPhong) REFERENCES DatPhong(maDatPhong),
-    FOREIGN KEY (maDichVu) REFERENCES DichVu(maDichVu)
+    FOREIGN KEY (maDichVu) REFERENCES DichVu(maDichVu),
+    -- Validation: Đảm bảo thanhTien = soLuong × donGia
+    CONSTRAINT CHK_ThanhTienDichVu CHECK (thanhTien = soLuong * donGia),
+    CONSTRAINT CHK_SoLuongDichVu CHECK (soLuong > 0)
 );
 GO
-
 -- =============================================
 -- Bảng: ThanhToan
--- Mô tả: Thanh toán
+-- Mô tả: Thanh toán (Hỗ trợ thanh toán từng phần)
+-- LƯU Ý: Một đơn đặt phòng có thể có nhiều lần thanh toán (đặt cọc, thanh toán cuối)
 -- =============================================
 CREATE TABLE ThanhToan (
     maThanhToan VARCHAR(5) PRIMARY KEY,
     maDatPhong VARCHAR(5) NOT NULL,
     ngayThanhToan DATETIME DEFAULT GETDATE(),
+    -- Số tiền thanh toán lần này
     soTien DECIMAL(18,2) NOT NULL,
+    -- Thông tin chi tiết (tùy chọn - dùng để ghi chú)
+    -- Chỉ điền đầy đủ trong lần thanh toán cuối cùng
+    tienPhong DECIMAL(18,2) DEFAULT 0,      -- Tổng tiền phòng (chỉ ghi chú)
+    tienDichVu DECIMAL(18,2) DEFAULT 0,     -- Tổng tiền dịch vụ (chỉ ghi chú)
+    giamGia DECIMAL(18,2) DEFAULT 0,        -- Giảm giá nếu có
     phuongThucThanhToan NVARCHAR(50) NOT NULL 
-        CHECK (phuongThucThanhToan IN (N'Tiền mặt', N'Chuyển khoản', N'Ví điện tử')),
-    trangThaiThanhToan NVARCHAR(20) DEFAULT 'Thành công'
+        CHECK (phuongThucThanhToan IN (N'Tiền mặt', N'Chuyển khoản')),
+    trangThaiThanhToan NVARCHAR(20) DEFAULT N'Thành công'
         CHECK (trangThaiThanhToan IN (N'Chờ xử lý', N'Thành công', N'Thất bại', N'Đã hoàn tiền')),
     maGiaoDich NVARCHAR(100),
     ghiChu NVARCHAR(500),
     nguoiXuLy VARCHAR(5), -- Admin xử lý thanh toán
     FOREIGN KEY (maDatPhong) REFERENCES DatPhong(maDatPhong),
-    FOREIGN KEY (nguoiXuLy) REFERENCES NguoiDung(maNguoiDung)
+    FOREIGN KEY (nguoiXuLy) REFERENCES NguoiDung(maNguoiDung),
+    -- Validation: Số tiền phải > 0
+    CONSTRAINT CHK_SoTienThanhToan CHECK (soTien > 0),
+    CONSTRAINT CHK_GiamGiaThanhToan CHECK (giamGia >= 0)
 );
 GO
 INSERT INTO NguoiDung (maNguoiDung, hoTen, email, soDienThoai, matKhau, vaiTro, diaChi, ngaySinh, gioiTinh, trangThaiHoatDong)
@@ -275,10 +283,10 @@ VALUES
 ('DV010', N'Room Service - Bữa trưa', N'Bữa trưa phục vụ tại phòng', 500000, N'Phục vụ phòng', 'room-lunch.jpg', 1),
 ('DV011', N'Room Service - Bữa tối', N'Bữa tối phục vụ tại phòng', 650000, N'Phục vụ phòng', 'room-dinner.jpg', 1),
 ('DV012', N'Room Service - Đồ uống', N'Đồ uống phục vụ tại phòng', 150000, N'Phục vụ phòng', 'room-drinks.jpg', 1),
-('DV013', N'Giặt khô', N'Dịch vụ giặt khô quần áo cao cấp', 80000, N'Giặt là', 'dry-clean.jpg', 1),
-('DV014', N'Giặt ủi thường', N'Giặt ủi quần áo thông thường', 50000, N'Giặt là', 'laundry.jpg', 1),
-('DV015', N'Ủi áo sơ mi', N'Ủi áo sơ mi chuyên nghiệp', 30000, N'Giặt là', 'iron-shirt.jpg', 1),
-('DV016', N'Ủi vest/suit', N'Ủi vest hoặc bộ suit', 80000, N'Giặt là', 'iron-suit.jpg', 1),
+('DV013', N'Giặt khô', N'Dịch vụ giặt khô quần áo cao cấp', 80000, N'Giặt ủi', 'dry-clean.jpg', 1),
+('DV014', N'Giặt ủi thường', N'Giặt ủi quần áo thông thường', 50000, N'Giặt ủi', 'laundry.jpg', 1),
+('DV015', N'Ủi áo sơ mi', N'Ủi áo sơ mi chuyên nghiệp', 30000, N'Giặt ủi', 'iron-shirt.jpg', 1),
+('DV016', N'Ủi vest/suit', N'Ủi vest hoặc bộ suit', 80000, N'Giặt ủi', 'iron-suit.jpg', 1),
 ('DV017', N'Đưa đón sân bay - 1 chiều', N'Dịch vụ đưa đón sân bay Tân Sơn Nhất', 500000, N'Vận chuyển', 'airport-transfer.jpg', 1),
 ('DV018', N'Đưa đón sân bay - Khứ hồi', N'Dịch vụ đưa đón sân bay khứ hồi', 900000, N'Vận chuyển', 'airport-roundtrip.jpg', 1),
 ('DV019', N'Thuê xe 4 chỗ - Nửa ngày', N'Thuê xe 4 chỗ có tài xế nửa ngày', 1200000, N'Vận chuyển', 'car-halfday.jpg', 1),
@@ -299,7 +307,7 @@ GO
 -- 5. DatPhong - 30 bookings
 -- Format: DP001, DP002, ..., DP030
 -- =============================================
-INSERT INTO DatPhong (maDatPhong, maKhachHang, maPhong, ngayNhanPhong, ngayTraPhong, soKhach, tongTien, tienDatCoc, trangThaiDatPhong, yeuCauDacBiet, nguoiTao, lyDoHuy, ngayHuy)
+INSERT INTO DatPhong (maDatPhong, maKhachHang, maPhong, ngayNhanPhong, ngayTraPhong, soKhach, tienPhong, tienDatCoc, trangThaiDatPhong, yeuCauDacBiet, nguoiTao, lyDoHuy, ngayHuy)
 VALUES 
 ('DP001', 'ND006', 'P0002', '2025-12-01', '2025-12-03', 2, 3000000, 1000000, N'Đã xác nhận', N'Yêu cầu phòng tầng cao', 'ND006', NULL, NULL),
 ('DP002', 'ND007', 'P0003', '2025-12-02', '2025-12-05', 2, 4500000, 1500000, N'Đã nhận phòng', N'Yêu cầu 2 chìa khóa phòng', 'ND001', NULL, NULL),
@@ -372,40 +380,77 @@ VALUES
 GO
 
 -- =============================================
--- 7. ThanhToan - 30 payment records
--- Format: TT001, TT002, ..., TT030
+-- 7. ThanhToan - 36 payment records
+-- Format: TT001, TT002, ..., TT036
+-- LƯU Ý: soTien = số tiền thanh toán lần này (hỗ trợ partial payment)
 -- =============================================
-INSERT INTO ThanhToan (maThanhToan, maDatPhong, ngayThanhToan, soTien, phuongThucThanhToan, trangThaiThanhToan, maGiaoDich, ghiChu, nguoiXuLy)
+INSERT INTO ThanhToan (maThanhToan, maDatPhong, ngayThanhToan, soTien, tienPhong, tienDichVu, giamGia, phuongThucThanhToan, trangThaiThanhToan, maGiaoDich, ghiChu, nguoiXuLy)
 VALUES 
-('TT001', 'DP001', '2025-11-28', 1000000, N'Chuyển khoản', N'Thành công', 'TXN001', N'Thanh toán đặt cọc', 'ND001'),
-('TT002', 'DP001', '2025-12-03', 2000000, N'Tiền mặt', N'Thành công', 'TXN002', N'Thanh toán phần còn lại khi check-out', 'ND002'),
-('TT003', 'DP002', '2025-11-30', 1500000, N'Ví điện tử', N'Thành công', 'TXN003', N'Đặt cọc qua MoMo', 'ND001'),
-('TT004', 'DP003', '2025-12-01', 2000000, N'Chuyển khoản', N'Thành công', 'TXN004', N'Đặt cọc', 'ND003'),
-('TT005', 'DP004', '2025-12-02', 2500000, N'Tiền mặt', N'Thành công', 'TXN005', N'Đặt cọc tiền mặt', 'ND001'),
-('TT006', 'DP005', '2025-12-03', 3000000, N'Chuyển khoản', N'Thành công', 'TXN006', N'Đặt cọc honeymoon package', 'ND002'),
-('TT007', 'DP006', '2025-12-04', 3000000, N'Ví điện tử', N'Thành công', 'TXN007', N'Thanh toán qua ZaloPay', 'ND001'),
-('TT008', 'DP007', '2025-12-05', 4000000, N'Chuyển khoản', N'Thành công', 'TXN008', N'Corporate payment', 'ND003'),
-('TT009', 'DP008', '2025-12-06', 3500000, N'Tiền mặt', N'Thành công', 'TXN009', N'Đặt cọc', 'ND002'),
-('TT010', 'DP009', '2025-12-07', 4000000, N'Chuyển khoản', N'Thành công', 'TXN010', N'Thanh toán đặt cọc', 'ND001'),
-('TT011', 'DP010', '2025-12-08', 5500000, N'Ví điện tử', N'Thành công', 'TXN011', N'Thanh toán qua VNPay', 'ND004'),
-('TT012', 'DP011', '2025-12-09', 6000000, N'Chuyển khoản', N'Thành công', 'TXN012', N'Honeymoon booking', 'ND002'),
-('TT013', 'DP012', '2025-12-10', 3800000, N'Tiền mặt', N'Thành công', 'TXN013', NULL, 'ND001'),
-('TT014', 'DP013', '2025-12-11', 5500000, N'Chuyển khoản', N'Thành công', 'TXN014', N'Club Suite booking', 'ND003'),
-('TT015', 'DP014', '2025-12-12', 2000000, N'Ví điện tử', N'Thành công', 'TXN015', NULL, 'ND002'),
-('TT016', 'DP015', '2025-12-13', 3000000, N'Tiền mặt', N'Thành công', 'TXN016', NULL, 'ND001'),
-('TT017', 'DP016', '2025-12-14', 12000000, N'Chuyển khoản', N'Thành công', 'TXN017', N'VIP Guest', 'ND005'),
-('TT018', 'DP017', '2025-11-23', 5400000, N'Tiền mặt', N'Thành công', 'TXN018', N'Full payment check-out', 'ND002'),
-('TT019', 'DP018', '2025-11-24', 8400000, N'Chuyển khoản', N'Thành công', 'TXN019', N'Full payment', 'ND001'),
-('TT020', 'DP019', '2025-11-25', 8400000, N'Ví điện tử', N'Thành công', 'TXN020', N'VNPay payment', 'ND003'),
-('TT021', 'DP020', '2025-11-26', 15000000, N'Chuyển khoản', N'Thành công', 'TXN021', N'Corporate booking', 'ND004'),
-('TT022', 'DP021', '2025-12-18', 800000, N'Ví điện tử', N'Chờ xử lý', 'TXN022', N'Đặt cọc chờ xác nhận', 'ND001'),
-('TT023', 'DP022', '2025-12-19', 1000000, N'Chuyển khoản', N'Chờ xử lý', 'TXN023', NULL, 'ND002'),
-('TT024', 'DP023', '2025-12-20', 3800000, N'Tiền mặt', N'Chờ xử lý', 'TXN024', NULL, 'ND001'),
-('TT025', 'DP024', '2025-12-21', 8000000, N'Chuyển khoản', N'Chờ xử lý', 'TXN025', N'Extended stay', 'ND003'),
-('TT026', 'DP025', '2025-11-08', 10000000, N'Chuyển khoản', N'Đã hoàn tiền', 'TXN026', N'Hoàn tiền do khách hủy', 'ND005'),
-('TT027', 'DP026', '2025-12-22', 6500000, N'Ví điện tử', N'Chờ xử lý', 'TXN027', NULL, 'ND002'),
-('TT028', 'DP027', '2025-12-23', 15000000, N'Chuyển khoản', N'Chờ xử lý', 'TXN028', N'Penthouse event', 'ND004'),
-('TT029', 'DP028', '2025-12-24', 20000000, N'Chuyển khoản', N'Chờ xử lý', 'TXN029', N'Villa booking', 'ND005'),
-('TT030', 'DP029', '2025-12-25', 4200000, N'Tiền mặt', N'Chờ xử lý', 'TXN030', NULL, 'ND001');
+-- DP001: tienPhong = 3,000,000 (không có dịch vụ)
+('TT001', 'DP001', '2025-11-28', 1000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN001', N'Đặt cọc', 'ND001'),
+('TT002', 'DP001', '2025-12-03', 2000000, 3000000, 0, 0, N'Tiền mặt', N'Thành công', 'TXN002', N'Thanh toán còn lại', 'ND002'),
+-- DP002: tienPhong = 4,500,000, dịch vụ = 2,650,000
+('TT003', 'DP002', '2025-11-30', 1500000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN003', N'Đặt cọc', 'ND001'),
+('TT004', 'DP002', '2025-12-05', 5650000, 4500000, 2650000, 0, N'Tiền mặt', N'Thành công', 'TXN004', N'Check-out (phòng + dịch vụ)', 'ND003'),
+-- DP003: tienPhong = 6,600,000, dịch vụ = 2,400,000
+('TT005', 'DP003', '2025-12-01', 2000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN005', N'Đặt cọc', 'ND003'),
+-- DP004: tienPhong = 7,500,000, dịch vụ = 1,450,000
+('TT006', 'DP004', '2025-12-02', 2500000, 0, 0, 0, N'Tiền mặt', N'Thành công', 'TXN006', N'Đặt cọc', 'ND001'),
+('TT007', 'DP004', '2025-12-07', 6450000, 7500000, 1450000, 0, N'Chuyển khoản', N'Thành công', 'TXN007', N'Check-out (phòng + dịch vụ)', 'ND002'),
+-- DP005: tienPhong = 9,000,000, dịch vụ = 3,200,000
+('TT008', 'DP005', '2025-12-03', 3000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN008', N'Đặt cọc honeymoon', 'ND002'),
+-- DP006: tienPhong = 9,600,000, dịch vụ = 3,100,000
+('TT009', 'DP006', '2025-12-04', 3000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN009', N'Đặt cọc', 'ND001'),
+('TT010', 'DP006', '2025-12-09', 9700000, 9600000, 3100000, 0, N'Tiền mặt', N'Thành công', 'TXN010', N'Check-out (phòng + dịch vụ)', 'ND002'),
+-- DP007: tienPhong = 12,000,000, dịch vụ = 1,550,000
+('TT011', 'DP007', '2025-12-05', 4000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN011', N'Đặt cọc', 'ND003'),
+-- DP008: tienPhong = 10,500,000, dịch vụ = 1,850,000
+('TT012', 'DP008', '2025-12-06', 3500000, 0, 0, 0, N'Tiền mặt', N'Thành công', 'TXN012', N'Đặt cọc', 'ND002'),
+-- DP009: tienPhong = 12,000,000, dịch vụ = 2,800,000
+('TT013', 'DP009', '2025-12-07', 4000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN013', N'Đặt cọc', 'ND001'),
+('TT014', 'DP009', '2025-12-12', 10800000, 12000000, 2800000, 0, N'Tiền mặt', N'Thành công', 'TXN014', N'Check-out (phòng + dịch vụ)', 'ND004'),
+-- DP010: tienPhong = 16,500,000, dịch vụ = 1,650,000
+('TT015', 'DP010', '2025-12-08', 5500000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN015', N'Đặt cọc', 'ND004'),
+-- DP011: tienPhong = 18,000,000, dịch vụ = 3,100,000
+('TT016', 'DP011', '2025-12-09', 6000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN016', N'Đặt cọc honeymoon', 'ND002'),
+-- DP012: tienPhong = 11,400,000, dịch vụ = 2,500,000
+('TT017', 'DP012', '2025-12-10', 3800000, 0, 0, 0, N'Tiền mặt', N'Thành công', 'TXN017', N'Đặt cọc', 'ND001'),
+('TT018', 'DP012', '2025-12-15', 10100000, 11400000, 2500000, 0, N'Chuyển khoản', N'Thành công', 'TXN018', N'Check-out (phòng + dịch vụ)', 'ND002'),
+-- DP013: tienPhong = 16,500,000, dịch vụ = 2,650,000
+('TT019', 'DP013', '2025-12-11', 5500000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN019', N'Đặt cọc', 'ND003'),
+-- DP014: tienPhong = 6,000,000, dịch vụ = 1,450,000
+('TT020', 'DP014', '2025-12-12', 2000000, 0, 0, 0, N'Tiền mặt', N'Thành công', 'TXN020', N'Đặt cọc', 'ND002'),
+('TT021', 'DP014', '2025-12-17', 5450000, 6000000, 1450000, 0, N'Chuyển khoản', N'Thành công', 'TXN021', N'Check-out (phòng + dịch vụ)', 'ND001'),
+-- DP015: tienPhong = 9,600,000, dịch vụ = 1,850,000
+('TT022', 'DP015', '2025-12-13', 3000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN022', N'Đặt cọc', 'ND001'),
+-- DP016: tienPhong = 36,000,000, dịch vụ = 3,900,000
+('TT023', 'DP016', '2025-12-14', 12000000, 0, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN023', N'Đặt cọc VIP', 'ND005'),
+-- DP017: tienPhong = 5,400,000 (ĐÃ TRẢ PHÒNG)
+('TT024', 'DP017', '2025-11-23', 5400000, 5400000, 0, 0, N'Tiền mặt', N'Thành công', 'TXN024', N'Full payment', 'ND002'),
+-- DP018: tienPhong = 8,400,000 (ĐÃ TRẢ PHÒNG)
+('TT025', 'DP018', '2025-11-24', 8400000, 8400000, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN025', N'Full payment', 'ND001'),
+-- DP019: tienPhong = 8,400,000 (ĐÃ TRẢ PHÒNG)
+('TT026', 'DP019', '2025-11-25', 8400000, 8400000, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN026', N'Full payment', 'ND003'),
+-- DP020: tienPhong = 15,000,000 (ĐÃ TRẢ PHÒNG)
+('TT027', 'DP020', '2025-11-26', 15000000, 15000000, 0, 0, N'Chuyển khoản', N'Thành công', 'TXN027', N'Corporate booking', 'ND004'),
+-- DP021: tienPhong = 2,400,000 (CHỜ XÁC NHẬN)
+('TT028', 'DP021', '2025-12-18', 800000, 0, 0, 0, N'Chuyển khoản', N'Chờ xử lý', 'TXN028', N'Đặt cọc', 'ND001'),
+-- DP022: tienPhong = 3,000,000 (CHỜ XÁC NHẬN)
+('TT029', 'DP022', '2025-12-19', 1000000, 0, 0, 0, N'Chuyển khoản', N'Chờ xử lý', 'TXN029', N'Đặt cọc', 'ND002'),
+-- DP023: tienPhong = 11,400,000 (CHỜ XÁC NHẬN)
+('TT030', 'DP023', '2025-12-20', 3800000, 0, 0, 0, N'Tiền mặt', N'Chờ xử lý', 'TXN030', N'Đặt cọc', 'ND001'),
+-- DP024: tienPhong = 24,000,000 (CHỜ XÁC NHẬN)
+('TT031', 'DP024', '2025-12-21', 8000000, 0, 0, 0, N'Chuyển khoản', N'Chờ xử lý', 'TXN031', N'Đặt cọc', 'ND003'),
+-- DP025: tienPhong = 30,000,000 (ĐÃ HỦY - HOÀN TIỀN)
+('TT032', 'DP025', '2025-11-08', 10000000, 0, 0, 0, N'Chuyển khoản', N'Đã hoàn tiền', 'TXN032', N'Hoàn tiền do hủy', 'ND005'),
+-- DP026: tienPhong = 19,500,000 (CHỜ XÁC NHẬN)
+('TT033', 'DP026', '2025-12-22', 6500000, 0, 0, 0, N'Chuyển khoản', N'Chờ xử lý', 'TXN033', N'Đặt cọc', 'ND002'),
+-- DP027: tienPhong = 45,000,000 (CHỜ XÁC NHẬN)
+('TT034', 'DP027', '2025-12-23', 15000000, 0, 0, 0, N'Chuyển khoản', N'Chờ xử lý', 'TXN034', N'Đặt cọc Penthouse', 'ND004'),
+-- DP028: tienPhong = 60,000,000 (CHỜ XÁC NHẬN)
+('TT035', 'DP028', '2025-12-24', 20000000, 0, 0, 0, N'Chuyển khoản', N'Chờ xử lý', 'TXN035', N'Đặt cọc Villa', 'ND005'),
+-- DP029: tienPhong = 12,600,000 (CHỜ XÁC NHẬN)
+('TT036', 'DP029', '2025-12-25', 4200000, 0, 0, 0, N'Tiền mặt', N'Chờ xử lý', 'TXN036', N'Đặt cọc', 'ND001');
 GO
+
 
