@@ -1,7 +1,5 @@
 # HỆ THỐNG QUẢN LÝ ĐẶT PHÒNG KHÁCH SẠN
-
 ## 📌 Tổng Quan
-
 Hệ thống quản lý đặt phòng khách sạn hỗ trợ hai hình thức đặt phòng:
 - **Online**: Khách hàng tự đặt phòng qua website/app
 - **Offline**: Admin tạo đặt phòng trực tiếp tại quầy lễ tân
@@ -283,7 +281,6 @@ Hệ thống có 2 vai trò chính:
   - Ví điện tử (MoMo, ZaloPay, VNPay)
 - ✅ Đối chiếu mã giao dịch
 - ✅ Cập nhật trạng thái: "Chờ xử lý" → "Thành công"
-
 ### G.5. Báo cáo
 - ✅ Xem lịch sử thanh toán theo đơn đặt phòng
 - ✅ Báo cáo doanh thu:
@@ -313,9 +310,6 @@ Hệ thống có 2 vai trò chính:
   - Doanh thu dịch vụ theo loại
   - Tổng doanh thu
   - Biểu đồ doanh thu theo thời gian
-- ✅ **Top khách hàng thân thiết**:
-  - Xếp hạng theo số lần đặt phòng
-  - Xếp hạng theo tổng chi tiêu
 - ✅ **Phòng được đặt nhiều nhất**
 - ✅ **Dịch vụ được sử dụng nhiều nhất**
 - ✅ **Báo cáo tình trạng phòng**:
@@ -480,7 +474,7 @@ Hệ thống có 2 vai trò chính:
   
   **Bước 5: Thanh toán đặt cọc**
   - Chọn phương thức thanh toán
-  - Thanh toán online
+  - Chuyển khoan
   
   **Bước 6: Xác nhận**
   - Ghi nhận `nguoiTao` = mã khách hàng (chính mình)
@@ -603,7 +597,6 @@ Hệ thống có 2 vai trò chính:
 
 ## E. Sử dụng Dịch vụ
 **Bảng: `DichVu`, `DichVuDatPhong`**
-
 ### Chức năng:
 
 ### E.1. Xem danh sách dịch vụ
@@ -889,7 +882,7 @@ Hệ thống có 2 vai trò chính:
 # 🔐 PHÂN QUYỀN RÕ RÀNG
 
 ## ADMIN được phép:
-- ✅ CRUD (Tạo, Đọc, Cập nhật, Xóa) trên TẤT CẢ các bảng
+- ✅ CRUD (Tạo, Đọc, Cập nhật) trên TẤT CẢ các bảng
 - ✅ Xem thông tin của TẤT CẢ khách hàng
 - ✅ Tạo đặt phòng cho BẤT KỲ khách hàng nào
 - ✅ Xác nhận/Từ chối đặt phòng của khách
