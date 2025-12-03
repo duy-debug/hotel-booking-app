@@ -1,0 +1,637 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Hotel Booking</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --ocean-blue: #006494;
+            --ocean-light: #0582ca;
+            --ocean-medium: #00a6fb;
+            --ocean-bright: #0fc2ff;
+            --ocean-sky: #83d7ff;
+            --white: #ffffff;
+            --light-bg: #f0f9ff;
+            --text-dark: #1a1a2e;
+            --text-medium: #4a5568;
+            --text-light: #718096;
+            --shadow: rgba(0, 100, 148, 0.1);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #ffffff;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .customer-container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation Bar */
+        .top-navbar {
+            background: #ffffff;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 12px var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--ocean-bright);
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: translateY(-1px);
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-bright) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(0, 100, 148, 0.3);
+        }
+
+        .logo-text h1 {
+            font-size: 26px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-bright) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            color: var(--text-light);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* Navigation Menu */
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 35px;
+        }
+
+        .nav-menu a {
+            color: var(--text-medium);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 8px 0;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ocean-blue) 0%, var(--ocean-bright) 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--ocean-blue);
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .nav-menu a.active {
+            color: var(--ocean-blue);
+        }
+
+        /* User Section */
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-icon {
+            position: relative;
+            cursor: pointer;
+            width: 42px;
+            height: 42px;
+            background: var(--light-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-icon:hover {
+            background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-bright) 100%);
+            box-shadow: 0 4px 15px rgba(0, 100, 148, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .nav-icon i {
+            font-size: 18px;
+            color: var(--ocean-blue);
+            transition: color 0.3s ease;
+        }
+
+        .nav-icon:hover i {
+            color: white;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.4);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .user-profile:hover {
+            background: var(--light-bg);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ocean-blue) 0%, var(--ocean-bright) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 100, 148, 0.3);
+            border: 3px solid white;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 15px;
+            color: var(--text-dark);
+        }
+
+        .user-role {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .dropdown-icon {
+            margin-left: 8px;
+            font-size: 12px;
+            color: var(--text-light);
+            transition: transform 0.3s ease;
+        }
+
+        .user-profile:hover .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        /* User Dropdown */
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 15px;
+            background: white;
+            border-radius: 16px;
+            min-width: 240px;
+            box-shadow: 0 10px 40px var(--shadow);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 100, 148, 0.1);
+        }
+
+        .user-profile:hover .user-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--light-bg);
+            text-align: center;
+        }
+
+        .dropdown-header h3 {
+            font-size: 16px;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+        }
+
+        .dropdown-header p {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .user-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 14px 20px;
+            color: var(--text-medium);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .user-dropdown a i {
+            font-size: 16px;
+            width: 20px;
+            color: var(--ocean-blue);
+        }
+
+        .user-dropdown a:hover {
+            background: var(--light-bg);
+            color: var(--ocean-blue);
+            padding-left: 25px;
+        }
+
+        .user-dropdown a:last-child {
+            border-top: 1px solid var(--light-bg);
+            color: #ff4757;
+            border-radius: 0 0 16px 16px;
+        }
+
+        .user-dropdown a:last-child i {
+            color: #ff4757;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px;
+            width: 100%;
+        }
+
+        /* Footer */
+        .footer {
+            background: #f8fafc;
+            color: var(--text-dark);
+            padding: 40px 0 24px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .footer-section p {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section ul li a {
+            color: var(--text-medium);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-section ul li a:hover {
+            color: white;
+            padding-left: 10px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            width: 38px;
+            height: 38px;
+            background: #e0f2fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--ocean-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #e5e7eb;
+            color: var(--text-medium);
+        }
+
+        /* Responsive */
+        @@media (max-width: 1024px) {
+            .navbar-content {
+                padding: 0 20px;
+            }
+
+            .nav-menu {
+                gap: 20px;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .user-info {
+                display: none;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .main-content > * {
+            animation: fadeInUp 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="customer-container">
+        <!-- Top Navigation -->
+        <header class="top-navbar">
+            <div class="navbar-content">
+                <a href="@Url.Action("Index", "Home", new { area = "Customer" })" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Hotel Luxury</h1>
+                        <p>Your Perfect Stay Awaits</p>
+                    </div>
+                </a>
+
+                <nav class="nav-menu">
+                    <a href="@Url.Action("Index", "Home", new { area = "Customer" })" class="active">
+                        <i class="fas fa-home"></i> Trang Chủ
+                    </a>
+                    <a href="@Url.Action("SearchRooms", "Room", new { area = "Customer" })">
+                        <i class="fas fa-search"></i> Tìm Phòng
+                    </a>
+                    <a href="@Url.Action("MyBookings", "Booking", new { area = "Customer" })">
+                        <i class="fas fa-calendar-check"></i> Đơn Của Tôi
+                    </a>
+                    <a href="@Url.Action("Services", "Service", new { area = "Customer" })">
+                        <i class="fas fa-concierge-bell"></i> Dịch Vụ
+                    </a>
+                    <a href="@Url.Action("Contact", "Home", new { area = "Customer" })">
+                        <i class="fas fa-envelope"></i> Liên Hệ
+                    </a>
+                </nav>
+
+                <div class="user-section">
+                    <div class="nav-icon">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">3</span>
+                    </div>
+
+                    <div class="nav-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            @{
+                                var userName = Session["UserName"]?.ToString() ?? "User";
+                                var firstLetter = userName.Substring(0, 1).ToUpper();
+                            }
+                            @firstLetter
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">@userName</div>
+                            <div class="user-role">Khách hàng</div>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+
+                        <div class="user-dropdown">
+                            <div class="dropdown-header">
+                                <h3>@userName</h3>
+                                <p>@(Session["UserEmail"]?.ToString() ?? "customer@hotel.com")</p>
+                            </div>
+                            <a href="@Url.Action("Profile", "Account", new { area = "Customer" })">
+                                <i class="fas fa-user"></i>
+                                <span>Hồ Sơ Của Tôi</span>
+                            </a>
+                            <a href="@Url.Action("MyBookings", "Booking", new { area = "Customer" })">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Đơn Đặt Phòng</span>
+                            </a>
+                            <a href="@Url.Action("Payments", "Payment", new { area = "Customer" })">
+                                <i class="fas fa-credit-card"></i>
+                                <span>Thanh Toán</span>
+                            </a>
+                            <a href="@Url.Action("Settings", "Account", new { area = "Customer" })">
+                                <i class="fas fa-cog"></i>
+                                <span>Cài Đặt</span>
+                            </a>
+                            <a href="@Url.Action("Logout", "Account65130650", new { area = "" })">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Đăng Xuất</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            @RenderBody()
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Hotel Luxury</h3>
+                    <p>Mang đến trải nghiệm nghỉ dưỡng đẳng cấp với dịch vụ chuyên nghiệp và tiện nghi hiện đại.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Liên Kết</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Giới Thiệu</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Phòng & Giá</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Dịch Vụ</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Khuyến Mãi</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Hỗ Trợ</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Trung Tâm Trợ Giúp</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Điều Khoản</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Chính Sách</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Liên Hệ</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> TP. Hồ Chí Minh</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> 1900 1234</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> info@hotel.vn</a></li>
+                        <li><a href="#"><i class="fas fa-clock"></i> 24/7 Hỗ trợ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 Hotel Luxury. All rights reserved. | Designed with <i class="fas fa-heart"></i> by NTU Student</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Active menu based on current URL
+        $(document).ready(function() {
+            var currentUrl = window.location.href;
+            $('.nav-menu a').each(function() {
+                var link = $(this).attr('href');
+                if (currentUrl.indexOf(link) !== -1 && link !== '#') {
+                    $('.nav-menu a').removeClass('active');
+                    $(this).addClass('active');
+                }
+            });
+        });
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

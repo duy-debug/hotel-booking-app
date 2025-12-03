@@ -1,0 +1,176 @@
+﻿@model Project_65130650.Models.Forms.RegisterForm
+
+<div id="registerModal" class="auth-modal is-hidden" aria-hidden="true" role="dialog" aria-labelledby="registerModalTitle">
+    <div class="auth-modal_backdrop" data-modal-close></div>
+    <div class="auth-modal_panel">
+        <button type="button" class="auth-modal_close" aria-label="Đóng" data-modal-close>
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="auth-card white-bg">
+            <div class="auth-card_header">
+                <div class="auth-card_logo">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div>
+                    <h1 id="registerModalTitle">Đăng Ký</h1>
+                    <p>Tạo tài khoản để bắt đầu đặt phòng nhanh chóng.</p>
+                </div>
+            </div>
+
+            @using (Html.BeginForm("Register", "Account65130650", FormMethod.Post, new { @class = "auth-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "auth-validation" })
+
+                <div class="form-row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.HoTen)
+                        <span class="required">*</span>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user input-icon"></i>
+                            @Html.TextBoxFor(m => m.HoTen, new
+                            {
+                                @class = "form-control",
+                                placeholder = "Nguyễn Văn A"
+                            })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.HoTen, "", new { @class = "field-validation-error" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.SoDienThoai)
+                        <span class="required">*</span>
+                        <div class="input-wrapper">
+                            <i class="fas fa-phone input-icon"></i>
+                            @Html.TextBoxFor(m => m.SoDienThoai, new
+                            {
+                                @class = "form-control",
+                                placeholder = "0901234567"
+                            })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.SoDienThoai, "", new { @class = "field-validation-error" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email)
+                    <span class="required">*</span>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        @Html.TextBoxFor(m => m.Email, new
+                        {
+                            @class = "form-control",
+                            placeholder = "example@email.com",
+                            type = "email"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "field-validation-error" })
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.MatKhau)
+                        <span class="required">*</span>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            @Html.PasswordFor(m => m.MatKhau, new
+                            {
+                                @class = "form-control",
+                                placeholder = "••••••••"
+                            })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "field-validation-error" })
+
+                        <div class="password-strength">
+                            <small>Mật khẩu cần:</small>
+                            <ul>
+                                <li>Tối thiểu 6 ký tự</li>
+                                <li>Chữ hoa và chữ thường</li>
+                                <li>Ít nhất 1 số và 1 ký tự đặc biệt</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.XacNhanMatKhau)
+                        <span class="required">*</span>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock input-icon"></i>
+                            @Html.PasswordFor(m => m.XacNhanMatKhau, new
+                            {
+                                @class = "form-control",
+                                placeholder = "••••••••"
+                            })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.XacNhanMatKhau, "", new { @class = "field-validation-error" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.DiaChi)
+                    <div class="input-wrapper">
+                        <i class="fas fa-map-marker-alt input-icon"></i>
+                        @Html.TextBoxFor(m => m.DiaChi, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Địa chỉ của bạn"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.DiaChi, "", new { @class = "field-validation-error" })
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.NgaySinh)
+                        <div class="input-wrapper">
+                            <i class="fas fa-calendar input-icon"></i>
+                            @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new
+                            {
+                                @class = "form-control",
+                                type = "date"
+                            })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.NgaySinh, "", new { @class = "field-validation-error" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(m => m.GioiTinh)
+                        <div class="input-wrapper">
+                            <i class="fas fa-venus-mars input-icon"></i>
+                            @Html.DropDownListFor(m => m.GioiTinh, new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "-- Chọn giới tính --", Value = "" },
+                                new SelectListItem { Text = "Nam", Value = "Nam" },
+                                new SelectListItem { Text = "Nữ", Value = "Nữ" },
+                                new SelectListItem { Text = "Khác", Value = "Khác" }
+                            }, new { @class = "form-control" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.GioiTinh, "", new { @class = "field-validation-error" })
+                    </div>
+                </div>
+
+                <div class="checkbox-group soft-bg">
+                    @Html.CheckBoxFor(m => m.DongYDieuKhoan, new { id = "agreeTerms" })
+                    <label for="agreeTerms">
+                        Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a>
+                    </label>
+                </div>
+                @Html.ValidationMessageFor(m => m.DongYDieuKhoan, "", new { @class = "field-validation-error" })
+
+                <button type="submit" class="btn-primary w-100">
+                    <i class="fas fa-user-plus"></i> Đăng Ký Ngay
+                </button>
+            }
+
+            <div class="auth-divider">
+                <span>hoặc</span>
+            </div>
+
+            <div class="text-center">
+                Đã có tài khoản?
+                <button type="button" class="link-button" data-open-modal="login">Đăng nhập ngay</button>
+            </div>
+        </div>
+    </div>
+</div>

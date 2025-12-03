@@ -8,7 +8,7 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0F2C9439-F090-418B-80A1-C8FAB82F61B6}</ProjectGuid>
+    <ProjectGuid>{FCFFD701-943A-40F9-810B-9B42F072840B}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -18,7 +18,7 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44356</IISExpressSSLPort>
+    <IISExpressSSLPort>44358</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -128,55 +128,25 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\Home65130650Controller.cs" />
+    <Compile Include="Areas\Customer\Controllers\Home65130650Controller.cs" />
+    <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
+    <Compile Include="Controllers\Account65130650Controller.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\65130650_Model1.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>65130650_Model1.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\65130650_Model1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\65130650_Model1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>65130650_Model1.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DatPhong.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DichVu.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DichVuDatPhong.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\LoaiPhong.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\NguoiDung.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Phong.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ThanhToan.cs">
-      <DependentUpon>65130650_Model1.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Models\DatPhong.cs" />
+    <Compile Include="Models\DichVu.cs" />
+    <Compile Include="Models\DichVuDatPhong.cs" />
+    <Compile Include="Models\Forms\LoginForm.cs" />
+    <Compile Include="Models\Forms\RegisterForm.cs" />
+    <Compile Include="Models\LoaiPhong.cs" />
+    <Compile Include="Models\Model65130650DbContext.cs" />
+    <Compile Include="Models\NguoiDung.cs" />
+    <Compile Include="Models\Phong.cs" />
+    <Compile Include="Models\ThanhToan.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -199,29 +169,35 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\65130650_Model1.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>65130650_Model1.Context.cs</LastGenOutput>
-      <DependentUpon>65130650_Model1.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\65130650_Model1.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>65130650_Model1.edmx</DependentUpon>
-      <LastGenOutput>65130650_Model1.cs</LastGenOutput>
-    </Content>
+    <Content Include="Images\ex.jpg" />
+    <Content Include="Images\hoboi.jpg" />
+    <Content Include="Images\khachsan.jpg" />
+    <Content Include="Images\khonggian.jpg" />
+    <Content Include="Images\khonggian1.jpg" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\nhahang.jpg" />
+    <Content Include="Images\nhahang1.jpg" />
+    <Content Include="Images\nhahang3.jpg" />
+    <Content Include="Images\penthouse.jpg" />
+    <Content Include="Images\quaybar.png" />
+    <Content Include="Images\quaybar1.jpg" />
+    <Content Include="Images\sanhkhachsan.jpg" />
+    <Content Include="Images\phonghangsang.jpeg" />
+    <Content Include="Images\bando.png" />
+    <Content Include="Images\spa.png" />
+    <Content Include="Images\sukien.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
     <Content Include="Scripts\bootstrap.esm.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\65130650_Model1.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>65130650_Model1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\65130650_Model1.edmx.diagram">
-      <DependentUpon>65130650_Model1.edmx</DependentUpon>
-    </Content>
+    <Content Include="Areas\Admin\Views\web.config" />
+    <Content Include="Areas\Customer\Views\web.config" />
+    <Content Include="Areas\Admin\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Admin\Views\Home65130650\Index.cshtml" />
+    <Content Include="Areas\Customer\Views\Home65130650\Index.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -244,15 +220,14 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
-    <Content Include="Views\Shared\_LayoutCustomer.cshtml" />
+    <Content Include="Views\Account65130650\Login.cshtml" />
+    <Content Include="Views\Account65130650\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Images\" />
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Customer\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
@@ -281,9 +256,6 @@
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -300,9 +272,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51117</DevelopmentServerPort>
+          <DevelopmentServerPort>49830</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44356/</IISUrl>
+          <IISUrl>https://localhost:44358/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

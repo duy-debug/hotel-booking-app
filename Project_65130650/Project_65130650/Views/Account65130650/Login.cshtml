@@ -1,0 +1,92 @@
+﻿@model Project_65130650.Models.Forms.LoginForm
+
+<div id="loginModal" class="auth-modal is-hidden" aria-hidden="true" role="dialog" aria-labelledby="loginModalTitle">
+    <div class="auth-modal_backdrop" data-modal-close></div>
+    <div class="auth-modal_panel">
+        <button type="button" class="auth-modal_close" aria-label="Đóng" data-modal-close>
+            <i class="fas fa-times"></i>
+        </button>
+
+        <div class="auth-card white-bg">
+            <div class="auth-card_header">
+                <div class="auth-card_logo">
+                    <i class="fas fa-hotel"></i>
+                </div>
+                <div>
+                    <h1 id="loginModalTitle">Đăng Nhập</h1>
+                    <p>Chào mừng trở lại! Tiếp tục hành trình của bạn.</p>
+                </div>
+            </div>
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="auth-alert success">
+                    <i class="fas fa-check-circle"></i>
+                    <span>@TempData["SuccessMessage"]</span>
+                </div>
+            }
+
+            @using (Html.BeginForm("Login", "Account65130650", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "auth-form" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "auth-validation" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, "Email đăng nhập")
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope input-icon"></i>
+                        @Html.TextBoxFor(m => m.Email, new
+                        {
+                            @class = "form-control",
+                            placeholder = "example@email.com",
+                            autocomplete = "email"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "field-validation-error" })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.MatKhau, "Mật khẩu")
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock input-icon"></i>
+                        @Html.PasswordFor(m => m.MatKhau, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Nhập mật khẩu",
+                            autocomplete = "current-password"
+                        })
+                    </div>
+                    @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "field-validation-error" })
+                </div>
+
+                <div class="forgot-password">
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+
+                <div class="checkbox-group">
+                    @Html.CheckBoxFor(m => m.RememberMe, new { id = "rememberMe" })
+                    @Html.LabelFor(m => m.RememberMe, new { @for = "rememberMe" })
+                </div>
+
+                <button type="submit" class="btn-primary w-100">
+                    <i class="fas fa-sign-in-alt"></i> Đăng Nhập
+                </button>
+            }
+
+            <div class="auth-divider">
+                <span>hoặc</span>
+            </div>
+
+            <div class="text-center">
+                Chưa có tài khoản?
+                <button type="button" class="link-button" data-open-modal="register">Đăng ký ngay</button>
+            </div>
+
+            <div class="trust-badges">
+                <span><i class="fas fa-shield-alt"></i> Bảo mật cao</span>
+                <span><i class="fas fa-credit-card"></i> Thanh toán an toàn</span>
+                <span><i class="fas fa-headset"></i> Hỗ trợ 24/7</span>
+            </div>
+        </div>
+    </div>
+</div>

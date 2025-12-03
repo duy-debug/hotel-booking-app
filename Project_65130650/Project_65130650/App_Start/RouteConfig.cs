@@ -13,6 +13,26 @@ namespace Project_65130650
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // Account Routes (Clean URLs)
+            routes.MapRoute(
+                name: "Login",
+                url: "Login",
+                defaults: new { controller = "Account65130650", action = "Login" }
+            );
+
+            routes.MapRoute(
+                name: "Register",
+                url: "Register",
+                defaults: new { controller = "Account65130650", action = "Register" }
+            );
+
+            routes.MapRoute(
+                name: "Logout",
+                url: "Logout",
+                defaults: new { controller = "Account65130650", action = "Logout" }
+            );
+
+            // Default Route
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
