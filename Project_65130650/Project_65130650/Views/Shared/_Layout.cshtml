@@ -247,7 +247,7 @@
  </head>
 <body class="bg-white min-h-screen flex flex-col">
     <header class="bg-white/80 backdrop-blur border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center py-3">
                 <!-- Logo + title (trái) -->
                 <div class="flex items-center gap-3">
@@ -286,7 +286,7 @@
     </header>
 
     <main class="flex-1">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8 py-0">
             <div class="bg-white rounded-xl border border-slate-200/70 p-6 shadow-xs">
                 @RenderBody()
             </div>
@@ -297,7 +297,7 @@
     </main>
 
     <footer class="bg-white/80 border-t border-slate-200">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs text-slate-500 flex items-center justify-between">
+        <div class="w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs text-slate-500 flex items-center justify-between">
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
             <span>Hotel Booking Management</span>
         </div>
@@ -309,50 +309,58 @@
         (function () {
             var body = document.body;
 
-            function toggleModal(target, open) {
+            // Đóng tất cả modal
+            function closeAllModals() {
+                var allModals = document.querySelectorAll('.auth-modal');
+                allModals.forEach(function (modal) {
+                    modal.classList.remove('is-active');
+                    modal.setAttribute('aria-hidden', 'true');
+                });
+                body.classList.remove('modal-open');
+            }
+
+            // Mở modal theo tên
+            function openModal(target) {
+                // Đóng tất cả modal trước
+                closeAllModals();
+                
                 var modal = document.getElementById(target + 'Modal');
                 if (!modal) return;
 
-                if (open) {
-                    modal.classList.add('is-active');
-                    modal.setAttribute('aria-hidden', 'false');
-                    body.classList.add('modal-open');
-                } else {
-                    modal.classList.remove('is-active');
-                    modal.setAttribute('aria-hidden', 'true');
-                    body.classList.remove('modal-open');
-                }
+                // Mở modal mới
+                modal.classList.add('is-active');
+                modal.setAttribute('aria-hidden', 'false');
+                body.classList.add('modal-open');
+
+                // Focus vào input đầu tiên
+                setTimeout(function() {
+                    var firstInput = modal.querySelector('input:not([type="hidden"])');
+                    if (firstInput) firstInput.focus();
+                }, 100);
             }
 
+            // Xử lý click
             document.addEventListener('click', function (e) {
+                // Mở modal (từ button header hoặc link trong modal)
                 var openBtn = e.target.closest('[data-open-modal]');
                 if (openBtn) {
+                    e.preventDefault();
                     var target = openBtn.getAttribute('data-open-modal');
-                    toggleModal(target, true);
+                    openModal(target);
                     return;
                 }
 
+                // Đóng modal (nút X hoặc click backdrop)
                 var closeBtn = e.target.closest('[data-modal-close]');
                 if (closeBtn) {
-                    var modal = closeBtn.closest('.auth-modal');
-                    if (modal) {
-                        modal.classList.remove('is-active');
-                        modal.setAttribute('aria-hidden', 'true');
-                        body.classList.remove('modal-open');
-                    }
+                    closeAllModals();
                 }
             });
 
+            // Đóng modal khi nhấn Escape
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
-                    var activeModals = document.querySelectorAll('.auth-modal.is-active');
-                    activeModals.forEach(function (modal) {
-                        modal.classList.remove('is-active');
-                        modal.setAttribute('aria-hidden', 'true');
-                    });
-                    if (activeModals.length) {
-                        body.classList.remove('modal-open');
-                    }
+                    closeAllModals();
                 }
             });
         })();

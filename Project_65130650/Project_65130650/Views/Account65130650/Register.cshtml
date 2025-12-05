@@ -2,175 +2,254 @@
 
 <div id="registerModal" class="auth-modal is-hidden" aria-hidden="true" role="dialog" aria-labelledby="registerModalTitle">
     <div class="auth-modal_backdrop" data-modal-close></div>
-    <div class="auth-modal_panel">
+    <div class="auth-modal_panel" style="max-width: 480px;">
         <button type="button" class="auth-modal_close" aria-label="Đóng" data-modal-close>
             <i class="fas fa-times"></i>
         </button>
 
-        <div class="auth-card white-bg">
-            <div class="auth-card_header">
-                <div class="auth-card_logo">
+        <div class="auth-card white-bg" style="padding: 24px; max-height: 85vh; overflow-y: auto;">
+            <div class="auth-card_header" style="margin-bottom: 16px; gap: 12px;">
+                <div class="auth-card_logo" style="width: 48px; height: 48px; font-size: 20px; border-radius: 12px;">
                     <i class="fas fa-user-plus"></i>
                 </div>
                 <div>
-                    <h1 id="registerModalTitle">Đăng Ký</h1>
-                    <p>Tạo tài khoản để bắt đầu đặt phòng nhanh chóng.</p>
+                    <h1 id="registerModalTitle" style="font-size: 20px; margin-bottom: 2px;">Đăng Ký</h1>
+                    <p style="font-size: 13px; margin: 0;">Tạo tài khoản để đặt phòng nhanh chóng</p>
                 </div>
             </div>
 
-            @using (Html.BeginForm("Register", "Account65130650", FormMethod.Post, new { @class = "auth-form" }))
-            {
+            <!-- Thông báo lỗi -->
+            <div id="registerErrorContainer" class="auth-validation" style="display: none; padding: 8px 12px; margin-bottom: 12px; font-size: 13px;">
+                <ul id="registerErrorList" style="margin: 0; padding-left: 16px; color: #dc2626;"></ul>
+            </div>
+
+            <!-- Thông báo thành công -->
+            <div id="registerSuccessContainer" style="display: none; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; color: #166534; font-size: 13px;">
+                <i class="fas fa-check-circle"></i>
+                <span id="registerSuccessMessage"></span>
+            </div>
+
+            <form id="registerForm" class="auth-form">
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "auth-validation" })
 
-                <div class="form-row">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.HoTen)
-                        <span class="required">*</span>
+                <!-- Row 1: Họ tên + SĐT -->
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Họ và tên <span style="color: red;">*</span></label>
                         <div class="input-wrapper">
-                            <i class="fas fa-user input-icon"></i>
-                            @Html.TextBoxFor(m => m.HoTen, new
-                            {
-                                @class = "form-control",
-                                placeholder = "Nguyễn Văn A"
-                            })
+                            <i class="fas fa-user input-icon" style="font-size: 12px; left: 10px;"></i>
+                            @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", placeholder = "Nguyễn Văn A", id = "regHoTen", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
                         </div>
-                        @Html.ValidationMessageFor(m => m.HoTen, "", new { @class = "field-validation-error" })
+                        <span class="field-validation-error" id="regHoTenError" style="font-size: 11px;"></span>
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.SoDienThoai)
-                        <span class="required">*</span>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Số điện thoại <span style="color: red;">*</span></label>
                         <div class="input-wrapper">
-                            <i class="fas fa-phone input-icon"></i>
-                            @Html.TextBoxFor(m => m.SoDienThoai, new
-                            {
-                                @class = "form-control",
-                                placeholder = "0901234567"
-                            })
+                            <i class="fas fa-phone input-icon" style="font-size: 12px; left: 10px;"></i>
+                            @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control", placeholder = "0901234567", id = "regSoDienThoai", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
                         </div>
-                        @Html.ValidationMessageFor(m => m.SoDienThoai, "", new { @class = "field-validation-error" })
+                        <span class="field-validation-error" id="regSoDienThoaiError" style="font-size: 11px;"></span>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email)
-                    <span class="required">*</span>
+                <!-- Row 2: Email -->
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Email <span style="color: red;">*</span></label>
                     <div class="input-wrapper">
-                        <i class="fas fa-envelope input-icon"></i>
-                        @Html.TextBoxFor(m => m.Email, new
-                        {
-                            @class = "form-control",
-                            placeholder = "example@email.com",
-                            type = "email"
-                        })
+                        <i class="fas fa-envelope input-icon" style="font-size: 12px; left: 10px;"></i>
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "example@email.com", type = "email", id = "regEmail", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
                     </div>
-                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "field-validation-error" })
+                    <span class="field-validation-error" id="regEmailError" style="font-size: 11px;"></span>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.MatKhau)
-                        <span class="required">*</span>
+                <!-- Row 3: Mật khẩu + Xác nhận -->
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Mật khẩu <span style="color: red;">*</span></label>
                         <div class="input-wrapper">
-                            <i class="fas fa-lock input-icon"></i>
-                            @Html.PasswordFor(m => m.MatKhau, new
-                            {
-                                @class = "form-control",
-                                placeholder = "••••••••"
-                            })
+                            <i class="fas fa-lock input-icon" style="font-size: 12px; left: 10px;"></i>
+                            @Html.PasswordFor(m => m.MatKhau, new { @class = "form-control", placeholder = "••••••••", id = "regMatKhau", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
                         </div>
-                        @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "field-validation-error" })
-
-                        <div class="password-strength">
-                            <small>Mật khẩu cần:</small>
-                            <ul>
-                                <li>Tối thiểu 6 ký tự</li>
-                                <li>Chữ hoa và chữ thường</li>
-                                <li>Ít nhất 1 số và 1 ký tự đặc biệt</li>
-                            </ul>
-                        </div>
+                        <span class="field-validation-error" id="regMatKhauError" style="font-size: 11px;"></span>
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.XacNhanMatKhau)
-                        <span class="required">*</span>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Xác nhận MK <span style="color: red;">*</span></label>
                         <div class="input-wrapper">
-                            <i class="fas fa-lock input-icon"></i>
-                            @Html.PasswordFor(m => m.XacNhanMatKhau, new
-                            {
-                                @class = "form-control",
-                                placeholder = "••••••••"
-                            })
+                            <i class="fas fa-lock input-icon" style="font-size: 12px; left: 10px;"></i>
+                            @Html.PasswordFor(m => m.XacNhanMatKhau, new { @class = "form-control", placeholder = "••••••••", id = "regXacNhanMatKhau", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
                         </div>
-                        @Html.ValidationMessageFor(m => m.XacNhanMatKhau, "", new { @class = "field-validation-error" })
+                        <span class="field-validation-error" id="regXacNhanMatKhauError" style="font-size: 11px;"></span>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(m => m.DiaChi)
+                <!-- Gợi ý mật khẩu -->
+                <div style="background: #f8fafc; padding: 6px 10px; border-radius: 6px; margin-bottom: 10px; font-size: 11px; color: #64748b;">
+                    <i class="fas fa-info-circle"></i> Mật khẩu: tối thiểu 6 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt
+                </div>
+
+                <!-- Row 4: Địa chỉ -->
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Địa chỉ</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-map-marker-alt input-icon"></i>
-                        @Html.TextBoxFor(m => m.DiaChi, new
-                        {
-                            @class = "form-control",
-                            placeholder = "Địa chỉ của bạn"
-                        })
+                        <i class="fas fa-map-marker-alt input-icon" style="font-size: 12px; left: 10px;"></i>
+                        @Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control", placeholder = "Địa chỉ của bạn", id = "regDiaChi", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
                     </div>
-                    @Html.ValidationMessageFor(m => m.DiaChi, "", new { @class = "field-validation-error" })
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.NgaySinh)
+                <!-- Row 5: Ngày sinh + Giới tính -->
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Ngày sinh</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-calendar input-icon"></i>
-                            @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new
-                            {
-                                @class = "form-control",
-                                type = "date"
-                            })
+                            <i class="fas fa-calendar input-icon" style="font-size: 12px; left: 10px;"></i>
+                            @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", id = "regNgaySinh", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
                         </div>
-                        @Html.ValidationMessageFor(m => m.NgaySinh, "", new { @class = "field-validation-error" })
                     </div>
-
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.GioiTinh)
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Giới tính</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-venus-mars input-icon"></i>
+                            <i class="fas fa-venus-mars input-icon" style="font-size: 12px; left: 10px;"></i>
                             @Html.DropDownListFor(m => m.GioiTinh, new List<SelectListItem>
                             {
-                                new SelectListItem { Text = "-- Chọn giới tính --", Value = "" },
+                                new SelectListItem { Text = "-- Chọn --", Value = "" },
                                 new SelectListItem { Text = "Nam", Value = "Nam" },
                                 new SelectListItem { Text = "Nữ", Value = "Nữ" },
                                 new SelectListItem { Text = "Khác", Value = "Khác" }
-                            }, new { @class = "form-control" })
+                            }, new { @class = "form-control", id = "regGioiTinh", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
                         </div>
-                        @Html.ValidationMessageFor(m => m.GioiTinh, "", new { @class = "field-validation-error" })
                     </div>
                 </div>
 
-                <div class="checkbox-group soft-bg">
-                    @Html.CheckBoxFor(m => m.DongYDieuKhoan, new { id = "agreeTerms" })
-                    <label for="agreeTerms">
-                        Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a>
+                <!-- Checkbox điều khoản -->
+                <div style="background: #f8fafc; padding: 8px 10px; border-radius: 8px; margin-bottom: 12px;">
+                    <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12px; cursor: pointer; margin: 0;">
+                        @Html.CheckBoxFor(m => m.DongYDieuKhoan, new { id = "agreeTerms", style = "margin-top: 2px;" })
+                        <span>Tôi đồng ý với <a href="#" style="color: #0d4ea6;">Điều khoản dịch vụ</a> và <a href="#" style="color: #0d4ea6;">Chính sách bảo mật</a></span>
                     </label>
                 </div>
-                @Html.ValidationMessageFor(m => m.DongYDieuKhoan, "", new { @class = "field-validation-error" })
+                <span class="field-validation-error" id="regDongYDieuKhoanError" style="font-size: 11px; display: block; margin-top: -8px; margin-bottom: 8px;"></span>
 
-                <button type="submit" class="btn-primary w-100">
+                <button type="submit" class="btn-primary w-100" id="registerSubmitBtn" style="padding: 10px 16px; font-size: 14px; border-radius: 10px;">
                     <i class="fas fa-user-plus"></i> Đăng Ký Ngay
                 </button>
-            }
+            </form>
 
-            <div class="auth-divider">
-                <span>hoặc</span>
-            </div>
-
-            <div class="text-center">
+            <div style="text-align: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 13px;">
                 Đã có tài khoản?
-                <button type="button" class="link-button" data-open-modal="login">Đăng nhập ngay</button>
+                <button type="button" class="link-button" data-open-modal="login" style="font-size: 13px;">Đăng nhập ngay</button>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var registerForm = document.getElementById('registerForm');
+        var errorContainer = document.getElementById('registerErrorContainer');
+        var errorList = document.getElementById('registerErrorList');
+        var successContainer = document.getElementById('registerSuccessContainer');
+        var successMessage = document.getElementById('registerSuccessMessage');
+        var submitBtn = document.getElementById('registerSubmitBtn');
+
+        function clearErrors() {
+            errorContainer.style.display = 'none';
+            errorList.innerHTML = '';
+            successContainer.style.display = 'none';
+            var errorSpans = document.querySelectorAll('#registerForm .field-validation-error');
+            errorSpans.forEach(function (span) { span.textContent = ''; });
+        }
+
+        if (registerForm) {
+            registerForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                clearErrors();
+
+                var hoTen = document.getElementById('regHoTen').value.trim();
+                var soDienThoai = document.getElementById('regSoDienThoai').value.trim();
+                var email = document.getElementById('regEmail').value.trim();
+                var matKhau = document.getElementById('regMatKhau').value;
+                var xacNhanMatKhau = document.getElementById('regXacNhanMatKhau').value;
+                var diaChi = document.getElementById('regDiaChi').value.trim();
+                var ngaySinh = document.getElementById('regNgaySinh').value;
+                var gioiTinh = document.getElementById('regGioiTinh').value;
+                var dongYDieuKhoan = document.getElementById('agreeTerms').checked;
+
+                var hasError = false;
+                if (!hoTen) { document.getElementById('regHoTenError').textContent = 'Họ tên không được để trống'; hasError = true; }
+                if (!soDienThoai) { document.getElementById('regSoDienThoaiError').textContent = 'SĐT không được để trống'; hasError = true; }
+                else if (!/^0[0-9]{9,10}$/.test(soDienThoai)) { document.getElementById('regSoDienThoaiError').textContent = 'SĐT không hợp lệ'; hasError = true; }
+                if (!email) { document.getElementById('regEmailError').textContent = 'Email không được để trống'; hasError = true; }
+                if (!matKhau) { document.getElementById('regMatKhauError').textContent = 'Mật khẩu không được để trống'; hasError = true; }
+                else if (matKhau.length < 6) { document.getElementById('regMatKhauError').textContent = 'Tối thiểu 6 ký tự'; hasError = true; }
+                if (!xacNhanMatKhau) { document.getElementById('regXacNhanMatKhauError').textContent = 'Vui lòng xác nhận'; hasError = true; }
+                else if (matKhau !== xacNhanMatKhau) { document.getElementById('regXacNhanMatKhauError').textContent = 'Mật khẩu không khớp'; hasError = true; }
+                if (!dongYDieuKhoan) { document.getElementById('regDongYDieuKhoanError').textContent = 'Bạn phải đồng ý với điều khoản'; hasError = true; }
+                if (hasError) return;
+
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+
+                var token = registerForm.querySelector('input[name="__RequestVerificationToken"]').value;
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '@Url.Action("RegisterAjax", "Account65130650")', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Đăng Ký Ngay';
+
+                        if (xhr.status === 200) {
+                            try {
+                                var response = JSON.parse(xhr.responseText);
+                                if (response.success) {
+                                    successContainer.style.display = 'block';
+                                    successMessage.textContent = response.message;
+                                    registerForm.reset();
+                                    setTimeout(function () {
+                                        document.getElementById('registerModal').classList.remove('is-active');
+                                        document.getElementById('registerModal').setAttribute('aria-hidden', 'true');
+                                        document.getElementById('loginModal').classList.add('is-active');
+                                        document.getElementById('loginModal').setAttribute('aria-hidden', 'false');
+                                    }, 1500);
+                                } else {
+                                    errorContainer.style.display = 'block';
+                                    if (response.errors && response.errors.length > 0) {
+                                        response.errors.forEach(function (err) {
+                                            var li = document.createElement('li');
+                                            li.textContent = err;
+                                            errorList.appendChild(li);
+                                        });
+                                    }
+                                }
+                            } catch (ex) {
+                                errorContainer.style.display = 'block';
+                                var li = document.createElement('li');
+                                li.textContent = 'Đã xảy ra lỗi';
+                                errorList.appendChild(li);
+                            }
+                        } else {
+                            errorContainer.style.display = 'block';
+                            var li = document.createElement('li');
+                            li.textContent = 'Không thể kết nối. Vui lòng thử lại.';
+                            errorList.appendChild(li);
+                        }
+                    }
+                };
+
+                var data = '__RequestVerificationToken=' + encodeURIComponent(token) +
+                    '&HoTen=' + encodeURIComponent(hoTen) +
+                    '&SoDienThoai=' + encodeURIComponent(soDienThoai) +
+                    '&Email=' + encodeURIComponent(email) +
+                    '&MatKhau=' + encodeURIComponent(matKhau) +
+                    '&XacNhanMatKhau=' + encodeURIComponent(xacNhanMatKhau) +
+                    '&DiaChi=' + encodeURIComponent(diaChi) +
+                    '&NgaySinh=' + encodeURIComponent(ngaySinh) +
+                    '&GioiTinh=' + encodeURIComponent(gioiTinh) +
+                    '&DongYDieuKhoan=' + dongYDieuKhoan;
+
+                xhr.send(data);
+            });
+        }
+    });
+</script>

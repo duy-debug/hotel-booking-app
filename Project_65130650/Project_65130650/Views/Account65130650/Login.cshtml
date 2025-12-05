@@ -2,87 +2,92 @@
 
 <div id="loginModal" class="auth-modal is-hidden" aria-hidden="true" role="dialog" aria-labelledby="loginModalTitle">
     <div class="auth-modal_backdrop" data-modal-close></div>
-    <div class="auth-modal_panel">
+    <div class="auth-modal_panel" style="max-width: 480px;">
         <button type="button" class="auth-modal_close" aria-label="Đóng" data-modal-close>
             <i class="fas fa-times"></i>
         </button>
 
-        <div class="auth-card white-bg">
-            <div class="auth-card_header">
-                <div class="auth-card_logo">
+        <div class="auth-card white-bg" style="padding: 24px;">
+            <div class="auth-card_header" style="margin-bottom: 16px; gap: 12px;">
+                <div class="auth-card_logo" style="width: 48px; height: 48px; font-size: 20px; border-radius: 12px;">
                     <i class="fas fa-hotel"></i>
                 </div>
                 <div>
-                    <h1 id="loginModalTitle">Đăng Nhập</h1>
-                    <p>Chào mừng trở lại! Tiếp tục hành trình của bạn.</p>
+                    <h1 id="loginModalTitle" style="font-size: 20px; margin-bottom: 2px;">Đăng Nhập</h1>
+                    <p style="font-size: 13px; margin: 0;">Chào mừng trở lại! Tiếp tục hành trình của bạn.</p>
                 </div>
             </div>
 
             @if (TempData["SuccessMessage"] != null)
             {
-                <div class="auth-alert success">
+                <div class="auth-alert success" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; color: #166534; font-size: 13px;">
                     <i class="fas fa-check-circle"></i>
                     <span>@TempData["SuccessMessage"]</span>
                 </div>
             }
 
-            @using (Html.BeginForm("Login", "Account65130650", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "auth-form" }))
-            {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true, "", new { @class = "auth-validation" })
+            <!-- Thông báo lỗi -->
+            <div id="loginErrorContainer" class="auth-validation" style="display: none; padding: 8px 12px; margin-bottom: 12px; font-size: 13px;">
+                <ul id="loginErrorList" style="margin: 0; padding-left: 16px; color: #dc2626;"></ul>
+            </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, "Email đăng nhập")
+            <form id="loginForm" class="auth-form">
+                @Html.AntiForgeryToken()
+
+                <!-- Email -->
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Email đăng nhập <span style="color: red;">*</span></label>
                     <div class="input-wrapper">
-                        <i class="fas fa-envelope input-icon"></i>
+                        <i class="fas fa-envelope input-icon" style="font-size: 12px; left: 10px;"></i>
                         @Html.TextBoxFor(m => m.Email, new
                         {
                             @class = "form-control",
                             placeholder = "example@email.com",
-                            autocomplete = "email"
+                            autocomplete = "email",
+                            id = "loginEmail",
+                            style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;"
                         })
                     </div>
-                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "field-validation-error" })
+                    <span class="field-validation-error" id="loginEmailError" style="font-size: 11px;"></span>
                 </div>
 
-                <div class="form-group">
-                    @Html.LabelFor(m => m.MatKhau, "Mật khẩu")
+                <!-- Mật khẩu -->
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Mật khẩu <span style="color: red;">*</span></label>
                     <div class="input-wrapper">
-                        <i class="fas fa-lock input-icon"></i>
+                        <i class="fas fa-lock input-icon" style="font-size: 12px; left: 10px;"></i>
                         @Html.PasswordFor(m => m.MatKhau, new
                         {
                             @class = "form-control",
                             placeholder = "Nhập mật khẩu",
-                            autocomplete = "current-password"
+                            autocomplete = "current-password",
+                            id = "loginPassword",
+                            style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;"
                         })
                     </div>
-                    @Html.ValidationMessageFor(m => m.MatKhau, "", new { @class = "field-validation-error" })
+                    <span class="field-validation-error" id="loginPasswordError" style="font-size: 11px;"></span>
                 </div>
 
-                <div class="forgot-password">
-                    <a href="#">Quên mật khẩu?</a>
+                <!-- Quên mật khẩu + Ghi nhớ -->
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 12px;">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; margin: 0;">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { id = "rememberMe" })
+                        <span>Ghi nhớ đăng nhập</span>
+                    </label>
+                    <a href="#" style="color: #0d4ea6; text-decoration: none;">Quên mật khẩu?</a>
                 </div>
 
-                <div class="checkbox-group">
-                    @Html.CheckBoxFor(m => m.RememberMe, new { id = "rememberMe" })
-                    @Html.LabelFor(m => m.RememberMe, new { @for = "rememberMe" })
-                </div>
-
-                <button type="submit" class="btn-primary w-100">
+                <button type="submit" class="btn-primary w-100" id="loginSubmitBtn" style="padding: 10px 16px; font-size: 14px; border-radius: 10px;">
                     <i class="fas fa-sign-in-alt"></i> Đăng Nhập
                 </button>
-            }
+            </form>
 
-            <div class="auth-divider">
-                <span>hoặc</span>
-            </div>
-
-            <div class="text-center">
+            <div style="text-align: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 13px;">
                 Chưa có tài khoản?
-                <button type="button" class="link-button" data-open-modal="register">Đăng ký ngay</button>
+                <button type="button" class="link-button" data-open-modal="register" style="font-size: 13px;">Đăng ký ngay</button>
             </div>
 
-            <div class="trust-badges">
+            <div style="display: flex; justify-content: center; gap: 16px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b;">
                 <span><i class="fas fa-shield-alt"></i> Bảo mật cao</span>
                 <span><i class="fas fa-credit-card"></i> Thanh toán an toàn</span>
                 <span><i class="fas fa-headset"></i> Hỗ trợ 24/7</span>
@@ -90,3 +95,98 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var loginForm = document.getElementById('loginForm');
+        var errorContainer = document.getElementById('loginErrorContainer');
+        var errorList = document.getElementById('loginErrorList');
+        var submitBtn = document.getElementById('loginSubmitBtn');
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Clear previous errors
+                errorContainer.style.display = 'none';
+                errorList.innerHTML = '';
+                document.getElementById('loginEmailError').textContent = '';
+                document.getElementById('loginPasswordError').textContent = '';
+
+                // Get form data
+                var email = document.getElementById('loginEmail').value.trim();
+                var password = document.getElementById('loginPassword').value;
+                var rememberMe = document.getElementById('rememberMe').checked;
+
+                // Client-side validation
+                var hasError = false;
+                if (!email) {
+                    document.getElementById('loginEmailError').textContent = 'Email không được để trống';
+                    hasError = true;
+                }
+                if (!password) {
+                    document.getElementById('loginPasswordError').textContent = 'Mật khẩu không được để trống';
+                    hasError = true;
+                }
+                if (hasError) return;
+
+                // Disable button and show loading
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+
+                // Get anti-forgery token
+                var token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                // Send AJAX request
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', '@Url.Action("LoginAjax", "Account65130650")', true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Đăng Nhập';
+
+                        if (xhr.status === 200) {
+                            try {
+                                var response = JSON.parse(xhr.responseText);
+                                if (response.success) {
+                                    // Đăng nhập thành công - chuyển hướng
+                                    window.location.href = response.redirectUrl;
+                                } else {
+                                    // Hiển thị lỗi
+                                    errorContainer.style.display = 'block';
+                                    if (response.errors && response.errors.length > 0) {
+                                        response.errors.forEach(function (err) {
+                                            var li = document.createElement('li');
+                                            li.textContent = err;
+                                            errorList.appendChild(li);
+                                        });
+                                    }
+                                }
+                            } catch (ex) {
+                                errorContainer.style.display = 'block';
+                                var li = document.createElement('li');
+                                li.textContent = 'Đã xảy ra lỗi khi xử lý yêu cầu';
+                                errorList.appendChild(li);
+                            }
+                        } else {
+                            errorContainer.style.display = 'block';
+                            var li = document.createElement('li');
+                            li.textContent = 'Không thể kết nối đến máy chủ. Vui lòng thử lại.';
+                            errorList.appendChild(li);
+                        }
+                    }
+                };
+
+                // Encode data
+                var data = '__RequestVerificationToken=' + encodeURIComponent(token) +
+                    '&Email=' + encodeURIComponent(email) +
+                    '&MatKhau=' + encodeURIComponent(password) +
+                    '&RememberMe=' + rememberMe;
+
+                xhr.send(data);
+            });
+        }
+    });
+</script>

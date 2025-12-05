@@ -134,6 +134,7 @@
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
     <Compile Include="Controllers\Account65130650Controller.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Room65130650Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -147,6 +148,9 @@
     <Compile Include="Models\NguoiDung.cs" />
     <Compile Include="Models\Phong.cs" />
     <Compile Include="Models\ThanhToan.cs" />
+    <Compile Include="Models\ViewModel\RoomCardViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomDetailViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomListViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +227,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account65130650\Login.cshtml" />
     <Content Include="Views\Account65130650\Register.cshtml" />
+    <Content Include="Views\Home\RoomDetail.cshtml" />
+    <Content Include="Views\Room65130650\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

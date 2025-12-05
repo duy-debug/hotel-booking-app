@@ -1,0 +1,724 @@
+﻿@model Project_65130650.Models.ViewModels.RoomDetailViewModel
+@{
+    ViewBag.Title = Model.TenLoaiPhong + " - Chi tiết phòng";   
+}
+
+<div class="room-detail-page">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Trang chủ</a>
+        <span class="separator"><i class="fas fa-chevron-right"></i></span>
+        <span class="current">@Model.TenLoaiPhong</span>
+    </nav>
+
+    <!-- Room Detail Container -->
+    <div class="room-detail-container">
+        <!-- Left: Room Image Gallery -->
+        <div class="room-gallery">
+            <div class="main-image">
+                <img src="@Url.Content("~/Images/phonghangsang.jpeg")" alt="@Model.TenLoaiPhong" />
+                <div class="availability-badge @(Model.SoPhongConTrong > 0 ? "available" : "unavailable")">
+                    @if (Model.SoPhongConTrong > 0)
+                    {
+                        <i class="fas fa-check-circle"></i>
+                        <span>Còn @Model.SoPhongConTrong phòng trống</span>
+                    }
+                    else
+                    {
+                        <i class="fas fa-times-circle"></i>
+                        <span>Hết phòng</span>
+                    }
+                </div>
+            </div>
+            <div class="thumbnail-gallery">
+                <img src="@Url.Content("~/Images/phonghangsang.jpeg")" alt="Hình 1" class="active" />
+                <img src="@Url.Content("~/Images/khonggian.jpg")" alt="Hình 2" />
+                <img src="@Url.Content("~/Images/sanhkhachsan.jpg")" alt="Hình 3" />
+                <img src="@Url.Content("~/Images/hoboi.jpg")" alt="Hình 4" />
+            </div>
+        </div>
+
+        <!-- Right: Room Information -->
+        <div class="room-info-panel">
+            <div class="room-header">
+                <span class="room-type-badge">
+                    <i class="fas fa-crown"></i> Loại phòng
+                </span>
+                <h1>@Model.TenLoaiPhong</h1>
+            </div>
+
+            <!-- Quick Info -->
+            <div class="room-quick-info">
+                <div class="info-item">
+                    <i class="fas fa-ruler-combined"></i>
+                    <div>
+                        <span class="label">Diện tích</span>
+                        <span class="value">@Model.DienTichPhong m²</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <span class="label">Sức chứa</span>
+                        <span class="value">Tối đa @Model.SoNguoiToiDa người</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-bed"></i>
+                    <div>
+                        <span class="label">Loại giường</span>
+                        <span class="value">@Model.LoaiGiuong</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-door-open"></i>
+                    <div>
+                        <span class="label">Tổng số phòng</span>
+                        <span class="value">@Model.TongSoPhong phòng</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="room-description">
+                <h3><i class="fas fa-info-circle"></i> Mô tả</h3>
+                <p>
+                    @if (!string.IsNullOrEmpty(Model.MoTa))
+                    {
+                        @Model.MoTa
+                    }
+                    else
+                    {
+                        <text>Phòng @Model.TenLoaiPhong được thiết kế sang trọng với đầy đủ tiện nghi hiện đại,
+                        mang đến cho quý khách trải nghiệm nghỉ dưỡng tuyệt vời. Với không gian rộng rãi,
+                        thoáng mát và view đẹp, đây là lựa chọn hoàn hảo cho kỳ nghỉ của bạn.</text>
+                    }
+                </p>
+            </div>
+
+            <!-- Amenities -->
+            <div class="room-amenities">
+                <h3><i class="fas fa-concierge-bell"></i> Tiện nghi phòng</h3>
+                <div class="amenities-grid">
+                    @if (Model.DanhSachTienNghi.Any())
+                    {
+                        foreach (var tienNghi in Model.DanhSachTienNghi)
+                        {
+                            <div class="amenity-item">
+                                <i class="fas fa-check"></i>
+                                <span>@tienNghi.Trim()</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <!-- Default amenities -->
+                        <div class="amenity-item"><i class="fas fa-wifi"></i><span>WiFi miễn phí</span></div>
+                        <div class="amenity-item"><i class="fas fa-snowflake"></i><span>Điều hòa</span></div>
+                        <div class="amenity-item"><i class="fas fa-tv"></i><span>Smart TV</span></div>
+                        <div class="amenity-item"><i class="fas fa-coffee"></i><span>Minibar</span></div>
+                        <div class="amenity-item"><i class="fas fa-bath"></i><span>Phòng tắm riêng</span></div>
+                        <div class="amenity-item"><i class="fas fa-lock"></i><span>Két sắt</span></div>
+                        <div class="amenity-item"><i class="fas fa-phone"></i><span>Điện thoại</span></div>
+                        <div class="amenity-item"><i class="fas fa-tshirt"></i><span>Áo choàng tắm</span></div>
+                    }
+                </div>
+            </div>
+
+            <!-- Price & Booking -->
+            <div class="room-booking-section">
+                <div class="price-display">
+                    <span class="price-label">Giá phòng</span>
+                    <span class="price-value">@String.Format("{0:N0}", Model.GiaCoBan) VNĐ</span>
+                    <span class="price-unit">/ đêm</span>
+                </div>
+                <div class="booking-actions">
+                    @if (Model.SoPhongConTrong > 0)
+                    {
+                        <button class="btn-book-now">
+                            <i class="fas fa-calendar-check"></i>
+                            Đặt phòng ngay
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn-book-now disabled" disabled>
+                            <i class="fas fa-times-circle"></i>
+                            Hết phòng
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Info Sections -->
+    <div class="additional-info">
+        <!-- Policies -->
+        <div class="info-section">
+            <h3><i class="fas fa-clipboard-list"></i> Chính sách</h3>
+            <div class="policy-grid">
+                <div class="policy-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Nhận phòng</strong>
+                        <span>Từ 14:00</span>
+                    </div>
+                </div>
+                <div class="policy-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <div>
+                        <strong>Trả phòng</strong>
+                        <span>Trước 12:00</span>
+                    </div>
+                </div>
+                <div class="policy-item">
+                    <i class="fas fa-undo-alt"></i>
+                    <div>
+                        <strong>Hủy phòng</strong>
+                        <span>Miễn phí trước 24h</span>
+                    </div>
+                </div>
+                <div class="policy-item">
+                    <i class="fas fa-smoking-ban"></i>
+                    <div>
+                        <strong>Không hút thuốc</strong>
+                        <span>Trong phòng</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services -->
+        <div class="info-section">
+            <h3><i class="fas fa-star"></i> Nhiều dịch vụ hấp dẫn</h3>
+            <div class="services-grid">
+                <div class="service-item">
+                    <i class="fas fa-utensils"></i>
+                    <span>Bữa sáng buffet</span>
+                    <span class="service-price"></span>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-car"></i>
+                    <span>Đưa đón sân bay</span>
+                    <span class="service-price"></span>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-spa"></i>
+                    <span>Spa & Massage</span>
+                    <span class="service-price"></span>
+                </div>
+                <div class="service-item">
+                    <i class="fas fa-swimming-pool"></i>
+                    <span>Hồ bơi riêng</span>
+                    <span class="service-price"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <div class="back-section">
+        <a href="@Url.Action("Index", "Home")#rooms" class="btn-back">
+            <i class="fas fa-arrow-left"></i>
+            Quay lại trang chủ
+        </a>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .room-detail-page {
+            max-width: 100%;
+            padding: 20px 0;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+            .breadcrumb a {
+                color: #0d4ea6;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+                .breadcrumb a:hover {
+                    text-decoration: underline;
+                }
+
+            .breadcrumb .separator {
+                color: #94a3b8;
+                font-size: 10px;
+            }
+
+            .breadcrumb .current {
+                color: #64748b;
+            }
+
+        /* Room Detail Container */
+        .room-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Gallery */
+        .room-gallery {
+            position: relative;
+        }
+
+        .main-image {
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+        }
+
+            .main-image img {
+                width: 100%;
+                height: 400px;
+                object-fit: cover;
+            }
+
+        .availability-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 10px 20px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .availability-badge.available {
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+            }
+
+            .availability-badge.unavailable {
+                background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+                color: white;
+            }
+
+        .thumbnail-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+            .thumbnail-gallery img {
+                width: 100%;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                opacity: 0.7;
+            }
+
+                .thumbnail-gallery img:hover,
+                .thumbnail-gallery img.active {
+                    opacity: 1;
+                    box-shadow: 0 4px 20px rgba(13, 78, 166, 0.3);
+                }
+
+        /* Room Info Panel */
+        .room-info-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .room-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 8px 0;
+        }
+
+        .room-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .room-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #fbbf24;
+            font-size: 14px;
+        }
+
+            .room-rating span {
+                color: #64748b;
+                margin-left: 8px;
+            }
+
+        /* Quick Info */
+        .room-quick-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 16px;
+        }
+
+            .info-item i {
+                font-size: 24px;
+                color: #0d4ea6;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(13, 78, 166, 0.1);
+            }
+
+            .info-item .label {
+                display: block;
+                font-size: 12px;
+                color: #64748b;
+            }
+
+            .info-item .value {
+                display: block;
+                font-size: 15px;
+                font-weight: 600;
+                color: #0f172a;
+            }
+
+        /* Description */
+        .room-description h3,
+        .room-amenities h3 {
+            font-size: 18px;
+            color: #0f172a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+            .room-description h3 i,
+            .room-amenities h3 i {
+                color: #0d4ea6;
+            }
+
+        .room-description p {
+            color: #475569;
+            line-height: 1.7;
+        }
+
+        /* Amenities */
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .amenity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            background: #f0f9ff;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #0f172a;
+        }
+
+            .amenity-item i {
+                color: #10b981;
+                font-size: 12px;
+            }
+
+        /* Booking Section */
+        .room-booking-section {
+            background: linear-gradient(135deg, #0d4ea6 0%, #1e40af 100%);
+            padding: 24px;
+            border-radius: 20px;
+            color: white;
+        }
+
+        .price-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .price-label {
+            display: block;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .price-value {
+            font-size: 36px;
+            font-weight: 700;
+        }
+
+        .price-unit {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-book-now {
+            flex: 1;
+            padding: 14px 24px;
+            background: white;
+            color: #0d4ea6;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-book-now:hover:not(.disabled) {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            }
+
+            .btn-book-now.disabled {
+                background: #94a3b8;
+                color: white;
+                cursor: not-allowed;
+            }
+
+        .btn-contact {
+            padding: 14px 20px;
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+            .btn-contact:hover {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: white;
+            }
+
+        /* Additional Info */
+        .additional-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .info-section {
+            background: white;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+        }
+
+            .info-section h3 {
+                font-size: 18px;
+                color: #0f172a;
+                margin-bottom: 20px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+                .info-section h3 i {
+                    color: #0d4ea6;
+                }
+
+        .policy-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .policy-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .policy-item i {
+                font-size: 20px;
+                color: #0d4ea6;
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f0f9ff;
+                border-radius: 12px;
+            }
+
+            .policy-item strong {
+                display: block;
+                font-size: 14px;
+                color: #0f172a;
+            }
+
+            .policy-item span {
+                font-size: 13px;
+                color: #64748b;
+            }
+
+        .services-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .service-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+
+            .service-item i {
+                color: #0d4ea6;
+                font-size: 18px;
+                width: 36px;
+            }
+
+            .service-item span:first-of-type {
+                flex: 1;
+                font-size: 14px;
+                color: #0f172a;
+            }
+
+        .service-price {
+            font-size: 13px;
+            font-weight: 600;
+            color: #10b981;
+        }
+
+        /* Back Button */
+        .back-section {
+            text-align: center;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: #f1f5f9;
+            color: #475569;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+            .btn-back:hover {
+                background: #e2e8f0;
+                color: #0f172a;
+            }
+
+        /* Responsive */
+        @@media (max-width: 1024px) {
+            .room-detail-container {
+                grid-template-columns: 1fr;
+            }
+
+            .additional-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @@media (max-width: 640px) {
+            .room-quick-info {
+                grid-template-columns: 1fr;
+            }
+
+            .amenities-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .policy-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .booking-actions {
+                flex-direction: column;
+            }
+
+            .thumbnail-gallery {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Thumbnail gallery click handling
+            var thumbnails = document.querySelectorAll('.thumbnail-gallery img');
+            var mainImage = document.querySelector('.main-image img');
+
+            thumbnails.forEach(function (thumb) {
+                thumb.addEventListener('click', function () {
+                    // Update main image
+                    mainImage.src = this.src;
+                    mainImage.alt = this.alt;
+
+                    // Update active state
+                    thumbnails.forEach(function (t) {
+                        t.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+}

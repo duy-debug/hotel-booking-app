@@ -1,0 +1,964 @@
+﻿@model Project_65130650.Models.ViewModels.RoomListViewModel
+@{
+    ViewBag.Title = "Tất cả phòng";
+}
+
+<div class="rooms-page">
+    <!-- Page Header -->
+    <div class="page-header">
+        <nav class="breadcrumb">
+            <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Trang chủ</a>
+            <span class="separator"><i class="fas fa-chevron-right"></i></span>
+            <span class="current">Tất cả phòng</span>
+        </nav>
+        <h1>Danh sách phòng còn trống</h1>
+        <p class="subtitle">Tìm thấy <strong>@Model.TotalItems</strong> loại phòng phù hợp</p>
+    </div>
+
+    <!-- Search & Filter Bar (Horizontal) -->
+    <div class="filter-bar">
+        <form method="get" action="@Url.Action("Index", "Room65130650")" class="filter-form" id="filterForm">
+            <!-- Search Box -->
+            <div class="filter-item search-item">
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" name="search" value="@Model.SearchQuery" placeholder="Tìm kiếm phòng..." />
+                </div>
+            </div>
+
+            <!-- Filter: Loại phòng - Custom Dropdown -->
+            <div class="filter-item">
+                <label><i class="fas fa-door-open"></i> Loại phòng</label>
+                <div class="custom-dropdown" data-name="loaiPhong">
+                    <input type="hidden" name="loaiPhong" value="@Model.SelectedLoaiPhong" />
+                    <div class="dropdown-selected">
+                        <span>@(string.IsNullOrEmpty(Model.SelectedLoaiPhong) ? "Tất cả loại phòng" : Model.LoaiPhongs.FirstOrDefault(x => x.MaLoaiPhong == Model.SelectedLoaiPhong)?.TenLoaiPhong ?? "Tất cả loại phòng")</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" data-value="">Tất cả loại phòng</div>
+                        @foreach (var lp in Model.LoaiPhongs)
+                        {
+                            <div class="dropdown-option" data-value="@lp.MaLoaiPhong">
+                                @lp.TenLoaiPhong <span class="option-count">(@lp.SoPhongConTrong phòng)</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter: Giá từ - Custom Dropdown -->
+            <div class="filter-item">
+                <label><i class="fas fa-tag"></i> Giá từ</label>
+                <div class="custom-dropdown" data-name="minPrice">
+                    <input type="hidden" name="minPrice" value="@Model.MinPrice" />
+                    <div class="dropdown-selected">
+                        <span>@(Model.MinPrice.HasValue ? String.Format("{0:N0} VNĐ", Model.MinPrice) : "Không giới hạn")</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" data-value="">Không giới hạn</div>
+                        <div class="dropdown-option" data-value="500000">500,000 VNĐ</div>
+                        <div class="dropdown-option" data-value="1000000">1,000,000 VNĐ</div>
+                        <div class="dropdown-option" data-value="2000000">2,000,000 VNĐ</div>
+                        <div class="dropdown-option" data-value="3000000">3,000,000 VNĐ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter: Giá đến - Custom Dropdown -->
+            <div class="filter-item">
+                <label><i class="fas fa-tag"></i> Giá đến</label>
+                <div class="custom-dropdown" data-name="maxPrice">
+                    <input type="hidden" name="maxPrice" value="@Model.MaxPrice" />
+                    <div class="dropdown-selected">
+                        <span>@(Model.MaxPrice.HasValue ? String.Format("{0:N0} VNĐ", Model.MaxPrice) : "Không giới hạn")</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" data-value="">Không giới hạn</div>
+                        <div class="dropdown-option" data-value="1000000">1,000,000 VNĐ</div>
+                        <div class="dropdown-option" data-value="2000000">2,000,000 VNĐ</div>
+                        <div class="dropdown-option" data-value="5000000">5,000,000 VNĐ</div>
+                        <div class="dropdown-option" data-value="10000000">10,000,000 VNĐ</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filter: Số người - Custom Dropdown -->
+            <div class="filter-item">
+                <label><i class="fas fa-users"></i> Số người</label>
+                <div class="custom-dropdown" data-name="minCapacity">
+                    <input type="hidden" name="minCapacity" value="@Model.MinCapacity" />
+                    <div class="dropdown-selected">
+                        <span>@(Model.MinCapacity.HasValue ? Model.MinCapacity + "+ người" : "Tất cả")</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-options">
+                        <div class="dropdown-option" data-value="">Tất cả</div>
+                        <div class="dropdown-option" data-value="2">2+ người</div>
+                        <div class="dropdown-option" data-value="4">4+ người</div>
+                        <div class="dropdown-option" data-value="6">6+ người</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hidden input for sortOrder -->
+            <input type="hidden" name="sortOrder" id="sortOrderInput" value="@Model.SortOrder" />
+
+            <!-- Buttons -->
+            <div class="filter-item filter-buttons">
+                <button type="submit" class="btn-filter">
+                    <i class="fas fa-search"></i> Tìm kiếm
+                </button>
+                <a href="@Url.Action("Index", "Room65130650")" class="btn-clear">
+                    <i class="fas fa-undo"></i> Xóa bộ lọc
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Sort Bar -->
+    <div class="sort-bar">
+        <span class="sort-label"><i class="fas fa-sort"></i> Sắp xếp:</span>
+        <div class="sort-buttons">
+            <a href="@Url.Action("Index", "Room65130650", new { search = Model.SearchQuery, loaiPhong = Model.SelectedLoaiPhong, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, minCapacity = Model.MinCapacity, sortOrder = "price_asc", page = 1 })" 
+               class="sort-btn @(Model.SortOrder == "price_asc" ? "active" : "")">
+                <i class="fas fa-sort-amount-up-alt"></i> Giá tăng dần
+            </a>
+            <a href="@Url.Action("Index", "Room65130650", new { search = Model.SearchQuery, loaiPhong = Model.SelectedLoaiPhong, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, minCapacity = Model.MinCapacity, sortOrder = "price_desc", page = 1 })" 
+               class="sort-btn @(Model.SortOrder == "price_desc" ? "active" : "")">
+                <i class="fas fa-sort-amount-down"></i> Giá giảm dần
+            </a>
+            <a href="@Url.Action("Index", "Room65130650", new { search = Model.SearchQuery, loaiPhong = Model.SelectedLoaiPhong, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, minCapacity = Model.MinCapacity, page = 1 })" 
+               class="sort-btn @(string.IsNullOrEmpty(Model.SortOrder) ? "active" : "")">
+                <i class="fas fa-star"></i> Mặc định
+            </a>
+        </div>
+    </div>
+
+    <!-- Room Grid -->
+    <div class="rooms-grid-container">
+        @if (Model.Rooms.Any())
+        {
+            <div class="rooms-grid">
+                @foreach (var room in Model.Rooms)
+                {
+                    <article class="room-card">
+                        <div class="room-card__image">
+                            <img src="@Url.Content("~/Images/phonghangsang.jpeg")" alt="@room.TenLoaiPhong" />
+                            <span class="availability-tag">
+                                <i class="fas fa-check-circle"></i> Còn @room.SoPhongConTrong phòng
+                            </span>
+                        </div>
+                        <div class="room-card__content">
+                            <h3>@room.TenLoaiPhong</h3>
+                            <div class="room-specs">
+                                <span><i class="fas fa-ruler-combined"></i> @room.DienTichPhong m²</span>
+                                <span><i class="fas fa-users"></i> @room.SoNguoiToiDa người</span>
+                                <span><i class="fas fa-bed"></i> @room.LoaiGiuong</span>
+                            </div>
+                            @if (!string.IsNullOrEmpty(room.MoTa))
+                            {
+                                <p class="room-desc">@(room.MoTa.Length > 100 ? room.MoTa.Substring(0, 100) + "..." : room.MoTa)</p>
+                            }
+                            <div class="room-footer">
+                                <div class="room-price">
+                                    <span class="price">@String.Format("{0:N0}", room.GiaCoBan) VNĐ</span>
+                                    <span class="per-night">/đêm</span>
+                                </div>
+                                <div class="room-actions">
+                                    <button class="btn-book">
+                                        <i class="fas fa-calendar-check"></i> Đặt phòng
+                                    </button>
+                                    <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong })" class="btn-detail">
+                                        <i class="fas fa-eye"></i> Chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="no-results">
+                <i class="fas fa-search"></i>
+                <h3>Không tìm thấy phòng phù hợp</h3>
+                <p>Vui lòng thử thay đổi tiêu chí tìm kiếm hoặc xóa bộ lọc</p>
+            </div>
+        }
+
+        @if (Model.TotalPages > 1)
+        {
+            <div class="pagination">
+                @if (Model.HasPreviousPage)
+                {
+                    <a href="@Url.Action("Index", "Room65130650", new { page = Model.CurrentPage - 1, search = Model.SearchQuery, loaiPhong = Model.SelectedLoaiPhong, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, minCapacity = Model.MinCapacity, sortOrder = Model.SortOrder })" class="page-btn prev">
+                        <i class="fas fa-chevron-left"></i> Trước
+                    </a>
+                }
+
+                <div class="page-numbers">
+                    @for (int i = 1; i <= Model.TotalPages; i++)
+                    {
+                        if (i == Model.CurrentPage)
+                        {
+                            <span class="page-btn current">@i</span>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Index", "Room65130650", new { page = i, search = Model.SearchQuery, loaiPhong = Model.SelectedLoaiPhong, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, minCapacity = Model.MinCapacity, sortOrder = Model.SortOrder })" class="page-btn">@i</a>
+                        }
+                    }
+                </div>
+
+                @if (Model.HasNextPage)
+                {
+                    <a href="@Url.Action("Index", "Room65130650", new { page = Model.CurrentPage + 1, search = Model.SearchQuery, loaiPhong = Model.SelectedLoaiPhong, minPrice = Model.MinPrice, maxPrice = Model.MaxPrice, minCapacity = Model.MinCapacity, sortOrder = Model.SortOrder })" class="page-btn next">
+                        Sau <i class="fas fa-chevron-right"></i>
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .rooms-page {
+            padding: 20px 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 24px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 16px 0 8px;
+        }
+
+        .page-header .subtitle {
+            color: #64748b;
+            font-size: 15px;
+        }
+
+        .page-header .subtitle strong {
+            color: #0d4ea6;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+        }
+
+        .breadcrumb a {
+            color: #0d4ea6;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb .separator {
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        .breadcrumb .current {
+            color: #64748b;
+        }
+
+        /* Filter Bar - Horizontal */
+        .filter-bar {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        /* Sort Bar */
+        .sort-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding: 12px 20px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+        }
+
+        .sort-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sort-label i {
+            color: #0d4ea6;
+        }
+
+        .sort-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .sort-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: #f8fafc;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .sort-btn:hover {
+            background: #f0f9ff;
+            border-color: #0d4ea6;
+            color: #0d4ea6;
+        }
+
+        .sort-btn.active {
+            background: linear-gradient(135deg, #0d4ea6 0%, #1e40af 100%);
+            color: #ffffff;
+            border-color: #0d4ea6;
+        }
+
+        .sort-btn.active i {
+            color: #ffffff;
+        }
+
+        .sort-btn i {
+            font-size: 12px;
+        }
+
+        .filter-form {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            gap: 16px;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .filter-item label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-item label i {
+            color: #0d4ea6;
+            font-size: 12px;
+        }
+
+        .filter-item.search-item {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0 14px;
+            transition: all 0.2s ease;
+        }
+
+        .search-input-wrapper:focus-within {
+            border-color: #0d4ea6;
+            box-shadow: 0 0 0 3px rgba(13, 78, 166, 0.1);
+        }
+
+        .search-input-wrapper i {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .search-input-wrapper input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 12px;
+            font-size: 14px;
+            background: transparent;
+        }
+
+        .search-input-wrapper input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* Custom Dropdown */
+        .custom-dropdown {
+            position: relative;
+            min-width: 180px;
+        }
+
+        .dropdown-selected {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: #0f172a;
+        }
+
+        .dropdown-selected:hover {
+            border-color: #0d4ea6;
+        }
+
+        .dropdown-selected i {
+            color: #64748b;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        .custom-dropdown.open .dropdown-selected {
+            border-color: #0d4ea6;
+            box-shadow: 0 0 0 3px rgba(13, 78, 166, 0.1);
+        }
+
+        .custom-dropdown.open .dropdown-selected i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 4px;
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.15);
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .custom-dropdown.open .dropdown-options {
+            max-height: 300px;
+            overflow-y: auto;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .dropdown-option {
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .dropdown-option:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-option:hover {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            color: #0d4ea6;
+            padding-left: 20px;
+        }
+
+        .dropdown-option.selected {
+            background: #0d4ea6;
+            color: #ffffff;
+        }
+
+        .dropdown-option.selected:hover {
+            background: #0b3f84;
+            color: #ffffff;
+            padding-left: 20px;
+        }
+
+        .option-count {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-left: 4px;
+        }
+
+        .dropdown-option:hover .option-count {
+            color: #60a5fa;
+        }
+
+        .dropdown-option.selected .option-count {
+            color: #bfdbfe;
+        }
+
+        /* Scrollbar for dropdown */
+        .dropdown-options::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .dropdown-options::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        .dropdown-options::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        .dropdown-options::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .filter-buttons {
+            flex-direction: row;
+            gap: 10px;
+            margin-left: auto;
+        }
+
+        .btn-filter {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #0d4ea6 0%, #1e40af 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-filter:hover {
+            box-shadow: 0 8px 20px rgba(13, 78, 166, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-clear {
+            padding: 12px 20px;
+            background: #f1f5f9;
+            color: #64748b;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-clear:hover {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        /* Rooms Grid */
+        .rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .room-card {
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .room-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+        }
+
+        .room-card__image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .room-card__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .room-card:hover .room-card__image img {
+            transform: scale(1.08);
+        }
+
+        .availability-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .room-card__content {
+            padding: 20px;
+        }
+
+        .room-card__content h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 12px;
+        }
+
+        .room-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .room-specs span {
+            font-size: 13px;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .room-specs i {
+            color: #0d4ea6;
+            font-size: 12px;
+        }
+
+        .room-desc {
+            font-size: 13px;
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .room-footer {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .room-price {
+            text-align: center;
+        }
+
+        .room-price .price {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0d4ea6;
+        }
+
+        .room-price .per-night {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .room-actions {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-detail,
+        .btn-book {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+
+        .btn-detail {
+            background: #f1f5f9;
+            color: #475569;
+            border: none;
+        }
+
+        .btn-detail:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-book {
+            background: #0d4ea6;
+            color: white;
+            border: none;
+        }
+
+        .btn-book:hover {
+            background: #0b3f84;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 40px;
+        }
+
+        .page-btn {
+            padding: 10px 16px;
+            background: #ffffff;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .page-btn:hover {
+            background: #f8fafc;
+            border-color: #0d4ea6;
+            color: #0d4ea6;
+        }
+
+        .page-btn.current {
+            background: #0d4ea6;
+            color: white;
+            border-color: #0d4ea6;
+        }
+
+        .page-numbers {
+            display: flex;
+            gap: 4px;
+        }
+
+        .page-ellipsis {
+            padding: 10px 8px;
+            color: #94a3b8;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 80px 40px;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        .no-results i {
+            font-size: 64px;
+            color: #cbd5e1;
+            margin-bottom: 24px;
+        }
+
+        .no-results h3 {
+            font-size: 20px;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .no-results p {
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        .btn-reset {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #0d4ea6;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @@media (max-width: 1200px) {
+            .rooms-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 768px) {
+            .filter-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-item {
+                width: 100%;
+            }
+
+            .filter-item.search-item {
+                min-width: 100%;
+            }
+
+            .custom-dropdown {
+                width: 100%;
+            }
+
+            .filter-buttons {
+                flex-direction: row;
+                margin-left: 0;
+            }
+
+            .filter-buttons .btn-filter,
+            .filter-buttons .btn-clear {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .room-footer {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            .room-actions {
+                width: 100%;
+            }
+
+            .room-actions .btn-detail,
+            .room-actions .btn-book {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Custom Dropdown Logic
+            var dropdowns = document.querySelectorAll('.custom-dropdown');
+
+            dropdowns.forEach(function (dropdown) {
+                var selected = dropdown.querySelector('.dropdown-selected');
+                var options = dropdown.querySelector('.dropdown-options');
+                var hiddenInput = dropdown.querySelector('input[type="hidden"]');
+                var optionItems = dropdown.querySelectorAll('.dropdown-option');
+
+                // Toggle dropdown
+                selected.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    
+                    // Close other dropdowns
+                    dropdowns.forEach(function (d) {
+                        if (d !== dropdown) {
+                            d.classList.remove('open');
+                        }
+                    });
+
+                    dropdown.classList.toggle('open');
+                });
+
+                // Select option
+                optionItems.forEach(function (option) {
+                    // Mark selected option
+                    if (option.getAttribute('data-value') === hiddenInput.value) {
+                        option.classList.add('selected');
+                    }
+
+                    option.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        
+                        var value = option.getAttribute('data-value');
+                        var text = option.textContent.trim();
+                        
+                        // Update hidden input
+                        hiddenInput.value = value;
+                        
+                        // Update displayed text
+                        selected.querySelector('span').textContent = text;
+                        
+                        // Update selected state
+                        optionItems.forEach(function (o) {
+                            o.classList.remove('selected');
+                        });
+                        option.classList.add('selected');
+                        
+                        // Close dropdown
+                        dropdown.classList.remove('open');
+                    });
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function () {
+                dropdowns.forEach(function (dropdown) {
+                    dropdown.classList.remove('open');
+                });
+            });
+
+            // Prevent dropdown from closing when clicking inside options
+            document.querySelectorAll('.dropdown-options').forEach(function (options) {
+                options.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+            });
+        });
+    </script>
+}

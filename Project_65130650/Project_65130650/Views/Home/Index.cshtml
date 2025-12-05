@@ -61,30 +61,76 @@
         </ul>
     </div>
 </section>
+
+<!-- Featured Rooms Section -->
 <section id="rooms" class="section reveal">
     <div class="section__content">
-        <p class="section__eyebrow">Phòng &amp; Suite &amp; Penthouse</p>
-        <h2>Không gian riêng tư, tiện nghi tinh tế</h2>
+        <p class="section__eyebrow">Phòng nổi bật</p>
+        <h2>Không gian nghỉ dưỡng sang trọng</h2>
         <p>
-            Từ phòng Deluxe ấm cúng đến Penthouse sang trọng, mỗi không gian đều được
-            chăm chút từng chi tiết để mang lại trải nghiệm thư giãn tối đa.
+            Khám phá các phòng được yêu thích nhất tại Shearaton, mang đến trải nghiệm 
+            tiện nghi đẳng cấp và không gian riêng tư hoàn hảo.
         </p>
-        <div class="cards-grid rooms-grid">
-            <article class="card">
-                <img src="~/Images/phonghangsang.jpeg" alt="Phòng Deluxe" />
-                <h3>Deluxe Room</h3>
-                <p>Thiết kế hiện đại, phù hợp cho chuyến công tác hoặc du   lịch ngắn ngày.</p>
-            </article>
-            <article class="card">
-                <img src="~/Images/ex.jpg" alt="Phòng Suite" />
-                <h3>Executive Suite</h3>
-                <p>Phòng rộng rãi với khu vực tiếp khách riêng, tầm nhìn đẹp.</p>
-            </article>
-            <article class="card">  
-                <img src="~/Images/penthouse.jpg" alt="Penthouse" />
-                <h3>Penthouse</h3>
-                <p>Đỉnh cao xa hoa với sân hiên riêng, phòng khách lớn và tiện nghi cao cấp.</p>
-            </article>
+
+        <div class="featured-rooms-container">
+            @{
+                var featuredRooms = ViewBag.FeaturedRooms as IEnumerable<Project_65130650.Models.ViewModels.RoomCardViewModel>;
+            }
+
+            <!-- Featured Rooms grid -->
+            <div class="featured-rooms-grid">
+                @if (featuredRooms != null && featuredRooms.Any())
+                {
+                    foreach (var room in featuredRooms)
+                    {
+                        <article class="featured-room-card">
+                            <div class="featured-room-card__image">
+                                <img src="@Url.Content("~/Images/phonghangsang.jpeg")" alt="@room.TenLoaiPhong" />
+                                <span class="featured-badge">
+                                    <i class="fas fa-star"></i> Nổi bật
+                                </span>
+                            </div>
+                            <div class="featured-room-card__content">
+                                <h3>@room.TenLoaiPhong</h3>
+                                <div class="room-specs">
+                                    <p class="room-info">
+                                        <i class="fas fa-ruler-combined"></i> @room.DienTichPhong m²
+                                    </p>
+                                    <p class="room-info">
+                                        <i class="fas fa-users"></i> Tối đa @room.SoNguoiToiDa người
+                                    </p>
+                                </div>
+                                <p class="room-price">
+                                    @String.Format("{0:N0} VNĐ", room.GiaCoBan)<span class="price-unit">/đêm</span>
+                                </p>
+                                <div class="room-actions">
+                                    <button class="btn-primary">
+                                        <i class="fas fa-calendar-check"></i> Đặt phòng
+                                    </button>
+                                    <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong })" class="btn-ghost">
+                                        <i class="fas fa-eye"></i> Chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    }
+                }
+                else
+                {
+                    <div class="no-rooms-message">
+                        <i class="fas fa-hotel"></i>
+                        <p>Hiện chưa có phòng nổi bật.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- View All Rooms Button - Centered -->
+            <div class="view-all-container">
+                <a href="@Url.Action("Index", "Room65130650")" class="btn-view-all">
+                    <span>Xem tất cả phòng</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
         </div>
     </div>
 </section>
@@ -136,7 +182,17 @@
         </ul>
     </div>
     <div class="section__media">
-        <img src="~/Images/bando.png" alt="Bản đồ vị trí khách sạn" />
+        <div class="location-map-embed">
+            <iframe
+                src="https://www.google.com/maps?q=Sheraton+Nha+Trang+Hotel+%26+Spa,+26-28+Tran+Phu,+Nha+Trang,+Vietnam&output=embed"
+                width="100%"
+                height="100%"
+                style="border:0;"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
     </div>
 </section>
 
@@ -159,7 +215,7 @@
                 <div class="dining-slider__slide">
                     <img src="~/Images/quaybar1.jpg" alt="Quầy bar" />
                 </div>
-                <div class="dining-slider__slide">  
+                <div class="dining-slider__slide">
                     <img src="~/Images/nhahang1.jpg" alt="Quầy bar" />
                 </div>
                 <div class="dining-slider__slide">
@@ -296,6 +352,11 @@
             border: 1px solid transparent;
             cursor: pointer;
             transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
         }
 
         .btn-primary {
@@ -318,37 +379,6 @@
             background: #eff6ff;
         }
 
-        .page-nav {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            padding: 8px 18px;
-            margin: 4px 0 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 999px;
-            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
-            position: sticky;
-            top: 88px;
-            z-index: 40;
-        }
-
-        .page-nav button {
-            border: none;
-            background: transparent;
-            padding: 6px 14px;
-            border-radius: 999px;
-            font-size: 13px;
-            font-weight: 500;
-            color: #475569;
-            cursor: pointer;
-            transition: background 0.15s ease, color 0.15s ease;
-        }
-
-        .page-nav button:hover {
-            background: #0ea5e9;
-            color: white;
-        }
-
         .section {
             display: grid;
             grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
@@ -359,6 +389,10 @@
 
         .section--alt {
             grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+        }
+
+        #rooms.section {
+            grid-template-columns: minmax(0, 1fr);
         }
 
         #dining.section {
@@ -375,6 +409,20 @@
             width: 100%;
             border-radius: 20px;
             object-fit: cover;
+            box-shadow: 0 22px 60px rgba(15, 23, 42, 0.2);
+        }
+
+        #location .section__media {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .location-map-embed {
+            width: 100%;
+            height: 260px;
+            border-radius: 20px;
+            overflow: hidden;
             box-shadow: 0 22px 60px rgba(15, 23, 42, 0.2);
         }
 
@@ -404,49 +452,176 @@
             margin-top: 4px;
         }
 
-        .cards-grid {
+        /* Featured Rooms Styles */
+        .featured-rooms-container {
+            margin-top: 24px;
+        }
+
+        .featured-rooms-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-top: 8px;
-            justify-items: center;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
         }
 
-        .rooms-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            justify-items: center;
-        }
-
-        .cards-grid--two {
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        }
-
-        .card {
+        .featured-room-card {
             background: #ffffff;
-            border-radius: 18px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .featured-room-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.15);
+        }
+
+        .featured-room-card__image {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .featured-room-card__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .featured-room-card:hover .featured-room-card__image img {
+            transform: scale(1.08);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .featured-badge i {
+            font-size: 10px;
+        }
+
+        .featured-room-card__content {
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            width: 100%;
-            max-width: 320px;
+            gap: 8px;
         }
 
-        .card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-        }
-
-        .card h3 {
+        .featured-room-card__content h3 {
             font-size: 18px;
-            margin: 14px 16px 4px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
         }
 
-        .card p {
-            font-size: 14px;
+        .room-specs {
+            display: flex;
+            gap: 16px;
+            margin: 8px 0;
+        }
+
+        .room-info {
+            font-size: 13px;
             color: #64748b;
-            margin: 0 16px 16px;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .room-info i {
+            color: #0d4ea6;
+            width: 14px;
+        }
+
+        .room-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0d4ea6;
+            margin: 8px 0 4px;
+        }
+
+        .price-unit {
+            font-size: 13px;
+            font-weight: 400;
+            color: #64748b;
+        }
+
+        .room-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .room-actions .btn-primary,
+        .room-actions .btn-ghost {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+
+        .no-rooms-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .no-rooms-message i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        /* View All Button */
+        .view-all-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn-view-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #0d4ea6 0%, #1e40af 100%);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 999px;
+            text-decoration: none;
+            box-shadow: 0 16px 40px rgba(13, 78, 166, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .btn-view-all:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(13, 78, 166, 0.45);
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        }
+
+        .btn-view-all i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-view-all:hover i {
+            transform: translateX(4px);
         }
 
         .icon-features {
@@ -454,12 +629,6 @@
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 12px;
             margin-top: 8px;
-        }
-
-        .icon-features div {
-            display: flex;
-            align-items: center;
-            gap: 8px;
             padding: 10px 12px;
             border-radius: 999px;
             background: #eff6ff;
@@ -531,6 +700,37 @@
             right: 10px;
         }
 
+        /* Remove layout card wrapper for Home Index page only */
+        .bg-white.rounded-xl.border.border-slate-200\/70 {
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        /* Remove all borders on this page */
+        .landing-hero,
+        .landing-hero *,
+        .section,
+        .section *,
+        .dining-slider,
+        .dining-slider *,
+        .icon-features,
+        .icon-features * {
+            border: none !important;
+        }
+
+        /* Extra override: remove Tailwind borders & dividers on this page */
+        body main *,
+        body [class*="border-"],
+        body .border,
+        body [class*="divide-"],
+        body .divide-x,
+        body .divide-y {
+            border: none !important;
+            border-width: 0 !important;
+        }
+
         @@media (max-width: 1024px) {
             .landing-hero {
                 grid-template-columns: minmax(0, 1fr);
@@ -541,8 +741,8 @@
                 grid-template-columns: minmax(0, 1fr);
             }
 
-            .rooms-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
+            .featured-rooms-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -555,9 +755,18 @@
                 padding: 28px 0;
             }
 
-            .page-nav {
-                top: 80px;
-                border-radius: 20px;
+            .featured-rooms-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-view-all {
+                padding: 14px 30px;
+                font-size: 14px;
+            }
+
+            .room-specs {
+                flex-direction: column;
+                gap: 8px;
             }
         }
     </style>
