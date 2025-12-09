@@ -246,6 +246,10 @@
     </style>
  </head>
 <body class="bg-white min-h-screen flex flex-col">
+    <script>
+        // Set user authentication status from server
+        var isUserLoggedIn = @(Request.IsAuthenticated ? "true" : "false");
+    </script>
     <header class="bg-white/80 backdrop-blur border-b border-slate-200 sticky top-0 z-50">
         <div class="w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center py-3">
@@ -258,14 +262,15 @@
                     </a>
                 </div>
 
+
                 <!-- Menu giữa -->
                 <nav class="hidden md:flex flex-1 justify-center items-center gap-6 text-sm font-medium text-slate-600">
-                    @Html.ActionLink("Khách Sạn", "Index", "Home", new { area = "" }, new { @class = "pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors", data_scroll_target = "#hotel" })
-                    @Html.ActionLink("Phòng, Suite & Penthouse", "About", "Home", new { area = "" }, new { @class = "pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors", data_scroll_target = "#rooms" })
-                    @Html.ActionLink("Dịch Vụ", "Contact", "Home", new { area = "" }, new { @class = "pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors", data_scroll_target = "#services" })
-                    @Html.ActionLink("Vị Trí", "Location", "Home", new { area = "" }, new { @class = "pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors", data_scroll_target = "#location" })
-                    @Html.ActionLink("Nhà Hàng & Quầy Bar", "FoodandDrink", "Home", new { area = "" }, new { @class = "pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors", data_scroll_target = "#dining" })
-                    @Html.ActionLink("Sự Kiện & Sống Động", "PartyandEvent", "Home", new { area = "" }, new { @class = "pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors", data_scroll_target = "#events" })
+                    <a href="@Url.Action("Index", "Home")#hotel" class="pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#hotel">Khách Sạn</a>
+                    <a href="@Url.Action("Index", "Home")#rooms" class="pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#rooms">Phòng, Suite & Penthouse</a>
+                    <a href="@Url.Action("Index", "Home")#services" class="pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#services">Dịch Vụ</a>
+                    <a href="@Url.Action("Index", "Home")#location" class="pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#location">Vị Trí</a>
+                    <a href="@Url.Action("Index", "Home")#dining" class="pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#dining">Nhà Hàng & Quầy Bar</a>
+                    <a href="@Url.Action("Index", "Home")#events" class="pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#events">Sự Kiện & Sống Động</a>
                 </nav>
 
                 <!-- Nút auth bên phải -->
@@ -339,6 +344,9 @@
                 }, 100);
             }
 
+            // Expose openModal to global scope for use in other scripts
+            window.openModal = openModal;
+
             // Xử lý click
             document.addEventListener('click', function (e) {
                 // Mở modal (từ button header hoặc link trong modal)
@@ -361,6 +369,90 @@
             document.addEventListener('keydown', function (e) {
                 if (e.key === 'Escape') {
                     closeAllModals();
+                }
+            });
+        })();
+
+        // Smooth scroll for navbar links
+        (function () {
+            // Check if we're on the home page
+            function isHomePage() {
+                var path = window.location.pathname.toLowerCase();
+                return path === '/' || path === '/home' || path === '/home/index' || path.endsWith('/');
+            }
+
+            // Scroll to hash on page load (if on home page)
+            window.addEventListener('load', function() {
+                if (isHomePage() && window.location.hash) {
+                    setTimeout(function() {
+                        var targetElement = document.querySelector(window.location.hash);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    }, 100);
+                }
+            });
+
+            // Handle navbar link clicks
+            document.addEventListener('click', function (e) {
+                var link = e.target.closest('[data-scroll-target]');
+                if (link) {
+                    e.preventDefault();
+                    var targetSelector = link.getAttribute('data-scroll-target');
+                    var href = link.getAttribute('href');
+                    
+                    if (isHomePage()) {
+                        // We're on home page, scroll directly
+                        var targetElement = document.querySelector(targetSelector);
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                            // Update URL hash without jumping
+                            if (history.pushState) {
+                                history.pushState(null, null, targetSelector);
+                            }
+                        }
+                    } else {
+                        // We're on another page, navigate to home with hash
+                        if (href) {
+                            window.location.href = href;
+                        }
+                    }
+                }
+            });
+        })();
+
+        // Handle booking button clicks - check authentication
+        (function () {
+            document.addEventListener('click', function (e) {
+                // Check if clicked element is a booking button
+                var bookingBtn = e.target.closest('.btn-book, .btn-book-now');
+                
+                // Also check for btn-primary buttons with "Đặt phòng" text
+                if (!bookingBtn) {
+                    var primaryBtn = e.target.closest('.btn-primary');
+                    if (primaryBtn && primaryBtn.textContent.includes('Đặt phòng')) {
+                        bookingBtn = primaryBtn;
+                    }
+                }
+                
+                if (bookingBtn && !bookingBtn.disabled) {
+                    e.preventDefault();
+                    
+                    // Check if user is logged in
+                    if (!isUserLoggedIn) {
+                        // User not logged in, show login modal
+                        openModal('login');
+                    } else {
+                        // User is logged in, proceed with booking
+                        // TODO: Add booking logic here
+                        alert('Chức năng đặt phòng đang được phát triển!');
+                    }
                 }
             });
         })();

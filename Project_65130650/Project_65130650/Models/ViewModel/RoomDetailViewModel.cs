@@ -28,6 +28,48 @@ namespace Project_65130650.Models.ViewModels
             }
         }
 
+        // Danh sách hình ảnh (tách từ chuỗi HinhAnh)
+        public List<string> DanhSachHinhAnh
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(HinhAnh))
+                    return new List<string> { "~/Images/phonghangsang.jpeg" }; // Default image
+
+                var images = new List<string>(HinhAnh.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries));
+                var normalizedImages = new List<string>();
+                
+                // Normalize each image path
+                foreach (var img in images)
+                {
+                    var trimmedImg = img.Trim();
+                    
+                    // Nếu đường dẫn đã có ~/ thì giữ nguyên
+                    if (trimmedImg.StartsWith("~/"))
+                    {
+                        normalizedImages.Add(trimmedImg);
+                    }
+                    // Nếu đường dẫn bắt đầu bằng Images/ thì thêm ~/
+                    else if (trimmedImg.StartsWith("Images/"))
+                    {
+                        normalizedImages.Add("~/" + trimmedImg);
+                    }
+                    // Nếu chỉ có tên file thì thêm ~/Images/
+                    else if (!trimmedImg.Contains("/") && !trimmedImg.Contains("\\"))
+                    {
+                        normalizedImages.Add("~/Images/" + trimmedImg);
+                    }
+                    // Trường hợp khác giữ nguyên
+                    else
+                    {
+                        normalizedImages.Add(trimmedImg);
+                    }
+                }
+                
+                return normalizedImages.Count > 0 ? normalizedImages : new List<string> { "~/Images/phonghangsang.jpeg" };
+            }
+        }
+
         // Số phòng còn trống của loại phòng này
         public int SoPhongConTrong { get; set; }
 

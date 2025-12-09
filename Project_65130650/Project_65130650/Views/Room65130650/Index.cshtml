@@ -146,9 +146,32 @@
                 {
                     <article class="room-card">
                         <div class="room-card__image">
-                            <img src="@Url.Content("~/Images/phonghangsang.jpeg")" alt="@room.TenLoaiPhong" />
+                            @{
+                                var imgPath = "~/Images/phonghangsang.jpeg";
+                                if (!string.IsNullOrEmpty(room.HinhAnh))
+                                {
+                                    var img = room.HinhAnh.Split(',', ';')[0].Trim();
+                                    if (img.StartsWith("~/"))
+                                    {
+                                        imgPath = img;
+                                    }
+                                    else if (img.StartsWith("Images/"))
+                                    {
+                                        imgPath = "~/" + img;
+                                    }
+                                    else if (!img.Contains("/"))
+                                    {
+                                        imgPath = "~/Images/" + img;
+                                    }
+                                    else
+                                    {
+                                        imgPath = img;
+                                    }
+                                }
+                            }
+                            <img src="@Url.Content(imgPath)" alt="@room.TenLoaiPhong" />
                             <span class="availability-tag">
-                                <i class="fas fa-check-circle"></i> Còn @room.SoPhongConTrong phòng
+                                <i class="fas fa-check-circle"></i> Còn @room.SoPhongConTrong phòng trống
                             </span>
                         </div>
                         <div class="room-card__content">
@@ -222,6 +245,14 @@
                 }
             </div>
         }
+    </div>
+
+    <!-- Back Button -->
+    <div class="back-section">
+        <button onclick="window.history.back()" class="btn-back">
+            <i class="fas fa-arrow-left"></i>
+            Quay lại
+        </button>
     </div>
 </div>
 
@@ -829,6 +860,33 @@
             border-radius: 12px;
             font-weight: 600;
         }
+
+        /* Back Button */
+        .back-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 28px;
+            background: #f1f5f9;
+            color: #475569;
+            text-decoration: none;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .btn-back:hover {
+                background: #e2e8f0;
+                color: #0f172a;
+            }
 
         /* Responsive */
         @@media (max-width: 1200px) {

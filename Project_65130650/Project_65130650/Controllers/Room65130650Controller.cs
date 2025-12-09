@@ -84,8 +84,8 @@ namespace Project_65130650.Controllers
                     orderedQuery = query.OrderByDescending(x => x.LoaiPhong.giaCoBan);
                     break;
                 default:
-                    orderedQuery = query.OrderByDescending(x => x.SoPhongConTrong)
-                                        .ThenByDescending(x => x.LoaiPhong.giaCoBan);
+                    // Mặc định: hiển thị theo thứ tự tự nhiên trong database
+                    orderedQuery = query.OrderBy(x => x.LoaiPhong.maLoaiPhong);
                     break;
             }
 

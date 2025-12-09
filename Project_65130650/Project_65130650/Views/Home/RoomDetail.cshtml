@@ -16,7 +16,7 @@
         <!-- Left: Room Image Gallery -->
         <div class="room-gallery">
             <div class="main-image">
-                <img src="@Url.Content("~/Images/phonghangsang.jpeg")" alt="@Model.TenLoaiPhong" />
+                <img id="mainImage" src="@Url.Content(Model.DanhSachHinhAnh[0])" alt="@Model.TenLoaiPhong" />
                 <div class="availability-badge @(Model.SoPhongConTrong > 0 ? "available" : "unavailable")">
                     @if (Model.SoPhongConTrong > 0)
                     {
@@ -30,12 +30,18 @@
                     }
                 </div>
             </div>
-            <div class="thumbnail-gallery">
-                <img src="@Url.Content("~/Images/phonghangsang.jpeg")" alt="Hình 1" class="active" />
-                <img src="@Url.Content("~/Images/khonggian.jpg")" alt="Hình 2" />
-                <img src="@Url.Content("~/Images/sanhkhachsan.jpg")" alt="Hình 3" />
-                <img src="@Url.Content("~/Images/hoboi.jpg")" alt="Hình 4" />
-            </div>
+            @if (Model.DanhSachHinhAnh.Count > 1)
+            {
+                <div class="thumbnail-gallery">
+                    @for (int i = 0; i < Model.DanhSachHinhAnh.Count; i++)
+                    {
+                        <img src="@Url.Content(Model.DanhSachHinhAnh[i])" 
+                             alt="Hình @(i + 1)" 
+                             class="@(i == 0 ? "active" : "")" 
+                             data-index="@i" />
+                    }
+                </div>
+            }
         </div>
 
         <!-- Right: Room Information -->
@@ -219,10 +225,10 @@
 
     <!-- Back Button -->
     <div class="back-section">
-        <a href="@Url.Action("Index", "Home")#rooms" class="btn-back">
+        <button onclick="window.history.back()" class="btn-back">
             <i class="fas fa-arrow-left"></i>
-            Quay lại trang chủ
-        </a>
+            Quay lại
+        </button>
     </div>
 </div>
 
@@ -653,9 +659,11 @@
             background: #f1f5f9;
             color: #475569;
             text-decoration: none;
+            border: none;
             border-radius: 12px;
             font-size: 15px;
             font-weight: 500;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 

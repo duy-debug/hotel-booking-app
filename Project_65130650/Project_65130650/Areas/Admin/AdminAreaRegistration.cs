@@ -17,7 +17,7 @@ namespace Project_65130650.Areas.Admin
             context.MapRoute(
                 "Admin_default",
                 "Admin/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { controller = "Home65130650", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

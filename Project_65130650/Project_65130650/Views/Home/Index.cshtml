@@ -85,7 +85,30 @@
                     {
                         <article class="featured-room-card">
                             <div class="featured-room-card__image">
-                                <img src="@Url.Content("~/Images/phonghangsang.jpeg")" alt="@room.TenLoaiPhong" />
+                                @{
+                                    var imagePath = "~/Images/phonghangsang.jpeg"; // default
+                                    if (!string.IsNullOrEmpty(room.HinhAnh))
+                                    {
+                                        var firstImage = room.HinhAnh.Split(',', ';')[0].Trim();
+                                        if (firstImage.StartsWith("~/"))
+                                        {
+                                            imagePath = firstImage;
+                                        }
+                                        else if (firstImage.StartsWith("Images/"))
+                                        {
+                                            imagePath = "~/" + firstImage;
+                                        }
+                                        else if (!firstImage.Contains("/"))
+                                        {
+                                            imagePath = "~/Images/" + firstImage;
+                                        }
+                                        else
+                                        {
+                                            imagePath = firstImage;
+                                        }
+                                    }
+                                }
+                                <img src="@Url.Content(imagePath)" alt="@room.TenLoaiPhong" />
                                 <span class="featured-badge">
                                     <i class="fas fa-star"></i> Nổi bật
                                 </span>

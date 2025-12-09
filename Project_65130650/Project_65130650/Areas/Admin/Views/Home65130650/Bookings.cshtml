@@ -1,0 +1,451 @@
+﻿@model IEnumerable<Project_65130650.Models.DatPhong>
+@{
+    ViewBag.Title = "Quản lý Đặt phòng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <div class="header-content">
+            <p>Danh sách tất cả các đặt phòng trong hệ thống</p>
+        </div>
+    </div>
+
+    <div class="content-card">
+        <div class="card-body">
+            <div class="table-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm theo mã, khách hàng, phòng...">
+                </div>
+                <div class="filter-group">
+                    <select id="statusFilter" class="form-select">
+                        <option value="">Tất cả trạng thái</option>
+                        <option value="Chờ xác nhận">Chờ xác nhận</option>
+                        <option value="Đã xác nhận">Đã xác nhận</option>
+                        <option value="Đã hủy">Đã hủy</option>
+                        <option value="Hoàn thành">Hoàn thành</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="data-table" id="bookingsTable">
+                        <thead>
+                            <tr>
+                                <th>Mã ĐP</th>
+                                <th>Khách hàng</th>
+                                <th>Phòng</th>
+                                <th>Nhận phòng</th>
+                                <th>Trả phòng</th>
+                                <th>Số khách</th>
+                                <th>Tiền phòng</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày đặt</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model)
+                            {
+                                <tr>
+                                    <td><span class="badge badge-primary">@booking.maDatPhong</span></td>
+                                    <td>
+                                        @if (booking.NguoiDung != null)
+                                        {
+                                            <div class="customer-info">
+                                                <strong>@booking.NguoiDung.hoTen</strong>
+                                                <small>@booking.NguoiDung.email</small>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (booking.Phong != null)
+                                        {
+                                            <span class="room-badge">@booking.Phong.soPhong</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                    <td>@String.Format("{0:dd/MM/yyyy}", booking.ngayNhanPhong)</td>
+                                    <td>@String.Format("{0:dd/MM/yyyy}", booking.ngayTraPhong)</td>
+                                    <td>@booking.soKhach</td>
+                                    <td><strong>@String.Format("{0:N0}", booking.tienPhong) VNĐ</strong></td>
+                                    <td>
+                                        @{
+                                            var statusClass = "badge-secondary";
+                                            if (booking.trangThaiDatPhong == "Đã xác nhận") { statusClass = "badge-success"; }
+                                            else if (booking.trangThaiDatPhong == "Chờ xác nhận") { statusClass = "badge-warning"; }
+                                            else if (booking.trangThaiDatPhong == "Đã hủy") { statusClass = "badge-danger"; }
+                                            else if (booking.trangThaiDatPhong == "Hoàn thành") { statusClass = "badge-info"; }
+                                        }
+                                        <span class="badge @statusClass">@booking.trangThaiDatPhong</span>
+                                    </td>
+                                    <td>@String.Format("{0:dd/MM/yyyy HH:mm}", booking.ngayDat)</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-icon btn-info" title="Xem chi tiết">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-icon btn-success" title="Xác nhận">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button class="btn-icon btn-danger" title="Hủy">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>Chưa có đặt phòng nào</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .page-container {
+            padding: 30px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+        }
+
+        .header-content h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0 0 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-content h1 i {
+            color: #4f46e5;
+        }
+
+        .header-content p {
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .filter-group select {
+            padding: 12px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            min-width: 200px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+        }
+
+        .data-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-info {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .badge-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .customer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .customer-info strong {
+            color: #111827;
+        }
+
+        .customer-info small {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .room-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #f0f9ff;
+            color: #0284c7;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon.btn-info {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-icon.btn-info:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-icon.btn-success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .btn-icon.btn-success:hover {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-icon.btn-danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .btn-icon.btn-danger:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        .text-muted {
+            color: #9ca3af;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        @@media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .table-controls {
+                flex-direction: column;
+            }
+
+            .data-table {
+                font-size: 13px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px;
+            }
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            var searchValue = this.value.toLowerCase();
+            var table = document.getElementById('bookingsTable');
+            var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchValue) ? '' : 'none';
+            }
+        });
+
+        // Status filter
+        document.getElementById('statusFilter').addEventListener('change', function() {
+            var filterValue = this.value.toLowerCase();
+            var table = document.getElementById('bookingsTable');
+            var rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var statusCell = row.cells[7]; // Status column
+                var statusText = statusCell.textContent.toLowerCase();
+                
+                if (filterValue === '' || statusText.includes(filterValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        });
+    </script>
+}

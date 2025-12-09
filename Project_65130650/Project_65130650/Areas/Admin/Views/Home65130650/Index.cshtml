@@ -1,8 +1,464 @@
-﻿
+﻿@using Project_65130650.Models.ViewModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Dashboard";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="dashboard-container">
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+        <!-- Total Rooms -->
+        <div class="stat-card stat-primary">
+            <div class="stat-icon">
+                <i class="fas fa-door-open"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@ViewBag.TotalRooms</div>
+                <div class="stat-label">Tổng số phòng</div>
+            </div>
+        </div>
 
+        <!-- Occupied Rooms -->
+        <div class="stat-card stat-success">
+            <div class="stat-icon">
+                <i class="fas fa-bed"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@ViewBag.OccupiedRooms</div>
+                <div class="stat-label">Phòng đang sử dụng</div>
+            </div>
+        </div>
+
+        <!-- Occupancy Rate -->
+        <div class="stat-card stat-info">
+            <div class="stat-icon">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@ViewBag.OccupancyRate%</div>
+                <div class="stat-label">Tỷ lệ lấp đầy</div>
+            </div>
+        </div>
+
+        <!-- Monthly Bookings -->
+        <div class="stat-card stat-warning">
+            <div class="stat-icon">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@ViewBag.BookingsThisMonth</div>
+                <div class="stat-label">Đặt phòng tháng này</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Row Stats -->
+    <div class="stats-grid">
+        <!-- Monthly Revenue -->
+        <div class="stat-card stat-gradient-purple">
+            <div class="stat-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@String.Format("{0:N0}", ViewBag.RevenueThisMonth ?? 0) VNĐ</div>
+                <div class="stat-label">Doanh thu tháng này</div>
+            </div>
+        </div>
+
+        <!-- New Customers -->
+        <div class="stat-card stat-gradient-pink">
+            <div class="stat-icon">
+                <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@ViewBag.NewCustomersThisMonth</div>
+                <div class="stat-label">Khách hàng mới</div>
+            </div>
+        </div>
+
+        <!-- Check-ins Today -->
+        <div class="stat-card stat-gradient-cyan">
+            <div class="stat-icon">
+                <i class="fas fa-sign-in-alt"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@ViewBag.CheckinsToday</div>
+                <div class="stat-label">Check-in hôm nay</div>
+            </div>
+        </div>
+
+        <!-- Check-outs Today -->
+        <div class="stat-card stat-gradient-orange">
+            <div class="stat-icon">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-value">@ViewBag.CheckoutsToday</div>
+                <div class="stat-label">Check-out hôm nay</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="content-card">
+        <div class="card-header">
+            <h2><i class="fas fa-list"></i> Đặt phòng gần đây</h2>
+            <a href="@Url.Action("Bookings", "Home65130650", new { area = "Admin" })" class="btn-view-all">
+                Xem tất cả <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="card-body">
+            @if (ViewBag.RecentBookings != null && ((IEnumerable<RecentBookingViewModel>)ViewBag.RecentBookings).Any())
+            {
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mã ĐP</th>
+                                <th>Khách hàng</th>
+                                <th>Phòng</th>
+                                <th>Nhận phòng</th>
+                                <th>Trả phòng</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày đặt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in (IEnumerable<RecentBookingViewModel>)ViewBag.RecentBookings)
+                            {
+                                <tr>
+                                    <td><span class="badge badge-primary">@booking.MaDatPhong</span></td>
+                                    <td>
+                                        @if (booking.KhachHang != null)
+                                        {
+                                            <div class="customer-info">
+                                                <strong>@booking.KhachHang.hoTen</strong>
+                                                <small>@booking.KhachHang.email</small>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (booking.Phong != null)
+                                        {
+                                            <span class="room-badge">@booking.Phong.soPhong</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">N/A</span>
+                                        }
+                                    </td>
+                                    <td>@String.Format("{0:dd/MM/yyyy}", booking.NgayNhanPhong)</td>
+                                    <td>@String.Format("{0:dd/MM/yyyy}", booking.NgayTraPhong)</td>
+                                    <td>
+                                        @{
+                                            var statusClass = "badge-secondary";
+                                            if (booking.TrangThaiDatPhong == "Đã xác nhận") { statusClass = "badge-success"; }
+                                            else if (booking.TrangThaiDatPhong == "Chờ xác nhận") { statusClass = "badge-warning"; }
+                                            else if (booking.TrangThaiDatPhong == "Đã hủy") { statusClass = "badge-danger"; }
+                                        }
+                                        <span class="badge @statusClass">@booking.TrangThaiDatPhong</span>
+                                    </td>
+                                    <td>@String.Format("{0:dd/MM/yyyy HH:mm}", booking.NgayDat)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>Chưa có đặt phòng nào</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .dashboard-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(30%, -30%);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.12);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .stat-primary .stat-icon { background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%); }
+        .stat-success .stat-icon { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
+        .stat-info .stat-icon { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); }
+        .stat-warning .stat-icon { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+
+        .stat-gradient-purple {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+        }
+
+        .stat-gradient-pink {
+            background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%);
+            color: white;
+        }
+
+        .stat-gradient-cyan {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            color: white;
+        }
+
+        .stat-gradient-orange {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            color: white;
+        }
+
+        .stat-gradient-purple .stat-icon,
+        .stat-gradient-pink .stat-icon,
+        .stat-gradient-cyan .stat-icon,
+        .stat-gradient-orange .stat-icon {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 24px 30px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 0;
+        }
+
+        .card-header h2 i {
+            color: #4f46e5;
+        }
+
+        .btn-view-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background: #eef2ff;
+            color: #4f46e5;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-view-all:hover {
+            background: #4f46e5;
+            color: white;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table thead {
+            background: #f9fafb;
+        }
+
+        .data-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            padding: 16px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-primary {
+            background: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-secondary {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .customer-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .customer-info strong {
+            color: #111827;
+        }
+
+        .customer-info small {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .room-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #f0f9ff;
+            color: #0284c7;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+
+        .text-muted {
+            color: #9ca3af;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        @@media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .data-table {
+                font-size: 13px;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px;
+            }
+        }
+    </style>
+}
