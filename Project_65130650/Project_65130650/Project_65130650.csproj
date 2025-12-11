@@ -234,13 +234,13 @@
     <Content Include="Areas\Customer\Views\Home65130650\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Dashboard.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Bookings.cshtml" />
-    <Content Include="Areas\Admin\Views\Home65130650\Users.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\RoomTypes.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Rooms.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Services.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Payments.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Reports.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Profile.cshtml" />
+    <Content Include="Areas\Admin\Views\Home65130650\Users.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

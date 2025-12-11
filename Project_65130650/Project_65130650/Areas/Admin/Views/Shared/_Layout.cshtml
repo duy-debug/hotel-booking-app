@@ -507,6 +507,12 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        // Fallback nếu CDN bị chặn/offline
+        if (typeof window.jQuery === 'undefined') {
+            document.write('<script src="@Url.Content("~/Scripts/jquery-3.7.0.min.js")"><\/script>');
+        }
+    </script>
+    <script>
         // Active menu item based on current URL
         $(document).ready(function() {
             var currentUrl = window.location.href;

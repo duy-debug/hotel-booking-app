@@ -102,7 +102,7 @@ Hệ thống có 2 vai trò chính:
 
 ---
 
-## D. Quản lý Đặt phòng
+## D. Quản lý đơn Đặt phòng
 **Bảng: `DatPhong`**
 
 ### Chức năng:

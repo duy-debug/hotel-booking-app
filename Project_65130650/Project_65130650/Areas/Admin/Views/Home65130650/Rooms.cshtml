@@ -2,47 +2,55 @@
 @{
     ViewBag.Title = "Quản lý Phòng";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var roomTypes = ViewBag.RoomTypes as List<Project_65130650.Models.LoaiPhong>;
 }
 
 <div class="page-container">
     <div class="page-header">
         <div class="header-content">
-            <h1><i class="fas fa-door-open"></i> Quản lý Phòng</h1>
-            <p>Danh sách tất cả các phòng trong khách sạn</p>
+            <h3>Danh sách tất cả các phòng trong khách sạn</h3>
         </div>
         <div class="header-actions">
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" onclick="openAddModal()">
                 <i class="fas fa-plus"></i> Thêm phòng mới
             </button>
         </div>
     </div>
 
+    <!-- Stats Row -->
     <div class="stats-row">
         <div class="stat-box stat-blue">
             <i class="fas fa-door-open"></i>
             <div>
-                <div class="stat-number">@Model.Count()</div>
+                <div class="stat-number">@(ViewBag.TotalRooms ?? Model.Count())</div>
                 <div class="stat-label">Tổng số phòng</div>
             </div>
         </div>
         <div class="stat-box stat-green">
             <i class="fas fa-check-circle"></i>
             <div>
-                <div class="stat-number">@Model.Count(p => p.trangThai == "Trống")</div>
+                <div class="stat-number">@(ViewBag.AvailableRooms ?? Model.Count(p => p.trangThai == "Còn trống"))</div>
                 <div class="stat-label">Phòng trống</div>
+            </div>
+        </div>
+        <div class="stat-box stat-indigo">
+            <i class="fas fa-calendar-check"></i>
+            <div>
+                <div class="stat-number">@(ViewBag.BookedRooms ?? Model.Count(p => p.trangThai == "Đã đặt"))</div>
+                <div class="stat-label">Đã đặt</div>
             </div>
         </div>
         <div class="stat-box stat-orange">
             <i class="fas fa-bed"></i>
             <div>
-                <div class="stat-number">@Model.Count(p => p.trangThai == "Đang sử dụng")</div>
+                <div class="stat-number">@(ViewBag.OccupiedRooms ?? Model.Count(p => p.trangThai == "Đang sử dụng"))</div>
                 <div class="stat-label">Đang sử dụng</div>
             </div>
         </div>
         <div class="stat-box stat-purple">
             <i class="fas fa-tools"></i>
             <div>
-                <div class="stat-number">@Model.Count(p => p.trangThai == "Đang bảo trì")</div>
+                <div class="stat-number">@(ViewBag.MaintenanceRooms ?? Model.Count(p => p.trangThai == "Bảo trì"))</div>
                 <div class="stat-label">Đang bảo trì</div>
             </div>
         </div>
@@ -53,481 +61,639 @@
             <div class="table-controls">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Tìm kiếm theo số phòng, loại phòng...">
+                    <input type="text" id="searchInput" value="@ViewBag.Search" placeholder="Tìm kiếm theo số phòng">
                 </div>
                 <div class="filter-group">
-                    <select id="statusFilter" class="form-select">
-                        <option value="">Tất cả trạng thái</option>
-                        <option value="Trống">Trống</option>
-                        <option value="Đang sử dụng">Đang sử dụng</option>
-                        <option value="Đang bảo trì">Đang bảo trì</option>
-                    </select>
-                    <select id="floorFilter" class="form-select">
-                        <option value="">Tất cả tầng</option>
-                        @for (int i = 1; i <= 10; i++)
-                        {
-                            <option value="@i">Tầng @i</option>
-                        }
-                    </select>
+                    <!-- Status Custom Dropdown -->
+                    <div class="custom-dropdown" id="statusDropdown">
+                        <button class="dropdown-btn">
+                            <span class="selected-text" id="statusText">
+                                @(string.IsNullOrEmpty(ViewBag.Status) ? "Tất cả trạng thái" : ViewBag.Status)
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="javascript:void(0)" class="filter-option" data-type="status" data-value="">Tất cả trạng thái</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="status" data-value="Còn trống">Còn trống</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="status" data-value="Đã đặt">Đã đặt</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="status" data-value="Đang sử dụng">Đang sử dụng</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="status" data-value="Bảo trì">Bảo trì</a>
+                        </div>
+                        <input type="hidden" id="statusFilter" value="@ViewBag.Status">
+                    </div>
+
+                    <!-- Floor Custom Dropdown -->
+                    <div class="custom-dropdown" id="floorDropdown">
+                        <button class="dropdown-btn">
+                            <span class="selected-text" id="floorText">
+                                @(ViewBag.Floor != null ? "Tất cả tầng " + ViewBag.Floor : "Tất cả tầng")
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="javascript:void(0)" class="filter-option" data-type="floor" data-value="">Tất cả tầng</a>
+                            @for (int i = 1; i <= 10; i++)
+                            {
+                                <a href="javascript:void(0)" class="filter-option" data-type="floor" data-value="@i">Tầng @i</a>
+                            }
+                        </div>
+                        <input type="hidden" id="floorFilter" value="@ViewBag.Floor">
+                    </div>
                 </div>
             </div>
 
-            @if (Model != null && Model.Any())
-            {
-                <div class="rooms-grid">
-                    @foreach (var room in Model)
-                    {
-                        var statusClass = "room-available";
-                        var statusIcon = "fa-check-circle";
-                        if (room.trangThai == "Đang sử dụng") 
-                        { 
-                            statusClass = "room-occupied"; 
-                            statusIcon = "fa-bed";
-                        }
-                        else if (room.trangThai == "Đang bảo trì") 
-                        { 
-                            statusClass = "room-maintenance"; 
-                            statusIcon = "fa-tools";
-                        }
+            <div id="tableContainer">
+                <div class="table-responsive">
+                    <table class="data-table" id="roomsTable">
+                        <thead>
+                            <tr>
+                                <th>Số phòng</th>
+                                <th>Loại phòng</th>
+                                <th>Tầng</th>
+                                <th>Giá cơ bản</th>
+                                <th>Trạng thái</th>
+                                <th>Khả dụng</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var room in Model)
+                                {
+                                    <tr class="room-row" data-status="@room.trangThai" data-floor="@room.tang">
+                                        <td><strong>@room.soPhong</strong></td>
+                                        <td>@(room.LoaiPhong != null ? room.LoaiPhong.tenLoaiPhong : "N/A")</td>
+                                        <td>@room.tang</td>
+                                        <td>@String.Format("{0:N0}", room.LoaiPhong != null ? room.LoaiPhong.giaCoBan : 0)</td>
+                                        <td>
+                                            @if (room.trangThai == "Còn trống")
+                                            {<span class="badge badge-success">Còn trống</span> }
+                                            else if (room.trangThai == "Đang sử dụng")
+                                            { <span class="badge badge-warning">Đang sử dụng</span> }
+                                            else if (room.trangThai == "Đã đặt")
+                                            { <span class="badge badge-info">Đã đặt</span> }
+                                            else
+                                            { <span class="badge badge-danger">Bảo trì</span>}
+                                        </td>
+                                        <td>
+                                            @if (room.trangThaiHoatDong == true || room.trangThaiHoatDong == null)
+                                            {
+                                                <span class="badge badge-success"><i class="fas fa-check-circle"></i> Hoạt động</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-secondary"><i class="fas fa-ban"></i> Ngừng</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn-icon btn-info" onclick="viewRoom('@room.maPhong')" title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn-icon btn-warning" onclick="editRoom('@room.maPhong')" title="Chỉnh sửa">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </button>
+                                                <button class="btn-icon @(room.trangThaiHoatDong == true ? "btn-danger" : "btn-success")" onclick="toggleStatus('@room.maPhong')" title="@(room.trangThaiHoatDong == true ? "Vô hiệu hóa" : "Kích hoạt")">
+                                                    <i class="fas @(room.trangThaiHoatDong == true ? "fa-ban" : "fa-check")"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center">Không có dữ liệu phòng phù hợp.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
 
-                        <div class="room-card @statusClass" data-floor="@room.tang" data-status="@room.trangThai">
-                            <div class="room-header">
-                                <div class="room-number">@room.soPhong</div>
-                                <div class="room-status">
-                                    <i class="fas @statusIcon"></i>
-                                    <span>@room.trangThai</span>
-                                </div>
-                            </div>
-                            <div class="room-body">
-                                <div class="room-info">
-                                    <div class="info-item">
-                                        <i class="fas fa-layer-group"></i>
-                                        <span>Tầng @room.tang</span>
-                                    </div>
-                                    <div class="info-item">
-                                        <i class="fas fa-tag"></i>
-                                        <span>@(room.LoaiPhong != null ? room.LoaiPhong.tenLoaiPhong : "N/A")</span>
-                                    </div>
-                                    <div class="info-item">
-                                        <i class="fas fa-dollar-sign"></i>
-                                        <span>@String.Format("{0:N0}", room.LoaiPhong != null ? room.LoaiPhong.giaCoBan : 0) VNĐ/đêm</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="room-footer">
-                                <button class="btn-icon btn-info" title="Xem chi tiết">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                                <button class="btn-icon btn-warning" title="Chỉnh sửa">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-                                <button class="btn-icon btn-success" title="Đổi trạng thái">
-                                    <i class="fas fa-sync-alt"></i>
-                                </button>
-                            </div>
+                <!-- Pagination Controls -->
+                @if (ViewBag.TotalPages > 1)
+                {
+                    <div class="pagination-wrapper">
+                        <div class="pagination-controls">
+                            @if (ViewBag.CurrentPage > 1)
+                            {
+                                <a href="javascript:void(0)" onclick="changePage(@(ViewBag.CurrentPage - 1))" class="pagination-btn prev">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            }
+
+                            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                            {
+                                if (i == ViewBag.CurrentPage)
+                                {
+                                    <span class="pagination-btn current">@i</span>
+                                }
+                                else
+                                {
+                                    <a href="javascript:void(0)" onclick="changePage(@i)" class="pagination-btn">@i</a>
+                                }
+                            }
+
+                            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                            {
+                                <a href="javascript:void(0)" onclick="changePage(@(ViewBag.CurrentPage + 1))" class="pagination-btn next">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            }
                         </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <div class="empty-state">
-                    <i class="fas fa-door-closed"></i>
-                    <p>Chưa có phòng nào</p>
-                </div>
-            }
+                    </div>
+                }
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Add/Edit Room Modal -->
+<div id="roomModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Thêm phòng mới</h3>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="roomForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="maPhong" name="maPhong">
+                
+                <div class="form-group">
+                    <label for="soPhong" class="control-label">Số phòng <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="soPhong" name="soPhong" required placeholder="Ví dụ: 101, 201">
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="maLoaiPhong" class="control-label">Loại phòng <span class="text-danger">*</span></label>
+                            <select class="form-control" id="maLoaiPhong" name="maLoaiPhong" required>
+                                <option value="">-- Chọn loại phòng --</option>
+                                @if (roomTypes != null)
+                                {
+                                    foreach (var type in roomTypes)
+                                    {
+                                        <option value="@type.maLoaiPhong">@type.tenLoaiPhong (@String.Format("{0:N0}", type.giaCoBan))</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="tang" class="control-label">Tầng <span class="text-danger">*</span></label>
+                            <select class="form-control" id="tang" name="tang" required>
+                                @for (int i = 1; i <= 10; i++)
+                                {
+                                    <option value="@i">Tầng @i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="trangThai" class="control-label">Trạng thái hiện tại</label>
+                    <select class="form-control" id="trangThai" name="trangThai">
+                        <option value="Còn trống">Còn trống</option>
+                        <option value="Bảo trì">Bảo trì</option>
+                        <option value="Đang sử dụng">Đang sử dụng</option>
+                    </select>
+                </div>
+
+                <div class="text-right mt-3">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- View Detail Modal -->
+<div id="viewModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Chi tiết Phòng</h3>
+            <span class="close" onclick="closeViewModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="detail-grid" id="roomDetails">
+                <!-- Content loaded via JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @section Styles {
     <style>
-        .page-container {
-            padding: 30px;
-        }
+            .page-container { padding: 30px; }
+            .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
+            .header-content h1 { font-size: 28px; font-weight: 700; color: #111827; margin: 0 0 8px 0; display: flex; align-items: center; gap: 12px; }
+            .header-content h1 i { color: #4f46e5; }
+            .header-content p { color: #6b7280; margin: 0; }
+            .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px; }
+            .stat-box { background: white; padding: 24px; border-radius: 12px; display: flex; align-items: center; gap: 16px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); transition: all 0.3s ease; }
+            .stat-box:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); }
+            .stat-box i { font-size: 32px; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 12px; }
+            .stat-blue i { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+            .stat-green i { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); color: white; }
+            .stat-indigo i { background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%); color: white; }
+            .stat-orange i { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; }
+            .stat-purple i { background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%); color: white; }
+            .stat-number { font-size: 28px; font-weight: 700; color: #111827; }
+            .stat-label { font-size: 14px; color: #6b7280; }
+            .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+            .btn-primary { background: #4f46e5; color: white; }
+            .btn-primary:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+            .content-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08); overflow: hidden; }
+            .card-body { padding: 30px; }
+            .table-controls { display: flex; gap: 16px; margin-bottom: 24px; }
+            .search-box { flex: 1; position: relative; }
+            .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+            .search-box input { width: 100%; height: 46px; padding: 0 16px 0 44px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; }
 
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 30px;
-        }
-
-        .header-content h1 {
-            font-size: 28px;
-            font-weight: 700;
-            color: #111827;
-            margin: 0 0 8px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-content h1 i {
-            color: #4f46e5;
-        }
-
-        .header-content p {
-            color: #6b7280;
-            margin: 0;
-        }
-
-        .stats-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .stat-box {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        .stat-box:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-box i {
-            font-size: 32px;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-        }
-
-        .stat-blue i {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .stat-green i {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-            color: white;
-        }
-
-        .stat-orange i {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-            color: white;
-        }
-
-        .stat-purple i {
-            background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
-            color: white;
-        }
-
-        .stat-number {
-            font-size: 28px;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #6b7280;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: #4f46e5;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #4338ca;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-        }
-
-        .content-card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
-            overflow: hidden;
-        }
-
-        .card-body {
-            padding: 30px;
-        }
-
-        .table-controls {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .search-box {
-            flex: 1;
-            position: relative;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #9ca3af;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px 12px 44px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .search-box input:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        .filter-group {
-            display: flex;
-            gap: 12px;
-        }
-
-        .filter-group select {
-            padding: 12px 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 14px;
-            cursor: pointer;
-            min-width: 160px;
-        }
-
-        .rooms-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-
-        .room-card {
-            background: white;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .room-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .room-card.room-available {
-            border-color: #22c55e;
-        }
-
-        .room-card.room-occupied {
-            border-color: #f97316;
-        }
-
-        .room-card.room-maintenance {
-            border-color: #a855f7;
-        }
-
-        .room-header {
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .room-available .room-header {
-            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-        }
-
-        .room-occupied .room-header {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-        }
-
-        .room-maintenance .room-header {
-            background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
-        }
-
-        .room-number {
-            font-size: 24px;
-            font-weight: 700;
-        }
-
-        .room-status {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 6px 12px;
-            border-radius: 20px;
-        }
-
-        .room-body {
-            padding: 20px;
-        }
-
-        .room-info {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #6b7280;
-            font-size: 14px;
-        }
-
-        .info-item i {
-            width: 20px;
-            color: #4f46e5;
-        }
-
-        .room-footer {
-            padding: 16px 20px;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .btn-icon.btn-info {
-            background: #dbeafe;
-            color: #2563eb;
-        }
-
-        .btn-icon.btn-info:hover {
-            background: #2563eb;
-            color: white;
-        }
-
-        .btn-icon.btn-warning {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .btn-icon.btn-warning:hover {
-            background: #d97706;
-            color: white;
-        }
-
-        .btn-icon.btn-success {
-            background: #dcfce7;
-            color: #16a34a;
-        }
-
-        .btn-icon.btn-success:hover {
-            background: #16a34a;
-            color: white;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #9ca3af;
-        }
-
-        .empty-state i {
-            font-size: 48px;
-            margin-bottom: 16px;
-            display: block;
-        }
-
-        @@media (max-width: 768px) {
-            .page-header {
-                flex-direction: column;
-                gap: 16px;
+            /* Custom Dropdown Styles */
+            .custom-dropdown {
+                position: relative;
+                display: inline-block;
+                min-width: 160px;
             }
 
-            .table-controls {
-                flex-direction: column;
+            .dropdown-btn {
+                width: 100%;
+                height: 46px;
+                padding: 0 16px;
+                background: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 8px;
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14px;
+                color: #374151;
+
+                transition: all 0.2s;
             }
 
-            .filter-group {
-                flex-direction: column;
+            .dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: white;
+                min-width: 100%;
+                box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+                border-radius: 8px;
+                z-index: 100;
+                margin-top: 5px;
+                padding: 5px 0;
+                border: 1px solid #f3f4f6;
+                opacity: 0;
+                transform: translateY(-10px);
+                transition: all 0.3s ease;
+                max-height: 250px;
+                overflow-y: auto;
             }
 
-            .rooms-grid {
-                grid-template-columns: 1fr;
+            .custom-dropdown.active .dropdown-content {
+                display: block;
+                opacity: 1;
+                transform: translateY(0);
             }
-        }
+
+            .dropdown-content a {
+                color: #374151;
+                padding: 10px 16px;
+                text-decoration: none;
+                display: block;
+                font-size: 14px;
+                transition: background 0.2s;
+            }
+
+            .dropdown-content a:hover {
+                background-color: #f3f4f6;
+                color: #4f46e5;
+            }
+
+            .dropdown-btn:hover {
+                border-color: #4f46e5;
+                color: #4f46e5;
+            }
+
+            /* Pagination Styles */
+            .pagination-wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 20px 0;
+                border-top: 1px solid #e5e7eb;
+                margin-top: 20px;
+            }
+
+            .pagination-controls {
+                display: flex;
+                gap: 4px;
+            }
+
+            .pagination-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 36px;
+                height: 36px;
+                padding: 0 8px;
+                border: 1px solid #e5e7eb;
+                border-radius: 6px;
+                background: white;
+                color: #374151;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+            }
+
+            .pagination-btn:hover {
+                background: #f9fafb;
+                border-color: #4f46e5;
+                color: #4f46e5;
+            }
+
+            .pagination-btn.current {
+                background: #4f46e5;
+                border-color: #4f46e5;
+                color: white;
+            }
+
+            
+            /* Table Styles */
+            .table-responsive { overflow-x: auto; }
+            .data-table { width: 100%; border-collapse: collapse; }
+            .data-table thead { background: #f9fafb; }
+            .data-table th { padding: 12px 16px; text-align: left; font-weight: 600; font-size: 13px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+            .data-table td { padding: 16px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+            .data-table tbody tr:hover { background: #f9fafb; }
+
+            .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+            .badge-primary { background: #eef2ff; color: #4f46e5; }
+            .badge-success { background: #dcfce7; color: #16a34a; }
+            .badge-warning { background: #fef3c7; color: #d97706; }
+            .badge-danger { background: #fee2e2; color: #dc2626; }
+            .badge-info { background: #dbeafe; color: #2563eb; }
+            .badge-secondary { background: #f3f4f6; color: #6b7280; }
+
+            .action-buttons { display: flex; gap: 8px; }
+            .btn-icon { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+            .btn-icon.btn-info { background: #dbeafe; color: #2563eb; }
+            .btn-icon.btn-info:hover { background: #2563eb; color: white; }
+            .btn-icon.btn-warning { background: #fef3c7; color: #d97706; }
+            .btn-icon.btn-warning:hover { background: #d97706; color: white; }
+            .btn-icon.btn-danger { background: #fee2e2; color: #dc2626; }
+            .btn-icon.btn-danger:hover { background: #dc2626; color: white; }
+            .btn-icon.btn-success { background: #dcfce7; color: #16a34a; }
+            .btn-icon.btn-success:hover { background: #16a34a; color: white; }
+
+            .empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; }
+            .empty-state i { font-size: 48px; margin-bottom: 16px; display: block; }
+            
+            /* Modal */
+            .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow: auto; }
+            .modal-content { background-color: #fefefe; margin: 5% auto; padding: 0; border-radius: 12px; width: 90%; max-width: 600px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+            .modal-header { padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
+            .modal-header h3 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+            .modal-body { padding: 20px; }
+            .close { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+            .close:hover { color: black; }
+            .form-control { display: block; width: 100%; padding: 0.5rem 0.75rem; font-size: 1rem; line-height: 1.5; color: #495057; background-color: #fff; border: 1px solid #ced4da; border-radius: 0.25rem; }
+            .form-group { margin-bottom: 1rem; }
+            .form-row { display: flex; flex-wrap: wrap; margin-right: -5px; margin-left: -5px; }
+            .col-md-6 { flex: 0 0 50%; max-width: 50%; padding: 0 5px; }
+            .text-danger { color: #dc2626; }
+            .text-right { text-align: right; }
+            .mt-3 { margin-top: 1rem; }
+            .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+            .detail-item { background: #f9fafb; padding: 12px; border-radius: 8px; }
+            .detail-item label { font-size: 12px; color: #6b7280; display: block; margin-bottom: 4px; }
+            .detail-item span { font-weight: 600; color: #111827; }
+
+            @@media (max-width: 768px) {
+                .page-header { flex-direction: column; gap: 16px; }
+                .table-controls { flex-direction: column; }
+                .filter-group { flex-direction: column; }
+            }
     </style>
 }
 
 @section Scripts {
     <script>
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            var searchValue = this.value.toLowerCase();
-            var rooms = document.querySelectorAll('.room-card');
+        var isEditMode = false;
 
-            rooms.forEach(function(room) {
-                var text = room.textContent.toLowerCase();
-                room.style.display = text.includes(searchValue) ? '' : 'none';
+        // Server-side AJAX Search and Filter (Fragment Loading)
+        function performSearch(page = 1) {
+            var search = $('#searchInput').val();
+            var status = $('#statusFilter').val();
+            var floor = $('#floorFilter').val();
+            
+            var url = '@Url.Action("Rooms", "Home65130650", new { area = "Admin" })';
+            
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    page: page,
+                    search: search,
+                    status: status,
+                    floor: floor
+                },
+                success: function(result) {
+                    // Extract only the table container from the full page response
+                    var newContent = $(result).find('#tableContainer').html();
+                    $('#tableContainer').html(newContent);
+                },
+                error: function() {
+                    console.error('Lỗi tải dữ liệu');
+                }
+            });
+        }
+
+        function changePage(page) {
+            performSearch(page);
+        }
+
+        // Search Input Timer for Debounce
+        var searchTimer;
+        $('#searchInput').on('input', function() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function() {
+                performSearch(1);
+            }, 500);
+        });
+        
+        // Toggle Dropdowns
+        $('.dropdown-btn').on('click', function(e) {
+            e.stopPropagation();
+            var $parent = $(this).parent();
+            $('.custom-dropdown').not($parent).removeClass('active');
+            $parent.toggleClass('active');
+        });
+
+        // Close dropdowns when clicking outside
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.custom-dropdown').length) {
+                $('.custom-dropdown').removeClass('active');
+            }
+        });
+
+
+        // Handle Custom Dropdown Selection
+        $('.filter-option').on('click', function() {
+            var type = $(this).data('type');
+            var value = $(this).data('value');
+            var text = $(this).text();
+            
+            if (type === 'status') {
+                $('#statusFilter').val(value);
+                $('#statusText').text(text);
+            } else if (type === 'floor') {
+                $('#floorFilter').val(value);
+                $('#floorText').text(text);
+            }
+            
+            $(this).closest('.custom-dropdown').removeClass('active');
+            
+            // Trigger search (Reload)
+            performSearch(1); 
+        });
+
+        // Modal Controls
+        function openAddModal() {
+            isEditMode = false;
+            document.getElementById('modalTitle').textContent = 'Thêm phòng mới';
+            document.getElementById('roomForm').reset();
+            document.getElementById('maPhong').value = '';
+            document.getElementById('soPhong').readOnly = false;
+            document.getElementById('roomModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('roomModal').style.display = 'none';
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Add/Update Room
+        $('#roomForm').on('submit', function(e) {
+            e.preventDefault();
+            var url = isEditMode
+                ? '@Url.Action("UpdateRoom", "Home65130650", new { area = "Admin" })'
+                : '@Url.Action("CreateRoom", "Home65130650", new { area = "Admin" })';
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function(res) {
+                    if(res.success) {
+                        alert(res.message);
+                        closeModal();
+                        performSearch(); // Reload table via AJAX
+                    } else {
+                        alert(res.error || 'Có lỗi xảy ra');
+                    }
+                },
+                error: function(err) {
+                    alert('Lỗi hệ thống');
+                }
             });
         });
 
-        // Status filter
-        document.getElementById('statusFilter').addEventListener('change', function() {
-            filterRooms();
-        });
-
-        // Floor filter
-        document.getElementById('floorFilter').addEventListener('change', function() {
-            filterRooms();
-        });
-
-        function filterRooms() {
-            var statusValue = document.getElementById('statusFilter').value;
-            var floorValue = document.getElementById('floorFilter').value;
-            var rooms = document.querySelectorAll('.room-card');
-
-            rooms.forEach(function(room) {
-                var roomStatus = room.getAttribute('data-status');
-                var roomFloor = room.getAttribute('data-floor');
-                
-                var statusMatch = statusValue === '' || roomStatus === statusValue;
-                var floorMatch = floorValue === '' || roomFloor === floorValue;
-                
-                room.style.display = (statusMatch && floorMatch) ? '' : 'none';
+        // View Room
+        function viewRoom(id) {
+            $.ajax({
+                url: '@Url.Action("GetRoomDetails", "Home65130650", new { area = "Admin" })',
+                type: 'GET',
+                data: { id: id },
+                success: function(res) {
+                    if(res.success) {
+                        var d = res.data;
+                        var html = `
+                            <div class="detail-item"><label>Mã phòng</label><span>${d.maPhong}</span></div>
+                            <div class="detail-item"><label>Số phòng</label><span>${d.soPhong}</span></div>
+                            <div class="detail-item"><label>Loại phòng</label><span>${d.tenLoaiPhong}</span></div>
+                            <div class="detail-item"><label>Tầng</label><span>${d.tang}</span></div>
+                             <div class="detail-item"><label>Giá cơ bản</label><span>${new Intl.NumberFormat('vi-VN').format(d.giaCoBan)} VNĐ</span></div>
+                            <div class="detail-item"><label>Trạng thái</label><span>${d.trangThai}</span></div>
+                            <div class="detail-item"><label>Tình trạng hoạt động</label><span>${d.trangThaiHoatDong ? 'Đang hoạt động' : 'Đã vô hiệu hóa'}</span></div>
+                        `;
+                        $('#roomDetails').html(html);
+                        document.getElementById('viewModal').style.display = 'block';
+                    } else {
+                        alert(res.error);
+                    }
+                }
             });
+        }
+
+        // Edit Room
+        function editRoom(id) {
+            isEditMode = true;
+            $.ajax({
+                url: '@Url.Action("GetRoomDetails", "Home65130650", new { area = "Admin" })',
+                type: 'GET',
+                data: { id: id },
+                success: function(res) {
+                    if(res.success) {
+                        var d = res.data;
+                        document.getElementById('modalTitle').textContent = 'Chỉnh sửa Phòng';
+                        document.getElementById('maPhong').value = d.maPhong;
+                        document.getElementById('soPhong').value = d.soPhong;
+                        document.getElementById('soPhong').readOnly = false; // Allow edit number or not? User didn't specify. Assuming yes.
+                        document.getElementById('maLoaiPhong').value = d.maLoaiPhong;
+                        document.getElementById('tang').value = d.tang;
+                        document.getElementById('trangThai').value = d.trangThai;
+                        
+                        document.getElementById('roomModal').style.display = 'block';
+                    } else {
+                        alert(res.error);
+                    }
+                }
+            });
+        }
+
+        // Toggle Status
+        function toggleStatus(id) {
+            if (confirm('Bạn có chắc chắn muốn thay đổi trạng thái hoạt động của phòng này?')) {
+                $.ajax({
+                    url: '@Url.Action("ToggleRoomStatus", "Home65130650", new { area = "Admin" })',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function(res) {
+                        if(res.success) {
+                            alert(res.message);
+                             performSearch(); // Reload table via AJAX
+                        } else {
+                            alert(res.error || 'Có lỗi xảy ra');
+                        }
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi xử lý yêu cầu.');
+                    }
+                });
+            }
         }
     </script>
 }
