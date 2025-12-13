@@ -21,6 +21,7 @@ namespace Project_65130650.Models.ViewModels
         public decimal? MaxPrice { get; set; }
         public int? MinCapacity { get; set; }
         public string SortOrder { get; set; } // "price_asc", "price_desc"
+        public string Status { get; set; } // "available", "soldout"
 
         // Danh sách loại phòng cho dropdown filter
         public List<LoaiPhongFilterItem> LoaiPhongs { get; set; }
@@ -51,6 +52,9 @@ namespace Project_65130650.Models.ViewModels
 
         // Số phòng còn trống
         public int SoPhongConTrong { get; set; }
+
+        // Trạng thái hiển thị (Còn trống, Hết phòng, Bảo trì)
+        public string TrangThaiHienThi { get; set; }
     }
 
     public class LoaiPhongFilterItem

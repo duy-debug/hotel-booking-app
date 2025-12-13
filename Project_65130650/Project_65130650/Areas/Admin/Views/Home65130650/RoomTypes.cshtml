@@ -1,63 +1,255 @@
 ﻿@model IEnumerable<Project_65130650.Models.LoaiPhong>
 @{
-    ViewBag.Title = "Quản lý Loại phòng";
+    ViewBag.Title = "Quản lý Loại Phòng";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
 <div class="page-container">
     <div class="page-header">
         <div class="header-content">
-            <h1><i class="fas fa-th-large"></i> Quản lý Loại phòng</h1>
-            <p>Danh sách các loại phòng trong khách sạn</p>
+            <h3>Danh sách các loại phòng trong khách sạn</h3>
         </div>
         <div class="header-actions">
-            <button class="btn btn-primary">
-                <i class="fas fa-plus"></i> Thêm loại phòng
+            <button class="btn btn-primary" onclick="openAddModal()">
+                <i class="fas fa-plus"></i> Thêm loại phòng mới
             </button>
         </div>
     </div>
 
     <div class="content-card">
         <div class="card-body">
-            @if (Model != null && Model.Any())
-            {
-                <div class="room-types-grid">
-                    @foreach (var roomType in Model)
-                    {
-                        <div class="room-type-card">
-                            <div class="card-header-custom">
-                                <h3>@roomType.tenLoaiPhong</h3>
-                                <span class="price">@String.Format("{0:N0}", roomType.giaCoBan) VNĐ/đêm</span>
-                            </div>
-                            <div class="card-body-custom">
-                                <div class="info-row">
-                                    <i class="fas fa-users"></i>
-                                    <span>Sức chứa: @roomType.soNguoiToiDa người</span>
-                                </div>
-                                <div class="info-row">
-                                    <i class="fas fa-expand"></i>
-                                    <span>Diện tích: @(roomType.dienTichPhong ?? 0) m²</span>
-                                </div>
-                                <div class="description">
-                                    @(roomType.moTa ?? "Chưa có mô tả")
-                                </div>
-                            </div>
-                            <div class="card-footer-custom">
-                                <button class="btn-icon btn-info"><i class="fas fa-eye"></i></button>
-                                <button class="btn-icon btn-warning"><i class="fas fa-edit"></i></button>
-                                <button class="btn-icon btn-danger"><i class="fas fa-trash"></i></button>
-                            </div>
+             <div class="table-controls">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" value="@ViewBag.Search" placeholder="Tìm kiếm loại phòng">
+                </div>
+                <div class="filter-group">
+                    <!-- Availability Custom Dropdown -->
+                    <div class="custom-dropdown" id="availabilityDropdown">
+                        <button class="dropdown-btn">
+                            <span class="selected-text" id="availabilityText">
+                                @(ViewBag.Availability == "active" ? "Đang hoạt động" : (ViewBag.Availability == "inactive" ? "Ngừng hoạt động" : "Tất cả tình trạng"))
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="">Tất cả tình trạng</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="active">Đang hoạt động</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="inactive">Ngừng hoạt động</a>
                         </div>
-                    }
+                        <input type="hidden" id="availabilityFilter" value="@ViewBag.Availability">
+                    </div>
                 </div>
-            }
-            else
-            {
-                <div class="empty-state">
-                    <i class="fas fa-th-large"></i>
-                    <p>Chưa có loại phòng nào</p>
+            </div>
+
+            <div id="tableContainer">
+                <div class="table-responsive">
+                    <table class="data-table" id="roomTypesTable">
+                        <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Tên loại phòng</th>
+                                <th>Giá cơ bản</th>
+                                <th>Sức chứa</th>
+                                <th>Diện tích</th>
+                                <th>Khả dụng</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                int index = 1;
+                                foreach (var type in Model)
+                                {
+                                    <tr class="room-type-row">
+                                        <td>@index</td>
+                                        <td>@type.tenLoaiPhong</td>
+                                        <td>@String.Format("{0:N0}", type.giaCoBan) VNĐ</td>
+                                        <td>@type.soNguoiToiDa người</td>
+                                        <td>@(type.dienTichPhong != null ? type.dienTichPhong + " m²" : "N/A")</td>
+                                        <td>
+                                            @if (type.trangThaiHoatDong == true || type.trangThaiHoatDong == null)
+                                            {
+                                                <span class="badge badge-success"><i class="fas fa-check-circle"></i> Hoạt động</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-secondary"><i class="fas fa-ban"></i> Ngừng</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn-icon btn-info" onclick="viewRoomType('@type.maLoaiPhong')" title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn-icon btn-warning" onclick="editRoomType('@type.maLoaiPhong')" title="Chỉnh sửa">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </button>
+                                                <button class="btn-icon @(type.trangThaiHoatDong == true ? "btn-danger" : "btn-success")" onclick="toggleStatus('@type.maLoaiPhong')" title="@(type.trangThaiHoatDong == true ? "Vô hiệu hóa" : "Kích hoạt")">
+                                                    <i class="fas @(type.trangThaiHoatDong == true ? "fa-ban" : "fa-check")"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    { index++; }
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7">
+                                        <div class="empty-state" style="height: 65vh; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                            <h4 style="margin: 0 0 8px 0; color: #334155; font-weight: 600;">Không tìm thấy loại phòng nào</h4>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
-            }
+
+                <!-- Pagination Controls -->
+                @if (ViewBag.TotalPages > 1)
+                {
+                    <div class="pagination-wrapper">
+                        <div class="pagination-controls">
+                            @if (ViewBag.CurrentPage > 1)
+                            {
+                                <a href="javascript:void(0)" onclick="changePage(@(ViewBag.CurrentPage - 1))" class="pagination-btn prev">
+                                    <i class="fas fa-angle-left"></i>
+                                </a>
+                            }
+
+                            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                            {
+                                if (i == ViewBag.CurrentPage)
+                                {
+                                    <span class="pagination-btn current">@i</span>
+                                }
+                                else
+                                {
+                                    <a href="javascript:void(0)" onclick="changePage(@i)" class="pagination-btn">@i</a>
+                                }
+                            }
+
+                            @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                            {
+                                <a href="javascript:void(0)" onclick="changePage(@(ViewBag.CurrentPage + 1))" class="pagination-btn next">
+                                    <i class="fas fa-angle-right"></i>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Room Type Modal -->
+<div id="roomTypeModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Thêm loại phòng mới</h3>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="roomTypeForm" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="maLoaiPhong" name="maLoaiPhong">
+                
+                <div class="form-row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="tenLoaiPhong" class="control-label">Tên loại phòng <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="tenLoaiPhong" name="tenLoaiPhong" required placeholder="Ví dụ: Phòng đơn, Phòng đôi">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                         <div class="form-group">
+                            <label for="loaiGiuong" class="control-label">Loại giường</label>
+                            <input type="text" class="form-control" id="loaiGiuong" name="loaiGiuong" placeholder="Ví dụ: 1 Giường đôi">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="soNguoiToiDa" class="control-label">Sức chứa (người) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="soNguoiToiDa" name="soNguoiToiDa" required min="1">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="dienTichPhong" class="control-label">Diện tích (m²)</label>
+                            <input type="number" class="form-control" id="dienTichPhong" name="dienTichPhong" min="0" step="0.01">
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="giaCoBan" class="control-label">Giá cơ bản (VNĐ) <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="giaCoBan" name="giaCoBan" required min="0">
+                        </div>
+                    </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="trangThaiHoatDong" class="control-label">Trạng thái</label>
+                            <select class="form-control" id="trangThaiHoatDong" name="trangThaiHoatDong">
+                                <option value="true">Đang hoạt động</option>
+                                <option value="false">Ngừng hoạt động</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="tienNghi" class="control-label">Tiện nghi</label>
+                    <textarea class="form-control" id="tienNghi" name="tienNghi" rows="2" placeholder="Ví dụ: Wifi, Tivi, Tủ lạnh..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="moTa" class="control-label">Mô tả</label>
+                    <textarea class="form-control" id="moTa" name="moTa" rows="3" placeholder="Nhập mô tả loại phòng..."></textarea>
+                </div>
+
+                <div class="form-group">
+                     <label for="imageFile" class="control-label">Hình ảnh</label>
+                    <input type="file" class="form-control" id="imageFile" name="imageFile" accept="image/*" onchange="previewImage(this)">
+                    <div id="imagePreview" style="margin-top: 10px; display: none;">
+                        <img src="" alt="Preview" style="max-height: 200px; max-width: 100%; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div class="text-right mt-3">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- View Detail Modal -->
+<div id="viewModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Chi tiết Loại phòng</h3>
+            <span class="close" onclick="closeViewModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div id="roomTypeDetails">
+                <!-- Content loaded via JS -->
+            </div>
+             <div class="text-right mt-3">
+                <button type="button" class="btn btn-secondary" onclick="closeViewModal()">Đóng</button>
+            </div>
         </div>
     </div>
 </div>
@@ -66,33 +258,339 @@
     <style>
         .page-container { padding: 30px; }
         .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
-        .header-content h1 { font-size: 28px; font-weight: 700; color: #111827; margin: 0 0 8px 0; display: flex; align-items: center; gap: 12px; }
-        .header-content h1 i { color: #4f46e5; }
-        .header-content p { color: #6b7280; margin: 0; }
+        .header-content h3 { font-size: 24px; font-weight: 700; color: #111827; margin: 0; }
+        
         .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
         .btn-primary { background: #4f46e5; color: white; }
         .btn-primary:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-secondary { background: #6b7280; color: white; }
+        .btn-secondary:hover { background: #4b5563; }
+
         .content-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08); overflow: hidden; }
         .card-body { padding: 30px; }
-        .room-types-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
-        .room-type-card { background: white; border: 2px solid #e5e7eb; border-radius: 12px; overflow: hidden; transition: all 0.3s ease; }
-        .room-type-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); border-color: #4f46e5; }
-        .card-header-custom { padding: 24px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
-        .card-header-custom h3 { margin: 0 0 8px 0; font-size: 20px; font-weight: 700; }
-        .price { font-size: 18px; font-weight: 600; }
-        .card-body-custom { padding: 20px; }
-        .info-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; color: #6b7280; }
-        .info-row i { color: #4f46e5; width: 20px; }
-        .description { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; line-height: 1.6; }
-        .card-footer-custom { padding: 16px 20px; border-top: 1px solid #e5e7eb; display: flex; justify-content: center; gap: 8px; }
-        .btn-icon { width: 36px; height: 36px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        
+        .table-controls { display: flex; gap: 16px; margin-bottom: 24px; }
+        .search-box { flex: 1; position: relative; }
+        .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+        .search-box input { width: 100%; height: 46px; padding: 0 16px 0 44px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; }
+
+        /* Custom Dropdown Styles */
+        .custom-dropdown { position: relative; display: inline-block; min-width: 160px; }
+        .dropdown-btn { width: 100%; height: 46px; padding: 0 16px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #374151; transition: all 0.2s; }
+        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 100%; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100; margin-top: 5px; padding: 5px 0; border: 1px solid #f3f4f6; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease; }
+        .custom-dropdown.active .dropdown-content { display: block; opacity: 1; transform: translateY(0); }
+        .dropdown-content a { color: #374151; padding: 10px 16px; text-decoration: none; display: block; font-size: 14px; transition: background 0.2s; }
+        .dropdown-content a:hover { background-color: #f3f4f6; color: #4f46e5; }
+        
+        /* Table Styles */
+        .table-responsive { overflow-x: auto; height: 65vh; overflow-y: auto; }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table thead { background: #f9fafb; position: sticky; top: 0; z-index: 10; }
+        .data-table th { padding: 12px 16px; text-align: left; font-weight: 600; font-size: 13px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+        .data-table td { padding: 16px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+        .data-table tbody tr:hover { background: #f9fafb; }
+
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+        .badge-success { background: #dcfce7; color: #16a34a; }
+        .badge-secondary { background: #f3f4f6; color: #6b7280; }
+
+        .action-buttons { display: flex; gap: 8px; }
+        .btn-icon { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
         .btn-icon.btn-info { background: #dbeafe; color: #2563eb; }
         .btn-icon.btn-info:hover { background: #2563eb; color: white; }
         .btn-icon.btn-warning { background: #fef3c7; color: #d97706; }
         .btn-icon.btn-warning:hover { background: #d97706; color: white; }
         .btn-icon.btn-danger { background: #fee2e2; color: #dc2626; }
         .btn-icon.btn-danger:hover { background: #dc2626; color: white; }
-        .empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; }
-        .empty-state i { font-size: 48px; margin-bottom: 16px; display: block; }
+        .btn-icon.btn-success { background: #dcfce7; color: #16a34a; }
+        .btn-icon.btn-success:hover { background: #16a34a; color: white; }
+
+        /* Pagination Styles */
+        .pagination-wrapper { display: flex; justify-content: center; align-items: center; padding: 20px 0; border-top: 1px solid #e5e7eb; margin-top: 20px; }
+        .pagination-controls { display: flex; gap: 4px; }
+        .pagination-btn { display: flex; align-items: center; justify-content: center; min-width: 36px; height: 36px; padding: 0 8px; border: 1px solid #e5e7eb; border-radius: 6px; background: white; color: #374151; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
+        .pagination-btn:hover { background: #f9fafb; border-color: #4f46e5; color: #4f46e5; }
+        .pagination-btn.current { background: #4f46e5; border-color: #4f46e5; color: white; }
+
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow: auto; }
+        .modal-content { background-color: #fefefe; margin: 5% auto; padding: 0; border-radius: 12px; width: 90%; max-width: 600px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); max-height: 85vh; overflow-y: auto;}
+        .modal-header { padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; z-index: 10; }
+        .modal-header h3 { margin: 0; font-size: 1.25rem; font-weight: 600; }
+        .modal-body { padding: 20px; }
+        .close { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: black; }
+        
+        .form-control { display: block; width: 100%; padding: 0.5rem 0.75rem; font-size: 1rem; line-height: 1.5; color: #495057; background-color: #fff; border: 1px solid #ced4da; border-radius: 0.25rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-row { display: flex; flex-wrap: wrap; margin-right: -5px; margin-left: -5px; }
+        .col-md-6 { flex: 0 0 50%; max-width: 50%; padding: 0 5px; }
+        .text-danger { color: #dc2626; }
+        .text-right { text-align: right; }
+        .mt-3 { margin-top: 1rem; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .detail-item { background: #f9fafb; padding: 12px; border-radius: 8px; }
+        .detail-item label { font-size: 12px; color: #6b7280; display: block; margin-bottom: 4px; }
+        .detail-item span { font-weight: 600; color: #111827; }
+
+        @@media (max-width: 768px) {
+            .page-header { flex-direction: column; gap: 16px; }
+            .table-controls { flex-direction: column; }
+        }
     </style>
+}
+
+@section Scripts {
+    <script>
+        var isEditMode = false;
+
+        // Populate search/filter
+        function performSearch(page = 1) {
+            var search = $('#searchInput').val();
+            var availability = $('#availabilityFilter').val();
+            
+            var url = '@Url.Action("RoomTypes", "Home65130650", new { area = "Admin" })';
+            
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    page: page,
+                    search: search,
+                    availability: availability
+                },
+                success: function(result) {
+                    // Extract new content and update table container
+                    var newContent = $(result).find('#tableContainer').html();
+                    if (newContent) {
+                         $('#tableContainer').html(newContent);
+                    } else {
+                        // Fallback if extraction fails
+                         location.reload(); 
+                    }
+                },
+                error: function() {
+                    console.error('Lỗi tải dữ liệu');
+                }
+            });
+        }
+
+        function changePage(page) {
+            performSearch(page);
+        }
+
+        // Search debounce
+        var searchTimer;
+        $('#searchInput').on('input', function() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function() {
+                performSearch(1);
+            }, 500);
+        });
+
+        // Dropdown toggle
+        $('.dropdown-btn').on('click', function(e) {
+            e.stopPropagation();
+            var $parent = $(this).parent();
+            $('.custom-dropdown').not($parent).removeClass('active');
+            $parent.toggleClass('active');
+        });
+
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('.custom-dropdown').length) {
+                $('.custom-dropdown').removeClass('active');
+            }
+        });
+
+        $('.filter-option').on('click', function() {
+            var type = $(this).data('type');
+            var value = $(this).data('value');
+            var text = $(this).text();
+            
+            if (type === 'availability') {
+                $('#availabilityFilter').val(value);
+                $('#availabilityText').text(text);
+                performSearch(1);
+            }
+            $(this).closest('.custom-dropdown').removeClass('active');
+        });
+
+        // Modal Controls
+        function openAddModal() {
+            isEditMode = false;
+            document.getElementById('modalTitle').textContent = 'Thêm loại phòng mới';
+            document.getElementById('roomTypeForm').reset();
+            document.getElementById('maLoaiPhong').value = '';
+            document.getElementById('trangThaiHoatDong').value = 'true';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('imagePreview').getElementsByTagName('img')[0].src = '';
+            document.getElementById('roomTypeModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('roomTypeModal').style.display = 'none';
+        }
+
+        function closeViewModal() {
+            document.getElementById('viewModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Preview Image on Change
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = document.getElementById('imagePreview').getElementsByTagName('img')[0];
+                    img.src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Add/Update Room Type
+        $('#roomTypeForm').on('submit', function(e) {
+            e.preventDefault();
+            var url = isEditMode
+                ? '@Url.Action("UpdateRoomType", "Home65130650", new { area = "Admin" })'
+                : '@Url.Action("CreateRoomType", "Home65130650", new { area = "Admin" })';
+            
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    if(res.success) {
+                        alert(res.message);
+                        closeModal();
+                         performSearch(1); 
+                    } else {
+                        alert(res.error || 'Có lỗi xảy ra');
+                    }
+                },
+                error: function(err) {
+                    alert('Lỗi hệ thống');
+                }
+            });
+        });
+
+        // View Room Type
+        function viewRoomType(id) {
+            $.ajax({
+                url: '@Url.Action("GetRoomTypeDetails", "Home65130650", new { area = "Admin" })',
+                type: 'GET',
+                data: { id: id },
+                success: function(res) {
+                    if(res.success) {
+                        var d = res.data;
+                        
+                        // Handle image path logic: if just filename, assume /images/
+                        var imgSrc = d.hinhAnh;
+                        if (imgSrc && !imgSrc.startsWith('/') && !imgSrc.startsWith('http')) {
+                            imgSrc = '/images/' + imgSrc;
+                        }
+
+                        var imgHtml = imgSrc ? `<div style="grid-column: span 2; text-align: center; margin-bottom: 20px;"><img src="${imgSrc}" style="max-height: 250px; max-width: 100%; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"></div>` : '';
+                        
+                        var html = `
+                            ${imgHtml}
+                            <div class="detail-grid">
+                                <div class="detail-item"><label>Mã loại phòng</label><span>${d.maLoaiPhong}</span></div>
+                                <div class="detail-item"><label>Tên loại phòng</label><span>${d.tenLoaiPhong}</span></div>
+                                <div class="detail-item"><label>Giá cơ bản</label><span>${new Intl.NumberFormat('vi-VN').format(d.giaCoBan)} VNĐ</span></div>
+                                <div class="detail-item"><label>Sức chứa</label><span>${d.soNguoiToiDa} người</span></div>
+                                <div class="detail-item"><label>Diện tích</label><span>${d.dienTichPhong} m²</span></div>
+                                <div class="detail-item"><label>Loại giường</label><span>${d.loaiGiuong || 'N/A'}</span></div>
+                                <div class="detail-item"><label>Tình trạng hoạt động</label><span>${d.trangThaiHoatDong ? 'Đang hoạt động' : 'Đã vô hiệu hóa'}</span></div>
+                                <div class="detail-item" style="grid-column: span 2;"><label>Tiện nghi</label><span>${d.tienNghi || 'Chưa cập nhật'}</span></div>
+                                <div class="detail-item" style="grid-column: span 2;"><label>Mô tả</label><span>${d.moTa || 'Không có mô tả'}</span></div>
+                            </div>
+                        `;
+                        $('#roomTypeDetails').html(html);
+                        document.getElementById('viewModal').style.display = 'block';
+                    } else {
+                        alert(res.error);
+                    }
+                }
+            });
+        }
+
+        // Edit Room Type
+        function editRoomType(id) {
+            isEditMode = true;
+            $.ajax({
+                url: '@Url.Action("GetRoomTypeDetails", "Home65130650", new { area = "Admin" })',
+                type: 'GET',
+                data: { id: id },
+                success: function(res) {
+                    if(res.success) {
+                        var d = res.data;
+                        document.getElementById('modalTitle').textContent = 'Chỉnh sửa Loại phòng';
+                        document.getElementById('maLoaiPhong').value = d.maLoaiPhong;
+                        document.getElementById('tenLoaiPhong').value = d.tenLoaiPhong;
+                        document.getElementById('soNguoiToiDa').value = d.soNguoiToiDa;
+                        document.getElementById('dienTichPhong').value = d.dienTichPhong;
+                        document.getElementById('giaCoBan').value = d.giaCoBan;
+                        document.getElementById('loaiGiuong').value = d.loaiGiuong || '';
+                        document.getElementById('tienNghi').value = d.tienNghi || '';
+                        document.getElementById('trangThaiHoatDong').value = (d.trangThaiHoatDong === true || d.trangThaiHoatDong === 'true' || d.trangThaiHoatDong === null) ? 'true' : 'false';
+                        document.getElementById('moTa').value = d.moTa || '';
+                        
+                        // Handle Image Preview if exists
+                        var imgPreview = document.getElementById('imagePreview');
+                        var img = imgPreview.getElementsByTagName('img')[0];
+                        
+                        var imgSrc = d.hinhAnh;
+                         if (imgSrc && !imgSrc.startsWith('/') && !imgSrc.startsWith('http')) {
+                            imgSrc = '/images/' + imgSrc;
+                        }
+
+                        if (imgSrc) {
+                            img.src = imgSrc;
+                            imgPreview.style.display = 'block';
+                        } else {
+                            img.src = '';
+                            imgPreview.style.display = 'none';
+                        }
+
+                        document.getElementById('roomTypeModal').style.display = 'block';
+                    } else {
+                        alert(res.error);
+                    }
+                }
+            });
+        }
+
+        // Toggle Status
+        function toggleStatus(id) {
+            if (confirm('Bạn có chắc chắn muốn thay đổi trạng thái hoạt động của loại phòng này?')) {
+                $.ajax({
+                    url: '@Url.Action("ToggleRoomTypeStatus", "Home65130650", new { area = "Admin" })',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function(res) {
+                        if(res.success) {
+                            alert(res.message);
+                            performSearch(1); 
+                        } else {
+                            alert(res.error || 'Có lỗi xảy ra');
+                        }
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra khi xử lý yêu cầu.');
+                    }
+                });
+            }
+        }
+    </script>
 }

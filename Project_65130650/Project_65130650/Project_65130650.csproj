@@ -232,7 +232,6 @@
     <Content Include="Areas\Customer\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Index.cshtml" />
     <Content Include="Areas\Customer\Views\Home65130650\Index.cshtml" />
-    <Content Include="Areas\Admin\Views\Home65130650\Dashboard.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Bookings.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\RoomTypes.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Rooms.cshtml" />

@@ -13,7 +13,7 @@ namespace Project_65130650.Controllers
         private readonly Model65130650DbContext _db = new Model65130650DbContext();
 
         // GET: Room
-        public ActionResult Index(string search, string loaiPhong, decimal? minPrice, decimal? maxPrice, int? minCapacity, string sortOrder, int page = 1)
+        public ActionResult Index(string search, string loaiPhong, decimal? minPrice, decimal? maxPrice, int? minCapacity, string sortOrder, string status, int page = 1)
         {
             int pageSize = 6; // Số phòng mỗi trang
 
@@ -23,15 +23,37 @@ namespace Project_65130650.Controllers
                         select new
                         {
                             LoaiPhong = lp,
-                            // Đếm số phòng còn trống của loại phòng này
+                            // Đếm số phòng còn trống
                             SoPhongConTrong = _db.Phongs.Count(p =>
                                 p.maLoaiPhong == lp.maLoaiPhong &&
                                 p.trangThai == "Còn trống" &&
+                                (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null)),
+                            
+                            // Đếm số phòng bảo trì
+                            SoPhongBaoTri = _db.Phongs.Count(p =>
+                                p.maLoaiPhong == lp.maLoaiPhong &&
+                                p.trangThai == "Bảo trì" &&
+                                (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null)),
+
+                            // Đếm tổng số phòng hoạt động của loại này
+                            TongSoPhong = _db.Phongs.Count(p =>
+                                p.maLoaiPhong == lp.maLoaiPhong &&
                                 (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null))
                         };
 
-            // Chỉ lấy loại phòng có ít nhất 1 phòng còn trống
-            query = query.Where(x => x.SoPhongConTrong > 0);
+            // Lọc theo trạng thái
+            if (!string.IsNullOrWhiteSpace(status))
+            {
+                status = status.Trim();
+                if (status == "available")
+                {
+                    query = query.Where(x => x.SoPhongConTrong > 0);
+                }
+                else if (status == "soldout")
+                {
+                    query = query.Where(x => x.SoPhongConTrong == 0);
+                }
+            }
 
             // Áp dụng bộ lọc tìm kiếm
             if (!string.IsNullOrWhiteSpace(search))
@@ -74,38 +96,61 @@ namespace Project_65130650.Controllers
             if (page > totalPages && totalPages > 0) page = totalPages;
 
             // Sắp xếp theo sortOrder
-            IOrderedQueryable<dynamic> orderedQuery;
             switch (sortOrder)
             {
                 case "price_asc":
-                    orderedQuery = query.OrderBy(x => x.LoaiPhong.giaCoBan);
+                    query = query.OrderBy(x => x.LoaiPhong.giaCoBan);
                     break;
                 case "price_desc":
-                    orderedQuery = query.OrderByDescending(x => x.LoaiPhong.giaCoBan);
+                    query = query.OrderByDescending(x => x.LoaiPhong.giaCoBan);
                     break;
                 default:
                     // Mặc định: hiển thị theo thứ tự tự nhiên trong database
-                    orderedQuery = query.OrderBy(x => x.LoaiPhong.maLoaiPhong);
+                    query = query.OrderBy(x => x.LoaiPhong.maLoaiPhong);
                     break;
             }
 
             // Lấy dữ liệu cho trang hiện tại
-            var rooms = orderedQuery
+            var rooms = query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList()
-                .Select(x => new RoomTypeItemViewModel
-                {
-                    MaLoaiPhong = x.LoaiPhong.maLoaiPhong,
-                    TenLoaiPhong = x.LoaiPhong.tenLoaiPhong,
-                    MoTa = x.LoaiPhong.moTa,
-                    GiaCoBan = x.LoaiPhong.giaCoBan,
-                    SoNguoiToiDa = x.LoaiPhong.soNguoiToiDa,
-                    LoaiGiuong = x.LoaiPhong.loaiGiuong,
-                    DienTichPhong = x.LoaiPhong.dienTichPhong,
-                    TienNghi = x.LoaiPhong.tienNghi,
-                    HinhAnh = x.LoaiPhong.hinhAnh,
-                    SoPhongConTrong = x.SoPhongConTrong
+                .Select(x => {
+                    string s = "Còn trống";
+                    if (x.SoPhongConTrong > 0)
+                    {
+                        s = "Còn trống";
+                    }
+                    else
+                    {
+                        // Nếu không còn phòng trống
+                        // Kiểm tra xem có phải tất cả đều bảo trì không?
+                        // Nếu TongSoPhong > 0 và SoPhongBaoTri == TongSoPhong -> Bảo trì
+                        // Ngược lại (có phòng Đã đặt/Đang ở) -> Hết phòng
+                        if (x.TongSoPhong > 0 && x.SoPhongBaoTri == x.TongSoPhong)
+                        {
+                            s = "Bảo trì";
+                        }
+                        else
+                        {
+                            s = "Hết phòng";
+                        }
+                    }
+
+                    return new RoomTypeItemViewModel
+                    {
+                        MaLoaiPhong = x.LoaiPhong.maLoaiPhong,
+                        TenLoaiPhong = x.LoaiPhong.tenLoaiPhong,
+                        MoTa = x.LoaiPhong.moTa,
+                        GiaCoBan = x.LoaiPhong.giaCoBan,
+                        SoNguoiToiDa = x.LoaiPhong.soNguoiToiDa,
+                        LoaiGiuong = x.LoaiPhong.loaiGiuong,
+                        DienTichPhong = x.LoaiPhong.dienTichPhong,
+                        TienNghi = x.LoaiPhong.tienNghi,
+                        HinhAnh = x.LoaiPhong.hinhAnh,
+                        SoPhongConTrong = x.SoPhongConTrong,
+                        TrangThaiHienThi = s
+                    };
                 })
                 .ToList();
 
@@ -138,6 +183,7 @@ namespace Project_65130650.Controllers
                 MaxPrice = maxPrice,
                 MinCapacity = minCapacity,
                 SortOrder = sortOrder,
+                Status = status,
                 LoaiPhongs = loaiPhongs
             };
 

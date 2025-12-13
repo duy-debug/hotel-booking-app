@@ -61,7 +61,7 @@
             <div class="table-controls">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" value="@ViewBag.Search" placeholder="Tìm kiếm theo số phòng">
+                    <input type="text" id="searchInput" value="@ViewBag.Search" placeholder="Tìm theo số phòng hoặc loại phòng">
                 </div>
                 <div class="filter-group">
                     <!-- Status Custom Dropdown -->
@@ -86,18 +86,40 @@
                     <div class="custom-dropdown" id="floorDropdown">
                         <button class="dropdown-btn">
                             <span class="selected-text" id="floorText">
-                                @(ViewBag.Floor != null ? "Tất cả tầng " + ViewBag.Floor : "Tất cả tầng")
+                                @(!string.IsNullOrEmpty(ViewBag.Floor) ? "Tầng " + ViewBag.Floor : "Tất cả tầng")
                             </span>
                             <i class="fas fa-chevron-down"></i>
                         </button>
                         <div class="dropdown-content">
                             <a href="javascript:void(0)" class="filter-option" data-type="floor" data-value="">Tất cả tầng</a>
-                            @for (int i = 1; i <= 10; i++)
+                            @{
+                                var floorList = ViewBag.Floors as List<int>;
+                            }
+                            @if (floorList != null && floorList.Any())
                             {
-                                <a href="javascript:void(0)" class="filter-option" data-type="floor" data-value="@i">Tầng @i</a>
+                                foreach (var item in floorList)
+                                {
+                                     <a href="javascript:void(0)" class="filter-option" data-type="floor" data-value="@item">Tầng @item</a>
+                                }
                             }
                         </div>
                         <input type="hidden" id="floorFilter" value="@ViewBag.Floor">
+                    </div>
+
+                    <!-- Availability Custom Dropdown -->
+                    <div class="custom-dropdown" id="availabilityDropdown">
+                        <button class="dropdown-btn">
+                            <span class="selected-text" id="availabilityText">
+                                @(ViewBag.Availability == "active" ? "Đang hoạt động" : (ViewBag.Availability == "inactive" ? "Ngừng hoạt động" : "Tất cả tình trạng"))
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="">Tất cả tình trạng</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="active">Đang hoạt động</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="inactive">Ngừng hoạt động</a>
+                        </div>
+                        <input type="hidden" id="availabilityFilter" value="@ViewBag.Availability">
                     </div>
                 </div>
             </div>
@@ -165,7 +187,12 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="7" class="text-center">Không có dữ liệu phòng phù hợp.</td>
+                                    <td colspan="7">
+                                        <div class="empty-state" style="height: 65vh; width: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                                            <h4 style="margin: 0 0 8px 0; color: #334155; font-weight: 600;">Không tìm thấy phòng nào</h4>
+                                            <p style="color: #64748b; margin: 0;">Không có dữ liệu phù hợp với bộ lọc hiện tại.</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -246,23 +273,37 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="tang" class="control-label">Tầng <span class="text-danger">*</span></label>
-                            <select class="form-control" id="tang" name="tang" required>
-                                @for (int i = 1; i <= 10; i++)
-                                {
-                                    <option value="@i">Tầng @i</option>
-                                }
+                            <input type="number" class="form-control" id="tang" name="tang" required min="1" placeholder="Nhập số tầng">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="trangThai" class="control-label">Trạng thái đặt phòng</label>
+                            <select class="form-control" id="trangThai" name="trangThai">
+                                <option value="Còn trống">Còn trống</option>
+                                <option value="Bảo trì">Bảo trì</option>
+                                <option value="Đang sử dụng">Đang sử dụng</option>
+                                <option value="Đã đặt">Đã đặt</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="trangThaiHoatDong" class="control-label">Tình trạng hoạt động</label>
+                            <select class="form-control" id="trangThaiHoatDong" name="trangThaiHoatDong">
+                                <option value="true">Đang hoạt động</option>
+                                <option value="false">Ngừng hoạt động</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="trangThai" class="control-label">Trạng thái hiện tại</label>
-                    <select class="form-control" id="trangThai" name="trangThai">
-                        <option value="Còn trống">Còn trống</option>
-                        <option value="Bảo trì">Bảo trì</option>
-                        <option value="Đang sử dụng">Đang sử dụng</option>
-                    </select>
+                    <label for="moTa" class="control-label">Mô tả</label>
+                    <textarea class="form-control" id="moTa" name="moTa" rows="3" placeholder="Nhập mô tả phòng..."></textarea>
                 </div>
 
                 <div class="text-right mt-3">
@@ -432,9 +473,9 @@
 
             
             /* Table Styles */
-            .table-responsive { overflow-x: auto; }
+            .table-responsive { overflow-x: auto; height: 65vh; overflow-y: auto; }
             .data-table { width: 100%; border-collapse: collapse; }
-            .data-table thead { background: #f9fafb; }
+            .data-table thead { background: #f9fafb; position: sticky; top: 0; z-index: 10; }
             .data-table th { padding: 12px 16px; text-align: left; font-weight: 600; font-size: 13px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
             .data-table td { padding: 16px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
             .data-table tbody tr:hover { background: #f9fafb; }
@@ -497,7 +538,10 @@
         function performSearch(page = 1) {
             var search = $('#searchInput').val();
             var status = $('#statusFilter').val();
+            var search = $('#searchInput').val();
+            var status = $('#statusFilter').val();
             var floor = $('#floorFilter').val();
+            var availability = $('#availabilityFilter').val();
             
             var url = '@Url.Action("Rooms", "Home65130650", new { area = "Admin" })';
             
@@ -508,7 +552,9 @@
                     page: page,
                     search: search,
                     status: status,
-                    floor: floor
+                    status: status,
+                    floor: floor,
+                    availability: availability
                 },
                 success: function(result) {
                     // Extract only the table container from the full page response
@@ -562,6 +608,9 @@
             } else if (type === 'floor') {
                 $('#floorFilter').val(value);
                 $('#floorText').text(text);
+            } else if (type === 'availability') {
+                $('#availabilityFilter').val(value);
+                $('#availabilityText').text(text);
             }
             
             $(this).closest('.custom-dropdown').removeClass('active');
@@ -577,6 +626,7 @@
             document.getElementById('roomForm').reset();
             document.getElementById('maPhong').value = '';
             document.getElementById('soPhong').readOnly = false;
+            document.getElementById('trangThaiHoatDong').value = 'true'; // Default active
             document.getElementById('roomModal').style.display = 'block';
         }
 
@@ -638,6 +688,7 @@
                              <div class="detail-item"><label>Giá cơ bản</label><span>${new Intl.NumberFormat('vi-VN').format(d.giaCoBan)} VNĐ</span></div>
                             <div class="detail-item"><label>Trạng thái</label><span>${d.trangThai}</span></div>
                             <div class="detail-item"><label>Tình trạng hoạt động</label><span>${d.trangThaiHoatDong ? 'Đang hoạt động' : 'Đã vô hiệu hóa'}</span></div>
+                            <div class="detail-item" style="grid-column: span 2;"><label>Mô tả</label><span>${d.moTa || 'Không có mô tả'}</span></div>
                         `;
                         $('#roomDetails').html(html);
                         document.getElementById('viewModal').style.display = 'block';
@@ -665,6 +716,9 @@
                         document.getElementById('maLoaiPhong').value = d.maLoaiPhong;
                         document.getElementById('tang').value = d.tang;
                         document.getElementById('trangThai').value = d.trangThai;
+                        document.getElementById('trangThai').value = d.trangThai;
+                        document.getElementById('trangThaiHoatDong').value = (d.trangThaiHoatDong === true || d.trangThaiHoatDong === 'true' || d.trangThaiHoatDong === null) ? 'true' : 'false';
+                        document.getElementById('moTa').value = d.moTa || '';
                         
                         document.getElementById('roomModal').style.display = 'block';
                     } else {

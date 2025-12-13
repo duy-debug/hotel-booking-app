@@ -460,7 +460,9 @@ namespace Project_65130650.Areas.Admin.Controllers
                         room.tang,
                         room.trangThai,
                         room.trangThaiHoatDong,
-                        giaCoBan = room.LoaiPhong != null ? room.LoaiPhong.giaCoBan : 0
+
+                        giaCoBan = room.LoaiPhong != null ? room.LoaiPhong.giaCoBan : 0,
+                        room.moTa
                     }
                 }, JsonRequestBehavior.AllowGet);
             }
@@ -473,24 +475,20 @@ namespace Project_65130650.Areas.Admin.Controllers
         // POST: Admin/Home65130650/CreateRoom
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult CreateRoom(string soPhong, string maLoaiPhong, int tang, string trangThai)
+        public JsonResult CreateRoom(Phong model)
         {
             try
             {
-                if (_db.Phongs.Any(p => p.soPhong == soPhong))
+                if (_db.Phongs.Any(p => p.soPhong == model.soPhong))
                     return Json(new { success = false, error = "Số phòng đã tồn tại" });
 
-                var newRoom = new Phong
-                {
-                    maPhong = GenerateRoomId(), 
-                    soPhong = soPhong,
-                    maLoaiPhong = maLoaiPhong,
-                    tang = tang,
-                    trangThai = trangThai ?? "Còn trống",
-                    trangThaiHoatDong = true
-                };
+                model.maPhong = GenerateRoomId();
+                model.trangThai = model.trangThai ?? "Còn trống";
+                model.trangThaiHoatDong = true;
+                model.ngayTao = DateTime.Now;
+                model.ngayCapNhat = DateTime.Now;
 
-                _db.Phongs.Add(newRoom);
+                _db.Phongs.Add(model);
                 _db.SaveChanges();
 
                 return Json(new { success = true, message = "Thêm phòng thành công!" });
@@ -504,22 +502,25 @@ namespace Project_65130650.Areas.Admin.Controllers
         // POST: Admin/Home65130650/UpdateRoom
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult UpdateRoom(string maPhong, string soPhong, string maLoaiPhong, int tang, string trangThai)
+        public JsonResult UpdateRoom(Phong model)
         {
             try
             {
-                var room = _db.Phongs.Find(maPhong);
+                var room = _db.Phongs.Find(model.maPhong);
                 if (room == null)
                     return Json(new { success = false, error = "Không tìm thấy phòng" });
 
                 // Check duplicate SoPhong but exclude current room
-                if (_db.Phongs.Any(p => p.soPhong == soPhong && p.maPhong != maPhong))
+                if (_db.Phongs.Any(p => p.soPhong == model.soPhong && p.maPhong != model.maPhong))
                     return Json(new { success = false, error = "Số phòng đã tồn tại" });
 
-                room.soPhong = soPhong;
-                room.maLoaiPhong = maLoaiPhong;
-                room.tang = tang;
-                room.trangThai = trangThai;
+                room.soPhong = model.soPhong;
+                room.maLoaiPhong = model.maLoaiPhong;
+                room.tang = model.tang;
+                room.trangThai = model.trangThai;
+                room.trangThaiHoatDong = model.trangThaiHoatDong;
+                room.moTa = model.moTa;
+                room.ngayCapNhat = DateTime.Now;
 
                 _db.SaveChanges();
 
@@ -553,48 +554,289 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
+
+
         private string GenerateRoomId()
         {
-            // Simple ID generation strategy P001, P002...
-            var maxId = _db.Phongs
-                .Where(p => p.maPhong.StartsWith("P") && p.maPhong.Length == 4)
-                .OrderByDescending(p => p.maPhong)
+            // Fetch all existing IDs to find the max value.
+            // Expected format: P0001, P0002... P0030
+            var ids = _db.Phongs
+                .Where(p => p.maPhong.StartsWith("P"))
                 .Select(p => p.maPhong)
-                .FirstOrDefault();
-
-            if (string.IsNullOrEmpty(maxId)) return "P001";
-            
-            var numberPart = maxId.Substring(1);
-            if (int.TryParse(numberPart, out int number))
-            {
-                var next = number + 1;
-                return "P" + next.ToString("D3");
-            }
-            // Fallback for weird data
-             return "P" + new Random().Next(100, 999).ToString();
-        }
-
-        // GET: Admin/Home65130650/RoomTypes
-        public ActionResult RoomTypes()
-        {
-            ViewBag.Title = "Quản lý Loại phòng";
-            ViewBag.UserName = Session["UserName"];
-
-            var roomTypes = _db.LoaiPhongs
-                .Where(lp => lp.trangThaiHoatDong == true || lp.trangThaiHoatDong == null)
                 .ToList();
 
-            return View(roomTypes);
+            if (!ids.Any()) return "P0001";
+
+            int maxVal = 0;
+            foreach (var id in ids)
+            {
+                // Remove 'P' and parse the number
+                // Using Trim() to be safe.
+                var cleanId = id.Trim();
+                if (cleanId.Length > 1) 
+                {
+                    string numPart = cleanId.Substring(1);
+                    if (int.TryParse(numPart, out int num))
+                    {
+                        if (num > maxVal) maxVal = num;
+                    }
+                }
+            }
+
+            // Generate next ID with 4-digit padding (e.g., 30 -> 31 -> P0031)
+            return "P" + (maxVal + 1).ToString("D4");
+        }
+
+            // GET: Admin/Home65130650/RoomTypes
+            // GET: Admin/Home65130650/RoomTypes
+            public ActionResult RoomTypes(int page = 1, string search = "", string availability = "")
+            {
+                ViewBag.Title = "Quản lý Loại phòng";
+                ViewBag.UserName = Session["UserName"];
+
+                int pageSize = 10;
+                var query = _db.LoaiPhongs.AsQueryable();
+
+                if (!string.IsNullOrEmpty(search))
+                {
+                    // search = search.ToLower(); // Remove to preserve case and rely on SQL collation
+                    query = query.Where(l => l.tenLoaiPhong.Contains(search) || l.maLoaiPhong.Contains(search));
+                }
+
+                if (!string.IsNullOrEmpty(availability))
+                {
+                    if (availability == "active")
+                        query = query.Where(l => l.trangThaiHoatDong == true || l.trangThaiHoatDong == null);
+                    else if (availability == "inactive")
+                        query = query.Where(l => l.trangThaiHoatDong == false);
+                }
+
+                ViewBag.TotalRoomTypes = query.Count();
+                
+                var totalItems = query.Count();
+                var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+                if (page < 1) page = 1;
+                if (page > totalPages && totalPages > 0) page = totalPages;
+
+                var roomTypes = query
+                    .OrderBy(lp => lp.tenLoaiPhong)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+                ViewBag.Search = search;
+                ViewBag.Availability = availability;
+
+                return View(roomTypes);
+            }
+
+        // GET: Admin/Home65130650/GetRoomTypeDetails
+        [HttpGet]
+        public JsonResult GetRoomTypeDetails(string id)
+        {
+            try
+            {
+                var type = _db.LoaiPhongs.Find(id);
+                if (type == null)
+                    return Json(new { success = false, error = "Không tìm thấy loại phòng" }, JsonRequestBehavior.AllowGet);
+
+                return Json(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        type.maLoaiPhong,
+                        type.tenLoaiPhong,
+                        type.giaCoBan,
+                        type.soNguoiToiDa,
+                        type.dienTichPhong,
+                        type.moTa,
+                        hinhAnh = !string.IsNullOrEmpty(type.hinhAnh) && !type.hinhAnh.StartsWith("/") && !type.hinhAnh.StartsWith("http") ? "/Images/" + type.hinhAnh : type.hinhAnh,
+                        type.trangThaiHoatDong,
+                        type.loaiGiuong,
+                        type.tienNghi
+                    }
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // POST: Admin/Home65130650/CreateRoomType
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult CreateRoomType(LoaiPhong model, System.Web.HttpPostedFileBase imageFile)
+        {
+            try
+            {
+                if (_db.LoaiPhongs.Any(lp => lp.tenLoaiPhong == model.tenLoaiPhong))
+                     return Json(new { success = false, error = "Tên loại phòng đã tồn tại" });
+
+                // Generate ID: LP001...
+                model.maLoaiPhong = GenerateRoomTypeId();
+                model.trangThaiHoatDong = true;
+                if (model.dienTichPhong == null) model.dienTichPhong = 0;
+                model.ngayTao = DateTime.Now;
+
+                // Handle Image Upload
+                if (imageFile != null && imageFile.ContentLength > 0)
+                {
+                    string fileName = System.IO.Path.GetFileName(imageFile.FileName);
+                    var serverSavePath = Server.MapPath("~/Images");
+                    
+                    // Save to user requested "Images" folder
+                    string path = System.IO.Path.Combine(serverSavePath, fileName);
+                    
+                    // Create directory if not exists
+                    if (!System.IO.Directory.Exists(serverSavePath))
+                    {
+                        System.IO.Directory.CreateDirectory(serverSavePath);
+                    }
+
+                    imageFile.SaveAs(path);
+                    model.hinhAnh = fileName; 
+                }
+
+                _db.LoaiPhongs.Add(model);
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Thêm loại phòng thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        // POST: Admin/Home65130650/UpdateRoomType
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult UpdateRoomType(LoaiPhong model, System.Web.HttpPostedFileBase imageFile)
+        {
+            try
+            {
+                var type = _db.LoaiPhongs.Find(model.maLoaiPhong);
+                if (type == null)
+                    return Json(new { success = false, error = "Không tìm thấy loại phòng" });
+
+                type.tenLoaiPhong = model.tenLoaiPhong;
+                type.soNguoiToiDa = model.soNguoiToiDa;
+                type.dienTichPhong = model.dienTichPhong;
+                type.giaCoBan = model.giaCoBan;
+                type.moTa = model.moTa;
+                type.trangThaiHoatDong = model.trangThaiHoatDong;
+                type.loaiGiuong = model.loaiGiuong;
+                type.tienNghi = model.tienNghi;
+
+                // Handle Image Upload
+                if (imageFile != null && imageFile.ContentLength > 0)
+                {
+                    // Delete old image if exists
+                    if (!string.IsNullOrEmpty(type.hinhAnh))
+                    {
+                         // Use GetFileName to avoid issues if DB has relative paths like /Images/file.jpg
+                         string oldFileName = System.IO.Path.GetFileName(type.hinhAnh);
+                         string oldPath = System.IO.Path.Combine(Server.MapPath("~/Images"), oldFileName);
+                         if (System.IO.File.Exists(oldPath))
+                         {
+                             // Attempt to delete. If file is locked, this might throw, which is better than silent fail given user feedback.
+                             System.IO.File.Delete(oldPath);
+                         }
+                    }
+
+                    string fileName = System.IO.Path.GetFileName(imageFile.FileName);
+                    var serverSavePath = Server.MapPath("~/Images");
+                    
+                    // Save to user requested "Images" folder
+                    string path = System.IO.Path.Combine(serverSavePath, fileName);
+                    
+                    // Create directory if not exists
+                    if (!System.IO.Directory.Exists(serverSavePath))
+                    {
+                        System.IO.Directory.CreateDirectory(serverSavePath);
+                    }
+
+                    imageFile.SaveAs(path);
+                    type.hinhAnh = fileName;
+                }
+
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Cập nhật loại phòng thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        // POST: Admin/Home65130650/ToggleRoomTypeStatus
+        [HttpPost]
+        public JsonResult ToggleRoomTypeStatus(string id)
+        {
+            try
+            {
+                var type = _db.LoaiPhongs.Find(id);
+                if (type == null)
+                    return Json(new { success = false, error = "Không tìm thấy loại phòng" });
+
+                bool currentStatus = type.trangThaiHoatDong ?? false;
+                type.trangThaiHoatDong = !currentStatus;
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Đã thay đổi trạng thái thành công" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        private string GenerateRoomTypeId()
+        {
+            // LP001, LP002
+            var ids = _db.LoaiPhongs
+                .Where(lp => lp.maLoaiPhong.StartsWith("LP"))
+                .Select(lp => lp.maLoaiPhong)
+                .ToList();
+
+             if (!ids.Any()) return "LP001";
+
+            int maxVal = 0;
+            foreach (var id in ids)
+            {
+                var cleanId = id.Trim();
+                if (cleanId.Length > 2 && int.TryParse(cleanId.Substring(2), out int num))
+                {
+                    if (num > maxVal) maxVal = num;
+                }
+            }
+
+            return "LP" + (maxVal + 1).ToString("D3");
         }
 
         // GET: Admin/Home65130650/Rooms
-        public ActionResult Rooms(int page = 1, string search = "", string status = "", string floor = "")
+        public ActionResult Rooms(int page = 1, string search = "", string status = "", string floor = "", string availability = "")
         {
             ViewBag.Title = "Quản lý Phòng";
             ViewBag.UserName = Session["UserName"];
 
             int pageSize = 10;
-            var roomsQuery = _db.Phongs.Where(p => p.trangThaiHoatDong == true || p.trangThaiHoatDong == null);
+            // Original query should allow inactive items to be filtered later, 
+            // BUT previous code restricted to active only (Where(p => p.trangThaiHoatDong == true)).
+            // We must remove that initial restriction to allow filtering by "inactive".
+            var roomsQuery = _db.Phongs.AsQueryable(); 
+
+            // If no availability filter is selected, maybe default to showing ALL or just Active?
+            // User request implies they want option to see Active OR Inactive.
+            // Let's assume default shows ALL or handle below.
+            // Usually default View might only show Active, but if we have a filter "All Status", "Active", "Inactive".
+            // Let's start with ALL queryable.
 
             // Calculate overall stats (unfiltered)
             ViewBag.TotalRooms = roomsQuery.Count();
@@ -606,8 +848,9 @@ namespace Project_65130650.Areas.Admin.Controllers
             // Apply filters
             if (!string.IsNullOrEmpty(search))
             {
-                search = search.ToLower();
-                roomsQuery = roomsQuery.Where(p => p.soPhong.ToLower().Contains(search));
+                 // search = search.ToLower();
+                 // Search by Room Number OR Room Type Name
+                 roomsQuery = roomsQuery.Where(p => p.soPhong.Contains(search) || (p.LoaiPhong != null && p.LoaiPhong.tenLoaiPhong.Contains(search)));
             }
 
             if (!string.IsNullOrEmpty(status))
@@ -619,6 +862,18 @@ namespace Project_65130650.Areas.Admin.Controllers
             {
                 int floorNum = int.Parse(floor);
                 roomsQuery = roomsQuery.Where(p => p.tang == floorNum);
+            }
+
+            if (!string.IsNullOrEmpty(availability))
+            {
+                if (availability == "active")
+                {
+                    roomsQuery = roomsQuery.Where(p => p.trangThaiHoatDong == true || p.trangThaiHoatDong == null);
+                }
+                else if (availability == "inactive")
+                {
+                    roomsQuery = roomsQuery.Where(p => p.trangThaiHoatDong == false);
+                }
             }
 
             var totalRooms = roomsQuery.Count();
@@ -643,6 +898,8 @@ namespace Project_65130650.Areas.Admin.Controllers
             ViewBag.Search = search;
             ViewBag.Status = status;
             ViewBag.Floor = floor;
+            ViewBag.Availability = availability;
+            ViewBag.Floors = _db.Phongs.Select(p => p.tang).Distinct().OrderBy(t => t).ToList();
 
             return View(rooms);
         }
