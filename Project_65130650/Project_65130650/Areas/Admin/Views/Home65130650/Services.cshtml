@@ -2,53 +2,273 @@
 @{
     ViewBag.Title = "Quản lý Dịch vụ";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int currentPage = (ViewBag.CurrentPage as int?) ?? 1;
+    int totalPages = (ViewBag.TotalPages as int?) ?? 1;
+    int stt = 1;
 }
 
 <div class="page-container">
     <div class="page-header">
         <div class="header-content">
-            <h1><i class="fas fa-concierge-bell"></i> Quản lý Dịch vụ</h1>
-            <p>Danh sách các dịch vụ khách sạn</p>
+            <h3>Danh sách các dịch vụ khách sạn</h3>
         </div>
         <div class="header-actions">
-            <button class="btn btn-primary">
+            <button class="btn btn-primary" onclick="openCreateModal()">
                 <i class="fas fa-plus"></i> Thêm dịch vụ
             </button>
         </div>
     </div>
-
     <div class="content-card">
         <div class="card-body">
-            @if (Model != null && Model.Any())
-            {
-                <div class="services-grid">
-                    @foreach (var service in Model)
+            <form action="@Url.Action("Services", "Home65130650")" method="get">
+                <div class="table-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" name="search" placeholder="Tìm kiếm dịch vụ" value="@ViewBag.Search">
+                    </div>
+                
+                    <!-- Availability Custom Dropdown -->
+                    <div class="custom-dropdown" id="availabilityDropdown">
+                        <button type="button" class="dropdown-btn">
+                            <span class="selected-text" id="availabilityText">
+                                @(ViewBag.Availability == "active" ? "Đang hoạt động" : (ViewBag.Availability == "inactive" ? "Ngưng hoạt động" : "Tất cả trạng thái"))
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="">Tất cả trạng thái</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="active">Đang hoạt động</a>
+                            <a href="javascript:void(0)" class="filter-option" data-type="availability" data-value="inactive">Ngưng hoạt động</a>
+                        </div>
+                        <input type="hidden" id="availabilityFilter" value="@ViewBag.Availability">
+                    </div>
+                    
+                    <!-- Service Type Custom Dropdown -->
+                    <div class="custom-dropdown" id="typeDropdown">
+                        <button type="button" class="dropdown-btn">
+                            <span class="selected-text" id="typeText">
+                                @(string.IsNullOrEmpty(ViewBag.ServiceType) ? "Tất cả loại dịch vụ" : ViewBag.ServiceType)
+                            </span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="javascript:void(0)" class="filter-option" data-type="serviceType" data-value="">Tất cả loại dịch vụ</a>
+                            @if (ViewBag.ServiceTypes != null)
+                            {
+                                foreach (var type in (List<string>)ViewBag.ServiceTypes)
+                                {
+                                    <a href="javascript:void(0)" class="filter-option" data-type="serviceType" data-value="@type">@type</a>
+                                }
+                            }
+                        </div>
+                        <input type="hidden" id="typeFilter" value="@ViewBag.ServiceType">
+                    </div>
+                </div>
+            </form>
+            <div id="tableContainer">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 50px; text-align: center;">STT</th>
+                                    <th>Tên dịch vụ</th>
+                                    <th>Loại dịch vụ</th>
+                                    <th>Giá dịch vụ</th>
+                                    <th>Mô tả</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td style="text-align: center; font-weight: 500;">@(stt++)</td>
+                                        <td>
+                                            <div class="fw-bold">@item.tenDichVu</div>
+                                        </td>
+                                        <td>
+                                            <span class="badge badge-info">@item.loaiDichVu</span>
+                                        </td>
+                                        <td class="text-price">
+                                            @string.Format("{0:N0}", item.giaDichVu) VNĐ
+                                        </td>
+                                        <td class="text-desc">
+                                            @(item.moTa != null && item.moTa.Length > 50 ? item.moTa.Substring(0, 50) + "..." : item.moTa)
+                                        </td>
+                                        <td>
+                                            @if (item.trangThaiHoatDong == true || item.trangThaiHoatDong == null)
+                                            {
+                                                <span class="badge badge-success"><i class="fas fa-check-circle"></i> Hoạt động</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-secondary"><i class="fas fa-ban"></i> Ngừng</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button class="btn-icon btn-info" onclick="viewService('@item.maDichVu')" title="Xem chi tiết">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="btn-icon btn-warning" onclick="editService('@item.maDichVu')" title="Sửa">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="btn-icon @((item.trangThaiHoatDong == true || item.trangThaiHoatDong == null) ? "btn-danger" : "btn-success")" 
+                                                        onclick="toggleServiceStatus('@item.maDichVu', '@item.tenDichVu')" 
+                                                        title="@((item.trangThaiHoatDong == true || item.trangThaiHoatDong == null) ? "Vô hiệu hóa" : "Kích hoạt")">
+                                                    <i class="fas @((item.trangThaiHoatDong == true || item.trangThaiHoatDong == null) ? "fa-ban" : "fa-check")"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    if (totalPages > 1)
                     {
-                        <div class="service-card">
-                            <div class="service-icon">
-                                <i class="fas fa-concierge-bell"></i>
-                            </div>
-                            <div class="service-content">
-                                <h3>@service.tenDichVu</h3>
-                                <p class="description">@(service.moTa ?? "Chưa có mô tả")</p>
-                                <div class="price-tag">@String.Format("{0:N0}", service.giaDichVu) VNĐ</div>
-                            </div>
-                            <div class="service-actions">
-                                <button class="btn-icon btn-info"><i class="fas fa-eye"></i></button>
-                                <button class="btn-icon btn-warning"><i class="fas fa-edit"></i></button>
-                                <button class="btn-icon btn-danger"><i class="fas fa-trash"></i></button>
+                        <div class="pagination-container" style="justify-content: center;">
+                            <div class="pagination">
+                                @if (currentPage > 1)
+                                {
+                                    <a href="javascript:void(0)" onclick="performSearch(@(currentPage - 1))" class="page-link">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                }
+
+                                @for (int i = 1; i <= totalPages; i++)
+                                {
+                                    <a href="javascript:void(0)" onclick="performSearch(@i)" 
+                                       class="page-link @(i == currentPage ? "active" : "")">
+                                        @i
+                                    </a>
+                                }
+
+                                @if (currentPage < totalPages)
+                                {
+                                    <a href="javascript:void(0)" onclick="performSearch(@(currentPage + 1))" class="page-link">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                }
                             </div>
                         </div>
                     }
+                }
+                else
+                {
+                    <div class="empty-state">
+                        <p>Không tìm thấy dịch vụ nào</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal View Service -->
+<div id="modalViewService" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Chi tiết dịch vụ</h2>
+            <span class="close" onclick="closeModal('modalViewService')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="detail-row">
+                <div class="detail-label">Hình ảnh:</div>
+                <div class="detail-value">
+                    <img id="viewImg" src="" alt="Service Image" style="max-width: 200px; border-radius: 8px;" onerror="this.style.display='none'">
+                    <span id="viewNoImg" style="display:none; color: #999;">Không có hình ảnh</span>
                 </div>
-            }
-            else
-            {
-                <div class="empty-state">
-                    <i class="fas fa-concierge-bell"></i>
-                    <p>Chưa có dịch vụ nào</p>
+            </div>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Mã dịch vụ:</span>
+                    <span class="detail-value" id="viewMaDV"></span>
                 </div>
-            }
+                <div class="detail-item">
+                    <span class="detail-label">Tên dịch vụ:</span>
+                    <span class="detail-value" id="viewTenDV"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Loại dịch vụ:</span>
+                    <span class="detail-value" id="viewLoaiDV"></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Giá:</span>
+                    <span class="detail-value price-text" id="viewGia"></span>
+                </div>
+                <div class="detail-item full-width">
+                    <span class="detail-label">Tình trạng hoạt động:</span>
+                    <span class="detail-value" id="viewStatus"></span>
+                </div>
+                <div class="detail-item full-width">
+                    <span class="detail-label">Mô tả:</span>
+                    <p class="detail-value" id="viewMoTa" style="white-space: pre-wrap; margin-top: 5px;"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Create/Edit Service -->
+<div id="modalService" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">Thêm dịch vụ mới</h2>
+            <span class="close" onclick="closeModal('modalService')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <form id="formService" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="maDichVu" name="maDichVu" />
+                
+                <div class="form-group">
+                    <label>Tên dịch vụ <span class="required">*</span></label>
+                    <input type="text" id="tenDichVu" name="tenDichVu" class="form-control" placeholder="Nhập tên dịch vụ" required />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label>Loại dịch vụ</label>
+                        <input type="text" id="loaiDichVu" name="loaiDichVu" class="form-control" placeholder="Nhập loại dịch vụ" required />
+                    </div>
+                    <div class="form-group half">
+                        <label>Giá dịch vụ (VNĐ) <span class="required">*</span></label>
+                        <input type="number" id="giaDichVu" name="giaDichVu" class="form-control" placeholder="Nhập giá dịch vụ" min="0" step="1000" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Hình ảnh</label>
+                    <div class="image-upload-container">
+                        <div class="current-image" id="currentImageContainer" style="display:none;">
+                            <img id="currentImage" src="" alt="Current Image" />
+                            <p class="note">Hình ảnh hiện tại</p>
+                        </div>
+                        <input type="file" id="imageFile" name="imageFile" accept="image/*" class="form-control" onchange="previewImage(this)" />
+                        <div id="imagePreview" class="image-preview" style="display:none;">
+                            <img id="previewImg" src="" alt="Preview" />
+                        </div>
+                    </div>
+                </div>
+                
+                 <!-- Hidden inputs for non-editable fields when creating -->
+                 <input type="hidden" id="trangThaiHoatDong" name="trangThaiHoatDong" value="true" />
+                 
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea id="moTa" name="moTa" class="form-control" rows="4" placeholder="Nhập mô tả"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('modalService')">Hủy</button>
+            <button class="btn btn-primary" onclick="saveService()">Lưu thay đổi</button>
         </div>
     </div>
 </div>
@@ -60,27 +280,320 @@
         .header-content h1 { font-size: 28px; font-weight: 700; color: #111827; margin: 0 0 8px 0; display: flex; align-items: center; gap: 12px; }
         .header-content h1 i { color: #4f46e5; }
         .header-content p { color: #6b7280; margin: 0; }
-        .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
+        
+        .table-controls { display: flex; gap: 16px; margin-bottom: 24px; align-items: center; }
+        .search-box { flex: 1; position: relative; }
+        .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+        .search-box input { width: 100%; height: 46px; padding: 0 16px 0 44px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; border: 1px solid #e5e7eb; }
+        .search-box input:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .filter-select { height: 46px; padding: 0 16px; border: 1px solid #e5e7eb; border-radius: 8px; outline: none; background-color: white; color: #374151; min-width: 200px; cursor: pointer; transition: all 0.3s ease; }
+        .filter-select:focus { border-color: #4f46e5; }
+        
+        /* Custom Dropdown Styles */
+        .custom-dropdown { position: relative; display: inline-block; min-width: 200px; }
+        .dropdown-btn { width: 100%; height: 46px; padding: 0 16px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #374151; transition: all 0.2s; outline: none; }
+        .dropdown-btn:hover { border-color: #4f46e5; color: #4f46e5; }
+        .dropdown-btn i { font-size: 12px; transition: transform 0.2s; margin-left: 8px; }
+        .custom-dropdown.active .dropdown-btn { border-color: #4f46e5; color: #4f46e5; }
+        .custom-dropdown.active .dropdown-btn i { transform: rotate(180deg); }
+        
+        .dropdown-content { display: none; position: absolute; background-color: white; min-width: 100%; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100; margin-top: 5px; padding: 5px 0; border: 1px solid #f3f4f6; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease; }
+        .custom-dropdown.active .dropdown-content { display: block; opacity: 1; transform: translateY(0); }
+        
+        .dropdown-content a { color: #374151; padding: 10px 16px; text-decoration: none; display: block; font-size: 14px; transition: background 0.2s; }
+        .dropdown-content a:hover { background-color: #f3f4f6; color: #4f46e5; }
+        
+        .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 8px; white-space: nowrap; }
         .btn-primary { background: #4f46e5; color: white; }
-        .btn-primary:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
+        .btn-secondary { background: #f3f4f6; color: #4b5563; }
+        .btn-secondary:hover { background: #e5e7eb; }
+        
         .content-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08); overflow: hidden; }
-        .card-body { padding: 30px; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .service-card { background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 24px; transition: all 0.3s ease; }
-        .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); border-color: #4f46e5; }
-        .service-icon { width: 60px; height: 60px; border-radius: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 16px; }
-        .service-content h3 { margin: 0 0 8px 0; font-size: 18px; font-weight: 700; color: #111827; }
-        .description { color: #6b7280; font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
-        .price-tag { display: inline-block; padding: 8px 16px; background: #dcfce7; color: #16a34a; border-radius: 8px; font-weight: 700; font-size: 16px; }
-        .service-actions { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; display: flex; gap: 8px; }
-        .btn-icon { width: 36px; height: 36px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-        .btn-icon.btn-info { background: #dbeafe; color: #2563eb; }
-        .btn-icon.btn-info:hover { background: #2563eb; color: white; }
-        .btn-icon.btn-warning { background: #fef3c7; color: #d97706; }
-        .btn-icon.btn-warning:hover { background: #d97706; color: white; }
-        .btn-icon.btn-danger { background: #fee2e2; color: #dc2626; }
-        .btn-icon.btn-danger:hover { background: #dc2626; color: white; }
-        .empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; }
+        .card-body { padding: 0; } /* Remove padding for edge-to-edge table */
+        
+        .table-responsive { overflow-x: auto; height: 65vh; overflow-y: auto; }
+        .table { width: 100%; border-collapse: collapse; }
+        .table thead { background: #f9fafb; position: sticky; top: 0; z-index: 10; }
+        .table th { background: #f9fafb; color: #6b7280; font-weight: 600; text-align: left; padding: 8px 16px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: none; white-space: nowrap; }
+        .table td { padding: 6px 16px; border-bottom: 1px solid #f3f4f6; color: #111827; vertical-align: middle; font-size: 12px; }
+        .table tr:last-child td { border-bottom: none; }
+        .table tr:hover { background-color: #f9fafb; }
+        
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
+        .badge-info { background: #dbeafe; color: #2563eb; }
+        .badge-success { background: #dcfce7; color: #16a34a; }
+        .badge-secondary { background: #f3f4f6; color: #6b7280; }
+        .badge-warning { background: #fef3c7; color: #d97706; }
+        .badge-danger { background: #fee2e2; color: #dc2626; }
+        
+        .text-price { font-weight: 400; color: #059669; }
+        .text-desc { color: #6b7280; font-size: 14px; max-width: 300px; }
+        
+        .action-buttons { display: flex; gap: 8px; }
+        .btn-icon { width: 32px; height: 32px; border-radius: 6px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 14px; }
+        .btn-icon.btn-info { background: #eff6ff; color: #3b82f6; }
+        .btn-icon.btn-info:hover { background: #3b82f6; color: white; }
+        .btn-icon.btn-warning { background: #fffbeb; color: #f59e0b; }
+        .btn-icon.btn-warning:hover { background: #f59e0b; color: white; }
+        .btn-icon.btn-danger { background: #fef2f2; color: #ef4444; }
+        .btn-icon.btn-danger:hover { background: #ef4444; color: white; }
+        .btn-icon.btn-success { background: #ecfdf5; color: #10b981; }
+        .btn-icon.btn-success:hover { background: #10b981; color: white; }
+
+        .pagination-container { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-top: 1px solid #e5e7eb; }
+        .showing-text { color: #6b7280; font-size: 14px; }
+        .pagination { display: flex; gap: 6px; }
+        .page-link { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid #e5e7eb; color: #6b7280; text-decoration: none; transition: all 0.2s; font-size: 14px; }
+        .page-link:hover { background: #f9fafb; border-color: #d1d5db; color: #111827; }
+        .page-link.active { background: #4f46e5; border-color: #4f46e5; color: white; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: #9ca3af; height: 400px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .empty-state i { font-size: 48px; margin-bottom: 16px; display: block; }
+        
+        /* Modal Styles */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .modal-content { background-color: #fff; margin: 5vh auto; padding: 0; border-radius: 16px; width: 90%; max-width: 600px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); animation: modalSlideIn 0.3s ease; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; }
+        @@keyframes modalSlideIn { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .modal-header { padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; z-index: 10; }
+        .modal-header h2 { margin: 0; font-size: 20px; font-weight: 700; color: #111827; }
+        .close { font-size: 24px; font-weight: bold; color: #9ca3af; cursor: pointer; transition: color 0.2s; }
+        .close:hover { color: #111827; }
+        
+        .modal-body { padding: 24px; flex: 1; overflow-y: auto; }
+        .modal-footer { padding: 20px 24px; border-top: 1px solid #e5e7eb; display: flex; justify-content: flex-end; gap: 12px; position: sticky; bottom: 0; background: white; z-index: 10; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: flex; gap: 16px; margin-bottom: 20px; }
+        .form-group.half { flex: 1; margin-bottom: 0; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #374151; font-size: 14px; }
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; transition: border-color 0.2s; outline: none; box-sizing: border-box; }
+        .form-control:focus { border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .required { color: #ef4444; }
+        
+        .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .detail-item { display: flex; flex-direction: column; gap: 4px; }
+        .detail-item.full-width { grid-column: span 2; }
+        .detail-label { font-size: 13px; color: #6b7280; font-weight: 500; }
+        .detail-value { font-size: 15px; color: #111827; font-weight: 500; }
+        .detail-row { display: flex; margin-bottom: 20px; gap: 16px; align-items: flex-start; }
+        
+        .image-upload-container { border: 2px dashed #e5e7eb; border-radius: 8px; padding: 16px; text-align: center; }
+        .current-image img, .image-preview img { max-width: 100%; max-height: 150px; border-radius: 8px; margin-bottom: 8px; }
+        .note { font-size: 12px; color: #6b7280; margin: 4px 0; }
     </style>
+}
+
+@section Scripts {
+    <script>
+        // Modal functions
+        function openCreateModal() {
+            document.getElementById('modalTitle').innerText = 'Thêm dịch vụ mới';
+            document.getElementById('formService').reset();
+            document.getElementById('maDichVu').value = '';
+            
+            // Hide preview
+            document.getElementById('currentImageContainer').style.display = 'none';
+            document.getElementById('imagePreview').style.display = 'none';
+            
+            document.getElementById('modalService').style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Action functions
+        function viewService(id) {
+            $.get('@Url.Action("GetServiceDetails")', { id: id }, function(res) {
+                if (res.success) {
+                    var data = res.data;
+                    document.getElementById('viewMaDV').innerText = data.maDichVu;
+                    document.getElementById('viewTenDV').innerText = data.tenDichVu;
+                    document.getElementById('viewLoaiDV').innerText = data.loaiDichVu || 'Khác';
+                    document.getElementById('viewGia').innerText = new Intl.NumberFormat('vi-VN').format(data.giaDichVu) + ' VNĐ';
+                    document.getElementById('viewStatus').innerText = data.trangThaiHoatDong ? 'Đang hoạt động' : 'Đã vô hiệu hóa';
+                    document.getElementById('viewMoTa').innerText = data.moTa || 'Chưa có mô tả';
+                    
+                    if (data.hinhAnh) {
+                        document.getElementById('viewImg').src = data.hinhAnh;
+                        document.getElementById('viewImg').style.display = 'block';
+                        document.getElementById('viewNoImg').style.display = 'none';
+                    } else {
+                        document.getElementById('viewImg').style.display = 'none';
+                        document.getElementById('viewNoImg').style.display = 'inline';
+                    }
+                    
+                    document.getElementById('modalViewService').style.display = 'block';
+                } else {
+                    alert('Lỗi: ' + res.error);
+                }
+            });
+        }
+
+        function editService(id) {
+            $.get('@Url.Action("GetServiceDetails")', { id: id }, function(res) {
+                if (res.success) {
+                    var data = res.data;
+                    document.getElementById('modalTitle').innerText = 'Chỉnh sửa dịch vụ';
+                    document.getElementById('maDichVu').value = data.maDichVu;
+                    document.getElementById('tenDichVu').value = data.tenDichVu;
+                    document.getElementById('giaDichVu').value = data.giaDichVu;
+                    document.getElementById('loaiDichVu').value = data.loaiDichVu;
+                    document.getElementById('moTa').value = data.moTa;
+                    // Note: trangThaiHoatDong handled by toggle button, but we could add checkbox if needed. 
+                    // For now, keep it simple as specified in Create.
+
+                     if (data.hinhAnh) {
+                        document.getElementById('currentImage').src = data.hinhAnh;
+                        document.getElementById('currentImageContainer').style.display = 'block';
+                    } else {
+                        document.getElementById('currentImageContainer').style.display = 'none';
+                    }
+                    document.getElementById('imagePreview').style.display = 'none';
+                    document.getElementById('imageFile').value = ''; // clear input
+
+                    document.getElementById('modalService').style.display = 'block';
+                } else {
+                    alert('Lỗi: ' + res.error);
+                }
+            });
+        }
+
+        function saveService() {
+            var form = document.getElementById('formService');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            var formData = new FormData(form);
+            var id = document.getElementById('maDichVu').value;
+            var url = id ? '@Url.Action("UpdateService")' : '@Url.Action("CreateService")';
+
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(res) {
+                    if (res.success) {
+                        alert(res.message);
+                        closeModal('modalService');
+                        reloadTable();
+                    } else {
+                        alert('Lỗi: ' + res.error);
+                    }
+                },
+                error: function() {
+                    alert('Đã có lỗi xảy ra khi lưu dữ liệu');
+                }
+            });
+        }
+
+        function toggleServiceStatus(id, name) {
+            if (confirm('Bạn có chắc muốn thay đổi trạng thái của dịch vụ "' + name + '"?')) {
+                $.post('@Url.Action("ToggleServiceStatus")', { id: id }, function(res) {
+                    if (res.success) {
+                        reloadTable();
+                    } else {
+                        alert('Lỗi: ' + res.error);
+                    }
+                });
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+            if (!event.target.closest('.custom-dropdown')) {
+                var dropdowns = document.getElementsByClassName("custom-dropdown");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    dropdowns[i].classList.remove('active');
+                }
+            }
+        }
+
+        // Custom Dropdown Logic
+        $(document).on('click', '.dropdown-btn', function(e) {
+            e.stopPropagation();
+            $(this).parent().toggleClass('active');
+        });
+
+        $(document).on('click', '.filter-option', function(e) {
+            e.preventDefault();
+            var type = $(this).data('type');
+            var value = $(this).data('value');
+            var text = $(this).text();
+            
+            if (type === 'serviceType') {
+                $('#typeFilter').val(value);
+                $('#typeText').text(text);
+            } else {
+                $('#availabilityFilter').val(value);
+                $('#availabilityText').text(text);
+            }
+            
+            $(this).closest('.custom-dropdown').removeClass('active');
+            
+            performSearch(1);
+        });
+
+        // AJAX Search & Pagination
+        function performSearch(page = 1) {
+            var search = $('#searchInput').val();
+            var status = $('#availabilityFilter').val();
+            var type = $('#typeFilter').val();
+            
+            $.ajax({
+                url: '@Url.Action("Services", "Home65130650", new { area = "Admin" })',
+                type: 'GET',
+                data: {
+                    page: page,
+                    search: search,
+                    availability: status,
+                    serviceType: type
+                },
+                success: function(result) {
+                    var newContent = $(result).find('#tableContainer').html();
+                    if (newContent && newContent.trim().length > 0) {
+                        $('#tableContainer').html(newContent);
+                    } else {
+                        location.reload(); // Fallback if regular page load
+                    }
+                },
+                error: function() {
+                    console.error('Lỗi tải dữ liệu');
+                }
+            });
+        }
+
+        function reloadTable() {
+            performSearch(1);
+        }
+
+        // Debounce search
+        var searchTimer;
+        $('#searchInput').on('input', function() {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(function() {
+                performSearch(1);
+            }, 500); 
+        });
+    </script>
 }

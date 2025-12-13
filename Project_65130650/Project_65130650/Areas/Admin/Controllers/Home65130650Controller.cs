@@ -905,16 +905,229 @@ namespace Project_65130650.Areas.Admin.Controllers
         }
 
         // GET: Admin/Home65130650/Services
-        public ActionResult Services()
+        // GET: Admin/Home65130650/Services
+        public ActionResult Services(int page = 1, string search = "", string availability = "", string serviceType = "")
         {
             ViewBag.Title = "Quản lý Dịch vụ";
             ViewBag.UserName = Session["UserName"];
 
-            var services = _db.DichVus
-                .Where(dv => dv.trangThaiHoatDong == true || dv.trangThaiHoatDong == null)
+            int pageSize = 10;
+            var query = _db.DichVus.AsQueryable();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(dv => dv.tenDichVu.Contains(search) || dv.maDichVu.Contains(search) || dv.loaiDichVu.Contains(search));
+            }
+
+            if (!string.IsNullOrEmpty(serviceType))
+            {
+                query = query.Where(dv => dv.loaiDichVu == serviceType);
+            }
+
+            if (!string.IsNullOrEmpty(availability))
+            {
+                if (availability == "active")
+                    query = query.Where(dv => dv.trangThaiHoatDong == true || dv.trangThaiHoatDong == null);
+                else if (availability == "inactive")
+                    query = query.Where(dv => dv.trangThaiHoatDong == false);
+            }
+
+            ViewBag.TotalServices = query.Count();
+
+            var totalItems = query.Count();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            if (page < 1) page = 1;
+            if (page > totalPages && totalPages > 0) page = totalPages;
+
+            var services = query
+                .OrderBy(dv => dv.tenDichVu)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.Search = search;
+            ViewBag.Availability = availability;
+            ViewBag.ServiceType = serviceType;
+
+            // Get distinct service types for dropdown
+            ViewBag.ServiceTypes = _db.DichVus
+                                    .Select(dv => dv.loaiDichVu)
+                                    .Distinct()
+                                    .Where(t => !string.IsNullOrEmpty(t))
+                                    .OrderBy(t => t)
+                                    .ToList();
+
             return View(services);
+        }
+
+        // GET: Admin/Home65130650/GetServiceDetails
+        [HttpGet]
+        public JsonResult GetServiceDetails(string id)
+        {
+            try
+            {
+                var service = _db.DichVus.Find(id);
+                if (service == null)
+                    return Json(new { success = false, error = "Không tìm thấy dịch vụ" }, JsonRequestBehavior.AllowGet);
+
+                return Json(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        service.maDichVu,
+                        service.tenDichVu,
+                        service.moTa,
+                        service.giaDichVu,
+                        service.loaiDichVu,
+                        service.trangThaiHoatDong,
+                        hinhAnh = !string.IsNullOrEmpty(service.hinhAnh) && !service.hinhAnh.StartsWith("/") && !service.hinhAnh.StartsWith("http") ? "/Images/" + service.hinhAnh : service.hinhAnh
+                    }
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // POST: Admin/Home65130650/CreateService
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult CreateService(DichVu model, System.Web.HttpPostedFileBase imageFile)
+        {
+            try
+            {
+                if (_db.DichVus.Any(dv => dv.tenDichVu == model.tenDichVu))
+                    return Json(new { success = false, error = "Tên dịch vụ đã tồn tại" });
+
+                model.maDichVu = GenerateServiceId();
+                model.trangThaiHoatDong = true;
+                model.ngayTao = DateTime.Now;
+
+                if (imageFile != null && imageFile.ContentLength > 0)
+                {
+                    string fileName = System.IO.Path.GetFileName(imageFile.FileName);
+                    var serverSavePath = Server.MapPath("~/Images");
+                    string path = System.IO.Path.Combine(serverSavePath, fileName);
+                    
+                    if (!System.IO.Directory.Exists(serverSavePath))
+                    {
+                        System.IO.Directory.CreateDirectory(serverSavePath);
+                    }
+
+                    imageFile.SaveAs(path);
+                    model.hinhAnh = fileName;
+                }
+
+                _db.DichVus.Add(model);
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Thêm dịch vụ thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        // POST: Admin/Home65130650/UpdateService
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult UpdateService(DichVu model, System.Web.HttpPostedFileBase imageFile)
+        {
+            try
+            {
+                var service = _db.DichVus.Find(model.maDichVu);
+                if (service == null)
+                    return Json(new { success = false, error = "Không tìm thấy dịch vụ" });
+
+                service.tenDichVu = model.tenDichVu;
+                service.moTa = model.moTa;
+                service.giaDichVu = model.giaDichVu;
+                service.loaiDichVu = model.loaiDichVu;
+                service.trangThaiHoatDong = model.trangThaiHoatDong;
+
+                if (imageFile != null && imageFile.ContentLength > 0)
+                {
+                     // Delete old image if exists
+                    if (!string.IsNullOrEmpty(service.hinhAnh))
+                    {
+                         string oldFileName = System.IO.Path.GetFileName(service.hinhAnh);
+                         string oldPath = System.IO.Path.Combine(Server.MapPath("~/Images"), oldFileName);
+                         if (System.IO.File.Exists(oldPath))
+                         {
+                             System.IO.File.Delete(oldPath);
+                         }
+                    }
+
+                    string fileName = System.IO.Path.GetFileName(imageFile.FileName);
+                    var serverSavePath = Server.MapPath("~/Images");
+                    string path = System.IO.Path.Combine(serverSavePath, fileName);
+                    
+                    if (!System.IO.Directory.Exists(serverSavePath))
+                    {
+                        System.IO.Directory.CreateDirectory(serverSavePath);
+                    }
+
+                    imageFile.SaveAs(path);
+                    service.hinhAnh = fileName;
+                }
+
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Cập nhật dịch vụ thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        // POST: Admin/Home65130650/ToggleServiceStatus
+        [HttpPost]
+        public JsonResult ToggleServiceStatus(string id)
+        {
+            try
+            {
+                var service = _db.DichVus.Find(id);
+                if (service == null)
+                    return Json(new { success = false, error = "Không tìm thấy dịch vụ" });
+
+                service.trangThaiHoatDong = !(service.trangThaiHoatDong ?? true);
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Đã thay đổi trạng thái thành công" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        private string GenerateServiceId()
+        {
+            var ids = _db.DichVus
+                .Where(dv => dv.maDichVu.StartsWith("DV"))
+                .Select(dv => dv.maDichVu)
+                .ToList();
+
+             if (!ids.Any()) return "DV001";
+
+            int maxVal = 0;
+            foreach (var id in ids)
+            {
+                var cleanId = id.Trim();
+                if (cleanId.Length > 2 && int.TryParse(cleanId.Substring(2), out int num))
+                {
+                    if (num > maxVal) maxVal = num;
+                }
+            }
+
+            return "DV" + (maxVal + 1).ToString("D3");
         }
 
         // GET: Admin/Home65130650/Payments
