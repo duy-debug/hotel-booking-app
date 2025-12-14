@@ -1131,16 +1131,233 @@ namespace Project_65130650.Areas.Admin.Controllers
         }
 
         // GET: Admin/Home65130650/Payments
-        public ActionResult Payments()
+        public ActionResult Payments(int page = 1, string search = "", string status = "", string method = "", string fromDate = "", string toDate = "")
         {
             ViewBag.Title = "Quản lý Thanh toán";
             ViewBag.UserName = Session["UserName"];
 
-            var payments = _db.ThanhToans
+            int pageSize = 10;
+            var query = _db.ThanhToans.AsQueryable();
+
+            // Filter by Search (Payment ID, Booking ID, Customer Name)
+            if (!string.IsNullOrEmpty(search))
+            {
+                // search = search.ToLower();
+                query = query.Where(tt => 
+                    tt.maThanhToan.Contains(search) || 
+                    tt.maDatPhong.Contains(search) ||
+                    (tt.NguoiDung != null && tt.NguoiDung.hoTen.Contains(search)) ||
+                    (tt.DatPhong != null && tt.DatPhong.NguoiDung != null && tt.DatPhong.NguoiDung.hoTen.Contains(search)));
+            }
+
+            // Filter by Status
+            if (!string.IsNullOrEmpty(status))
+            {
+                query = query.Where(tt => tt.trangThaiThanhToan == status);
+            }
+
+            // Filter by Method
+            if (!string.IsNullOrEmpty(method))
+            {
+                query = query.Where(tt => tt.phuongThucThanhToan == method);
+            }
+
+            // Filter by Date
+            if (!string.IsNullOrEmpty(fromDate) && DateTime.TryParse(fromDate, out DateTime start))
+            {
+                 query = query.Where(tt => tt.ngayThanhToan >= start);
+            }
+            if (!string.IsNullOrEmpty(toDate) && DateTime.TryParse(toDate, out DateTime end))
+            {
+                 // Include the end date fully
+                 end = end.AddDays(1).AddTicks(-1);
+                 query = query.Where(tt => tt.ngayThanhToan <= end);
+            }
+
+            var totalItems = query.Count();
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+            if (page < 1) page = 1;
+            if (page > totalPages && totalPages > 0) page = totalPages;
+
+            var payments = query
                 .OrderByDescending(tt => tt.ngayThanhToan)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.Search = search;
+            ViewBag.Status = status;
+            ViewBag.Method = method;
+            ViewBag.FromDate = fromDate;
+            ViewBag.ToDate = toDate;
+
+            // Stats for the view (All, not filtered, or maybe filtered? Let's use all for global stats)
+            // Or use filtered stats? User request G.1 doesn't specify stats behavior but usually stats are global.
+            // But preserving the existing simple stats is fine.
+            // Let's keep global stats.
+            ViewBag.TotalRevenue = _db.ThanhToans.Sum(t => (decimal?)t.soTien) ?? 0;
+            ViewBag.TotalTrans = _db.ThanhToans.Count();
+            ViewBag.TransferCount = _db.ThanhToans.Count(t => t.phuongThucThanhToan == "Chuyển khoản");
+            ViewBag.CashCount = _db.ThanhToans.Count(t => t.phuongThucThanhToan == "Tiền mặt");
+
+            // Getting pending bookings for the "Create Payment" modal dropdown
+            ViewBag.PendingBookings = _db.DatPhongs
+                .Where(dp => dp.trangThaiDatPhong == "Đã xác nhận" && !dp.ThanhToans.Any(tt => tt.trangThaiThanhToan == "Đã thanh toán" || tt.trangThaiThanhToan == "Thành công"))
+                .ToList()
+                .Select(dp => new SelectListItem
+                {
+                    Value = dp.maDatPhong,
+                    Text = dp.maDatPhong + " - " + (dp.NguoiDung != null ? dp.NguoiDung.hoTen : "")
+                })
+                .ToList();
+
+            // if (Request.IsAjaxRequest())
+            // {
+            //    return PartialView("_PaymentsTable", payments); 
+            // }
+
             return View(payments);
+        }
+
+        // GET: Admin/Home65130650/GetPaymentDetails
+        [HttpGet]
+        public JsonResult GetPaymentDetails(string id)
+        {
+            try
+            {
+                var payment = _db.ThanhToans.Find(id);
+                if (payment == null)
+                    return Json(new { success = false, error = "Không tìm thấy giao dịch" }, JsonRequestBehavior.AllowGet);
+
+                return Json(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        payment.maThanhToan,
+                        payment.maDatPhong,
+                        ngayThanhToan = payment.ngayThanhToan.HasValue ? payment.ngayThanhToan.Value.ToString("dd/MM/yyyy HH:mm") : "",
+                        payment.soTien,
+                        payment.phuongThucThanhToan,
+                        payment.trangThaiThanhToan,
+                        payment.ghiChu,
+                        nguoiXuLy = payment.nguoiXuLy, // Maybe fetching handler name would be better?
+                        handlerName = GetUserName(payment.nguoiXuLy),
+                        customerName = payment.DatPhong != null && payment.DatPhong.NguoiDung != null ? payment.DatPhong.NguoiDung.hoTen : ""
+                    }
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        private string GetUserName(string userId)
+        {
+            if (string.IsNullOrEmpty(userId)) return "";
+            var u = _db.NguoiDungs.Find(userId);
+            return u != null ? u.hoTen : userId;
+        }
+
+        // POST: Admin/Home65130650/CreatePayment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult CreatePayment(string maDatPhong, decimal soTien, string phuongThucThanhToan, string ghiChu)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(maDatPhong))
+                    return Json(new { success = false, error = "Vui lòng chọn mã đặt phòng" });
+
+                if (soTien <= 0)
+                    return Json(new { success = false, error = "Số tiền phải lớn hơn 0" });
+
+                var adminId = Session["UserId"]?.ToString();
+                
+                var payment = new ThanhToan
+                {
+                    maThanhToan = GeneratePaymentId(),
+                    maDatPhong = maDatPhong,
+                    ngayThanhToan = DateTime.Now,
+                    soTien = soTien,
+                    phuongThucThanhToan = phuongThucThanhToan,
+                    ghiChu = ghiChu,
+                    nguoiXuLy = adminId,
+                    trangThaiThanhToan = (phuongThucThanhToan == "Tiền mặt") ? "Thành công" : "Chờ xử lý" // Cash is instant, Transfer might be pending? Or manual entry implies verified?
+                    // Request G.2 says: "Update payment status". It implies we set it.
+                    // If creating manually, it's usually "Success" (Collected money).
+                    // Let's assume manual creation = "Thành công" or "Đã thanh toán" unless specified. 
+                    // Let's default to "Thành công" for manual entry.
+                };
+                
+                if (payment.trangThaiThanhToan == null) payment.trangThaiThanhToan = "Thành công";
+
+                _db.ThanhToans.Add(payment);
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Tạo thanh toán thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        // POST: Admin/Home65130650/UpdatePaymentStatus
+        [HttpPost]
+        public JsonResult UpdatePaymentStatus(string id, string status, string reason = "")
+        {
+            try
+            {
+                var payment = _db.ThanhToans.Find(id);
+                if (payment == null)
+                    return Json(new { success = false, error = "Không tìm thấy giao dịch" });
+
+                payment.trangThaiThanhToan = status;
+                
+                if (!string.IsNullOrEmpty(reason))
+                {
+                    payment.ghiChu = (payment.ghiChu ?? "") + " | Lý do: " + reason; 
+                }
+                
+                var adminId = Session["UserId"]?.ToString();
+                payment.nguoiXuLy = adminId; // Update handler
+
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Cập nhật trạng thái thành công" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, error = ex.Message });
+            }
+        }
+
+        private string GeneratePaymentId()
+        {
+            var ids = _db.ThanhToans
+                .Where(t => t.maThanhToan.StartsWith("TT"))
+                .Select(t => t.maThanhToan)
+                .ToList();
+
+            if (!ids.Any()) return "TT001";
+            
+            int maxVal = 0;
+            foreach (var id in ids)
+            {
+                var cleanId = id.Trim();
+                // TT001 -> len 5
+                if (cleanId.Length > 2 && int.TryParse(cleanId.Substring(2), out int num))
+                {
+                    if (num > maxVal) maxVal = num;
+                }
+            }
+
+            return "TT" + (maxVal + 1).ToString("D3");
         }
 
         // GET: Admin/Home65130650/Reports

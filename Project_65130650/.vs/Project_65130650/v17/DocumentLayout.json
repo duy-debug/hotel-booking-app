@@ -3,48 +3,56 @@
   "WorkspaceRootPath": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\services.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\services.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|d:\\ntu\\academicyear_2025_2026\\semester1\\hotel_booking_management\\project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\payments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\payments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\users.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\users.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\payments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\payments.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\bookings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\bookings.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|d:\\ntu\\academicyear_2025_2026\\semester1\\hotel_booking_management\\project_65130650\\project_65130650\\areas\\customer\\controllers\\home65130650controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\customer\\controllers\\home65130650controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\controllers\\home65130650controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\controllers\\home65130650controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\reports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\reports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\roomtypes.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\roomtypes.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\rooms.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\rooms.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\profile.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\roomtypes.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\roomtypes.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\views\\home65130650\\services.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\home65130650\\services.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\customer\\customerarearegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\customer\\customerarearegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\customer\\controllers\\home65130650controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\customer\\controllers\\home65130650controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\adminarearegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\adminarearegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\controllers\\home65130650controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\controllers\\home65130650controller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -103,10 +111,6 @@
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\admin\\adminarearegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\admin\\adminarearegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\models\\viewmodel\\roomlistviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\models\\viewmodel\\roomlistviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -145,10 +149,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\models\\phong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\models\\phong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\areas\\customer\\customerarearegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\areas\\customer\\customerarearegistration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\project_65130650\\models\\nguoidung.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -190,8 +190,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
@@ -201,114 +205,21 @@
               "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:1:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Home65130650Controller.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\Controllers\\Home65130650Controller.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Customer\\Controllers\\Home65130650Controller.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\Controllers\\Home65130650Controller.cs",
-              "RelativeToolTip": "Project_65130650\\Areas\\Customer\\Controllers\\Home65130650Controller.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-12T14:32:55.619Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Index.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Index.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Index.cshtml",
-              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAIgAAAAyAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-03T06:31:06.414Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Bookings.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Bookings.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Bookings.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Bookings.cshtml",
-              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Bookings.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-08T11:22:06.02Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "Payments.cshtml",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Payments.cshtml",
               "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Payments.cshtml",
               "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Payments.cshtml",
               "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Payments.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-12-08T11:22:41.948Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Services.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Services.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Services.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Services.cshtml",
-              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Services.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-08T11:22:35.762Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Users.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Users.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Users.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Users.cshtml",
-              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Users.cshtml",
-              "ViewState": "AgIAAK4EAAAAAAAAAAD4v2MEAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-09T10:28:23.076Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "RoomTypes.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\RoomTypes.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\RoomTypes.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\RoomTypes.cshtml",
-              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\RoomTypes.cshtml",
-              "ViewState": "AgIAAKgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-08T11:22:21.04Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Rooms.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Rooms.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Rooms.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Rooms.cshtml",
-              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Rooms.cshtml",
-              "ViewState": "AgIAAKwCAAAAAAAAAAD4v4EAAAAzAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-08T11:22:28.754Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 5,
               "Title": "Reports.cshtml",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Reports.cshtml",
               "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Reports.cshtml",
@@ -320,211 +231,115 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Home65130650Controller.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Controllers\\Home65130650Controller.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Controllers\\Home65130650Controller.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Controllers\\Home65130650Controller.cs",
-              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Controllers\\Home65130650Controller.cs",
-              "ViewState": "AgIAAOgCAAAAAAAAAAAlwD8DAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-09T10:26:27.004Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 4,
               "Title": "Profile.cshtml",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Profile.cshtml",
               "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Profile.cshtml",
               "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Profile.cshtml",
               "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Profile.cshtml",
-              "ViewState": "AgIAADUAAAAAAAAAAAD4vwgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-12-08T11:22:59.562Z"
             },
             {
               "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Index.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Index.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Index.cshtml",
+              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Index.cshtml",
+              "ViewState": "AgIAAIAAAAAAAAAAAAAAAIgAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-03T06:31:06.414Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Bookings.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Bookings.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Bookings.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Bookings.cshtml",
+              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Bookings.cshtml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAuwCMAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-08T11:22:06.02Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Users.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Users.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Users.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Users.cshtml",
+              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Users.cshtml",
+              "ViewState": "AgIAAOMAAAAAAAAAAAAcwO8AAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-09T10:28:23.076Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Rooms.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Rooms.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Rooms.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Rooms.cshtml",
+              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Rooms.cshtml",
+              "ViewState": "AgIAAKwCAAAAAAAAAAD4v4EAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-08T11:22:28.754Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "RoomTypes.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\RoomTypes.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\RoomTypes.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\RoomTypes.cshtml",
+              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\RoomTypes.cshtml",
+              "ViewState": "AgIAAKgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-08T11:22:21.04Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Services.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Services.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Services.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Services.cshtml",
+              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Home65130650\\Services.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-08T11:22:35.762Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "CustomerAreaRegistration.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\CustomerAreaRegistration.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Customer\\CustomerAreaRegistration.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\CustomerAreaRegistration.cs",
+              "RelativeToolTip": "Project_65130650\\Areas\\Customer\\CustomerAreaRegistration.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T05:42:58.602Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Home65130650Controller.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\Controllers\\Home65130650Controller.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Customer\\Controllers\\Home65130650Controller.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\Controllers\\Home65130650Controller.cs",
+              "RelativeToolTip": "Project_65130650\\Areas\\Customer\\Controllers\\Home65130650Controller.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T14:32:55.619Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "RouteConfig.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\RouteConfig.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\App_Start\\RouteConfig.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\RouteConfig.cs",
-              "RelativeToolTip": "Project_65130650\\App_Start\\RouteConfig.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-11T16:59:24.17Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "FilterConfig.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\FilterConfig.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\App_Start\\FilterConfig.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\FilterConfig.cs",
-              "RelativeToolTip": "Project_65130650\\App_Start\\FilterConfig.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-12T08:47:52.453Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "BundleConfig.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\BundleConfig.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\App_Start\\BundleConfig.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\BundleConfig.cs",
-              "RelativeToolTip": "Project_65130650\\App_Start\\BundleConfig.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-12T08:47:51.857Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Room65130650\\Index.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Views\\Room65130650\\Index.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Room65130650\\Index.cshtml",
-              "RelativeToolTip": "Project_65130650\\Views\\Room65130650\\Index.cshtml",
-              "ViewState": "AgIAAOEAAAAAAAAAAAAAAPQAAAARAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-05T08:30:01.273Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 20,
-              "Title": "RoomDetailViewModel.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomDetailViewModel.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Models\\ViewModel\\RoomDetailViewModel.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomDetailViewModel.cs",
-              "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\RoomDetailViewModel.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAA1wAsAAAAoAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T07:41:14.111Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Home\\Index.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Views\\Home\\Index.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Home\\Index.cshtml",
-              "RelativeToolTip": "Project_65130650\\Views\\Home\\Index.cshtml",
-              "ViewState": "AgIAAFYBAAAAAAAAAAAuwGkBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-03T06:57:57.685Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 21,
-              "Title": "RoomCardViewModel.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomCardViewModel.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Models\\ViewModel\\RoomCardViewModel.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomCardViewModel.cs",
-              "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\RoomCardViewModel.cs",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAxwBIAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-04T11:16:55.496Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "Account65130650Controller.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Controllers\\Account65130650Controller.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Controllers\\Account65130650Controller.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Controllers\\Account65130650Controller.cs",
-              "RelativeToolTip": "Project_65130650\\Controllers\\Account65130650Controller.cs",
-              "ViewState": "AgIAAEEAAAAAAAAAAAAcwGEAAAANAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T06:38:37.272Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "RecentBookingViewModel.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RecentBookingViewModel.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Models\\ViewModel\\RecentBookingViewModel.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RecentBookingViewModel.cs",
-              "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\RecentBookingViewModel.cs",
-              "ViewState": "AgIAABEAAAAAAAAAAAA9wAsAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-08T11:32:35.842Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "RoomDetail.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Home\\RoomDetail.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Views\\Home\\RoomDetail.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Home\\RoomDetail.cshtml",
-              "RelativeToolTip": "Project_65130650\\Views\\Home\\RoomDetail.cshtml",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAALEAAAAwAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-05T07:42:16.365Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "RegisterForm.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Forms\\RegisterForm.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Models\\Forms\\RegisterForm.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Forms\\RegisterForm.cs",
-              "RelativeToolTip": "Project_65130650\\Models\\Forms\\RegisterForm.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAzwAsAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T06:46:47.693Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "LoginForm.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Forms\\LoginForm.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Models\\Forms\\LoginForm.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Forms\\LoginForm.cs",
-              "RelativeToolTip": "Project_65130650\\Models\\Forms\\LoginForm.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAhAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T06:46:29.027Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 23,
-              "Title": "Model65130650DbContext.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Model65130650DbContext.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Models\\Model65130650DbContext.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Model65130650DbContext.cs",
-              "RelativeToolTip": "Project_65130650\\Models\\Model65130650DbContext.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T05:52:05.186Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAOABAAAAAAAAAAAMwO4BAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-03T06:26:53.114Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 26,
-              "Title": "RoomListViewModel.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomListViewModel.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Models\\ViewModel\\RoomListViewModel.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomListViewModel.cs",
-              "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\RoomListViewModel.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwD4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-05T08:28:17.498Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 25,
               "Title": "AdminAreaRegistration.cs",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\AdminAreaRegistration.cs",
               "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\AdminAreaRegistration.cs",
@@ -536,7 +351,199 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Home65130650Controller.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Controllers\\Home65130650Controller.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Controllers\\Home65130650Controller.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Controllers\\Home65130650Controller.cs",
+              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Controllers\\Home65130650Controller.cs",
+              "ViewState": "AgIAAOgCAAAAAAAAAAAlwD8DAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-09T10:26:27.004Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "RouteConfig.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\RouteConfig.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\App_Start\\RouteConfig.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\RouteConfig.cs",
+              "RelativeToolTip": "Project_65130650\\App_Start\\RouteConfig.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-11T16:59:24.17Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "FilterConfig.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\FilterConfig.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\App_Start\\FilterConfig.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\FilterConfig.cs",
+              "RelativeToolTip": "Project_65130650\\App_Start\\FilterConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T08:47:52.453Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "BundleConfig.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\BundleConfig.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\App_Start\\BundleConfig.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\App_Start\\BundleConfig.cs",
+              "RelativeToolTip": "Project_65130650\\App_Start\\BundleConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-12T08:47:51.857Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Room65130650\\Index.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Views\\Room65130650\\Index.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Room65130650\\Index.cshtml",
+              "RelativeToolTip": "Project_65130650\\Views\\Room65130650\\Index.cshtml",
+              "ViewState": "AgIAAOEAAAAAAAAAAAAAAPQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-05T08:30:01.273Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "RoomDetailViewModel.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomDetailViewModel.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Models\\ViewModel\\RoomDetailViewModel.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomDetailViewModel.cs",
+              "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\RoomDetailViewModel.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAA1wAsAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T07:41:14.111Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Project_65130650\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAFYBAAAAAAAAAAAuwGkBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-03T06:57:57.685Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "RoomCardViewModel.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomCardViewModel.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Models\\ViewModel\\RoomCardViewModel.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomCardViewModel.cs",
+              "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\RoomCardViewModel.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAxwBIAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-04T11:16:55.496Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Account65130650Controller.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Controllers\\Account65130650Controller.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Controllers\\Account65130650Controller.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Controllers\\Account65130650Controller.cs",
+              "RelativeToolTip": "Project_65130650\\Controllers\\Account65130650Controller.cs",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAcwGEAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:38:37.272Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "RecentBookingViewModel.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RecentBookingViewModel.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Models\\ViewModel\\RecentBookingViewModel.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RecentBookingViewModel.cs",
+              "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\RecentBookingViewModel.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAA9wAsAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-08T11:32:35.842Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "RoomDetail.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Home\\RoomDetail.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Views\\Home\\RoomDetail.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Home\\RoomDetail.cshtml",
+              "RelativeToolTip": "Project_65130650\\Views\\Home\\RoomDetail.cshtml",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAALEAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-05T07:42:16.365Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "RegisterForm.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Forms\\RegisterForm.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Models\\Forms\\RegisterForm.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Forms\\RegisterForm.cs",
+              "RelativeToolTip": "Project_65130650\\Models\\Forms\\RegisterForm.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAzwAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:46:47.693Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "LoginForm.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Forms\\LoginForm.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Models\\Forms\\LoginForm.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Forms\\LoginForm.cs",
+              "RelativeToolTip": "Project_65130650\\Models\\Forms\\LoginForm.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T06:46:29.027Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Model65130650DbContext.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Model65130650DbContext.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Models\\Model65130650DbContext.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Model65130650DbContext.cs",
+              "RelativeToolTip": "Project_65130650\\Models\\Model65130650DbContext.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-03T05:52:05.186Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Project_65130650\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAOABAAAAAAAAAAAMwO4BAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-03T06:26:53.114Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 27,
+              "Title": "RoomListViewModel.cs",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomListViewModel.cs",
+              "RelativeDocumentMoniker": "Project_65130650\\Models\\ViewModel\\RoomListViewModel.cs",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\ViewModel\\RoomListViewModel.cs",
+              "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\RoomListViewModel.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwD4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-05T08:28:17.498Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
               "Title": "Room65130650Controller.cs",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Controllers\\Room65130650Controller.cs",
               "RelativeDocumentMoniker": "Project_65130650\\Controllers\\Room65130650Controller.cs",
@@ -548,7 +555,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 29,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Project_65130650\\Controllers\\HomeController.cs",
@@ -560,7 +567,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 30,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "Project_65130650\\Views\\Shared\\_Layout.cshtml",
@@ -572,7 +579,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 35,
               "Title": "LoaiPhong.cs",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\LoaiPhong.cs",
               "RelativeDocumentMoniker": "Project_65130650\\Models\\LoaiPhong.cs",
@@ -584,7 +591,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 34,
               "Title": "Login.cshtml",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Account65130650\\Login.cshtml",
               "RelativeDocumentMoniker": "Project_65130650\\Views\\Account65130650\\Login.cshtml",
@@ -596,7 +603,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 33,
               "Title": "Register.cshtml",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Account65130650\\Register.cshtml",
               "RelativeDocumentMoniker": "Project_65130650\\Views\\Account65130650\\Register.cshtml",
@@ -608,7 +615,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 31,
               "Title": "Web.config",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Web.config",
               "RelativeDocumentMoniker": "Project_65130650\\Web.config",
@@ -621,7 +628,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 36,
               "Title": "Phong.cs",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Models\\Phong.cs",
               "RelativeDocumentMoniker": "Project_65130650\\Models\\Phong.cs",
@@ -633,7 +640,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 32,
               "Title": "Web.config",
               "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Views\\Web.config",
               "RelativeDocumentMoniker": "Project_65130650\\Views\\Web.config",
@@ -642,18 +649,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
               "WhenOpened": "2025-12-05T06:34:45.365Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 36,
-              "Title": "CustomerAreaRegistration.cs",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\CustomerAreaRegistration.cs",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Customer\\CustomerAreaRegistration.cs",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\CustomerAreaRegistration.cs",
-              "RelativeToolTip": "Project_65130650\\Areas\\Customer\\CustomerAreaRegistration.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-03T05:42:58.602Z"
             },
             {
               "$type": "Document",
