@@ -147,7 +147,7 @@
                                         <td><strong>@room.soPhong</strong></td>
                                         <td>@(room.LoaiPhong != null ? room.LoaiPhong.tenLoaiPhong : "N/A")</td>
                                         <td>@room.tang</td>
-                                        <td>@String.Format("{0:N0}", room.LoaiPhong != null ? room.LoaiPhong.giaCoBan : 0)</td>
+                                        <td>@String.Format("{0:N0}", room.LoaiPhong != null ? room.LoaiPhong.giaCoBan : 0) ₫</td>
                                         <td>
                                             @if (room.trangThai == "Còn trống")
                                             {<span class="badge badge-success">Còn trống</span> }
@@ -685,7 +685,7 @@
                             <div class="detail-item"><label>Số phòng</label><span>${d.soPhong}</span></div>
                             <div class="detail-item"><label>Loại phòng</label><span>${d.tenLoaiPhong}</span></div>
                             <div class="detail-item"><label>Tầng</label><span>${d.tang}</span></div>
-                             <div class="detail-item"><label>Giá cơ bản</label><span>${new Intl.NumberFormat('vi-VN').format(d.giaCoBan)} VNĐ</span></div>
+                             <div class="detail-item"><label>Giá cơ bản</label><span>${new Intl.NumberFormat('vi-VN').format(d.giaCoBan)} ₫</span></div>
                             <div class="detail-item"><label>Trạng thái</label><span>${d.trangThai}</span></div>
                             <div class="detail-item"><label>Tình trạng hoạt động</label><span>${d.trangThaiHoatDong ? 'Đang hoạt động' : 'Đã vô hiệu hóa'}</span></div>
                             <div class="detail-item" style="grid-column: span 2;"><label>Mô tả</label><span>${d.moTa || 'Không có mô tả'}</span></div>

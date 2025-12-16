@@ -240,6 +240,7 @@
     <Content Include="Areas\Admin\Views\Home65130650\Reports.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Profile.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Users.cshtml" />
+    <Content Include="Areas\Admin\Views\Home65130650\Invoice.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

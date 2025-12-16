@@ -65,7 +65,7 @@
                                     <tr class="room-type-row">
                                         <td>@index</td>
                                         <td>@type.tenLoaiPhong</td>
-                                        <td>@String.Format("{0:N0}", type.giaCoBan) VNĐ</td>
+                                        <td>@String.Format("{0:N0}", type.giaCoBan) ₫</td>
                                         <td>@type.soNguoiToiDa người</td>
                                         <td>@(type.dienTichPhong != null ? type.dienTichPhong + " m²" : "N/A")</td>
                                         <td>
@@ -194,7 +194,7 @@
                  <div class="form-row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="giaCoBan" class="control-label">Giá cơ bản (VNĐ) <span class="text-danger">*</span></label>
+                            <label for="giaCoBan" class="control-label">Giá cơ bản (₫) <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="giaCoBan" name="giaCoBan" required min="0">
                         </div>
                     </div>
@@ -507,7 +507,7 @@
                             <div class="detail-grid">
                                 <div class="detail-item"><label>Mã loại phòng</label><span>${d.maLoaiPhong}</span></div>
                                 <div class="detail-item"><label>Tên loại phòng</label><span>${d.tenLoaiPhong}</span></div>
-                                <div class="detail-item"><label>Giá cơ bản</label><span>${new Intl.NumberFormat('vi-VN').format(d.giaCoBan)} VNĐ</span></div>
+                                <div class="detail-item"><label>Giá cơ bản</label><span>${new Intl.NumberFormat('vi-VN').format(d.giaCoBan)} ₫</span></div>
                                 <div class="detail-item"><label>Sức chứa</label><span>${d.soNguoiToiDa} người</span></div>
                                 <div class="detail-item"><label>Diện tích</label><span>${d.dienTichPhong} m²</span></div>
                                 <div class="detail-item"><label>Loại giường</label><span>${d.loaiGiuong || 'N/A'}</span></div>
