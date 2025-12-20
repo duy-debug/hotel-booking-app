@@ -54,7 +54,8 @@ namespace Project_65130650.Areas.Admin.Controllers
 
             // Doanh thu tháng này
             var revenueThisMonth = _db.ThanhToans
-                .Where(tt => tt.ngayThanhToan >= thisMonth && tt.ngayThanhToan < nextMonth)
+                .Where(tt => tt.ngayThanhToan >= thisMonth && tt.ngayThanhToan < nextMonth 
+                          && (tt.trangThaiThanhToan == "Thành công" || tt.trangThaiThanhToan == "Đã thanh toán"))
                 .Sum(tt => (decimal?)tt.soTien) ?? 0;
             ViewBag.RevenueThisMonth = revenueThisMonth;
 
@@ -128,6 +129,8 @@ namespace Project_65130650.Areas.Admin.Controllers
                 query = query.Where(dp => dp.trangThaiDatPhong == status);
             }
 
+
+
             // Pagination
             var totalItems = query.Count();
             var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
@@ -193,6 +196,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                 customerPhone = booking.NguoiDung?.soDienThoai, // Fix: JS expects customerPhone
                 roomNumber = booking.Phong?.soPhong, // Fix: JS expects roomNumber
                 loaiPhong = booking.Phong?.LoaiPhong?.tenLoaiPhong,
+                roomPrice = booking.Phong?.LoaiPhong?.giaCoBan ?? 0, // Giá cơ bản/đêm
                 ngayNhanPhong = booking.ngayNhanPhong.ToString("dd/MM/yyyy"), // Fix: JS expects ngayNhanPhong
                 ngayTraPhong = booking.ngayTraPhong.ToString("dd/MM/yyyy"), // Fix: JS expects ngayTraPhong
                 ngayHuy = booking.ngayHuy.HasValue ? booking.ngayHuy.Value.ToString("dd/MM/yyyy HH:mm") : "",
@@ -221,6 +225,61 @@ namespace Project_65130650.Areas.Admin.Controllers
                 if (booking == null) return Json(new { success = false, error = "Không tìm thấy đơn đặt phòng" });
                 
                 // Allow status change logic
+                
+
+                // VALIDATE CHECK-IN DATE
+                if (status == "Đã nhận phòng")
+                {
+                    if (booking.ngayNhanPhong.Date > DateTime.Now.Date)
+                    {
+                        return Json(new { success = false, error = $"Chưa đến ngày nhận phòng ({booking.ngayNhanPhong:dd/MM/yyyy}). Không thể nhận phòng sớm." });
+                    }
+
+                    // VALIDATE DEPOSIT (Review request: Must pay at least 50% or full before check-in)
+                    decimal totalService = 0;
+                    if (booking.DichVuDatPhongs != null) totalService = booking.DichVuDatPhongs.Sum(d => d.thanhTien);
+                    decimal grandTotal = booking.tienPhong + totalService;
+
+                    decimal totalPaid = 0;
+                    if (booking.ThanhToans != null)
+                    {
+                        totalPaid = booking.ThanhToans
+                            .Where(t => t.trangThaiThanhToan == "Thành công" || t.trangThaiThanhToan == "Đã thanh toán")
+                            .Sum(t => t.soTien);
+                    }
+
+                    decimal minDeposit = grandTotal * 0.5m;
+
+                    if (totalPaid < minDeposit)
+                    {
+                         decimal missing = minDeposit - totalPaid;
+                         return Json(new { success = false, error = $"Yêu cầu đặt cọc trước ít nhất 50% tổng đơn ({minDeposit:N0} ₫). Khách hàng còn thiếu {missing:N0} ₫ để đủ điều kiện nhận phòng." });
+                    }
+                }
+                
+                // VALIDATE CHECK-OUT (MUST PAY FULLY)
+                if (status == "Đã trả phòng")
+                {
+                    decimal totalService = 0;
+                    if (booking.DichVuDatPhongs != null) totalService = booking.DichVuDatPhongs.Sum(d => d.thanhTien);
+                    decimal grandTotal = booking.tienPhong + totalService;
+
+                    decimal totalPaid = 0;
+                    if (booking.ThanhToans != null)
+                    {
+                        totalPaid = booking.ThanhToans
+                            .Where(t => t.trangThaiThanhToan == "Thành công" || t.trangThaiThanhToan == "Đã thanh toán")
+                            .Sum(t => t.soTien);
+                    }
+
+                    if (totalPaid < grandTotal)
+                    {
+                        decimal remaining = grandTotal - totalPaid;
+                        return Json(new { success = false, error = $"Khách hàng chưa thanh toán đủ. Còn thiếu: {remaining:N0} ₫. Vui lòng thanh toán trước khi trả phòng." });
+                    }
+                }
+
+
                 booking.trangThaiDatPhong = status;
                 booking.ngayCapNhat = DateTime.Now;
 
@@ -417,7 +476,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                     ngayNhanPhong = start,
                     ngayTraPhong = end,
                     soKhach = soKhach,
-                    tienPhong = grandTotal, // FIX: Lưu Tổng tiền (bao gồm dịch vụ) để thỏa mãn constraint DB (tienDatCoc <= tienPhong)
+                    tienPhong = totalRoomPrice, // FIX: Lưu tiền phòng (Giá * Ngày)
                     tienDatCoc = tienCoc,
                     trangThaiDatPhong = "Đã xác nhận", // Auto confirm for walk-in
                     yeuCauDacBiet = string.IsNullOrEmpty(yeuCauDacBiet) ? "Đặt trực tiếp tại quầy" : yeuCauDacBiet,
@@ -448,10 +507,31 @@ namespace Project_65130650.Areas.Admin.Controllers
                 }
                 
                 // 4. Create payment if deposit > 0
+                // 4. Create payment if deposit > 0
                 if (tienCoc > 0)
                 {
                     // Sinh mã Thanh toán: Lấy TT cao nhất + 1
                     var paymentId = GenerateId("TT", "ThanhToan", "maThanhToan");
+                    
+                     // Safety check for length 5 (database constraint)
+                    if (paymentId.Length > 5) 
+                    {
+                         // Fallback to shorter prefix if "TT" causes overflow (e.g., T9999)
+                         paymentId = GenerateId("T", "ThanhToan", "maThanhToan");
+                         if (paymentId.Length > 5) return Json(new { success = false, error = "Hết số phiếu chi (Mã > 5 ký tự). Vui lòng liên hệ Admin." });
+                    }
+
+                    // Check nguoiXuLy exists to avoid FK violation
+                    string currentUser = Session["UserId"] as string;
+                    if (string.IsNullOrEmpty(currentUser)) currentUser = "Admin";
+                    
+                    // Verify if this user actually exists in DB
+                    if (!_db.NguoiDungs.Any(u => u.maNguoiDung == currentUser))
+                    {
+                        // Fallback to the first available Admin
+                        var firstAdmin = _db.NguoiDungs.FirstOrDefault(u => u.vaiTro == "Quản trị");
+                        currentUser = firstAdmin != null ? firstAdmin.maNguoiDung : null;
+                    }
 
                     var payment = new ThanhToan
                     {
@@ -462,7 +542,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                         phuongThucThanhToan = string.IsNullOrEmpty(phuongThuc) ? "Tiền mặt" : phuongThuc,
                         trangThaiThanhToan = "Thành công",
                          maGiaoDich = "TXN" + DateTime.Now.ToString("yyMMddHHmmssfff"),
-                        nguoiXuLy = Session["UserId"] as string ?? "Admin",
+                        nguoiXuLy = currentUser,
                         ghiChu = "Thanh toán tại quầy"
                     };
                     _db.ThanhToans.Add(payment);
@@ -505,17 +585,28 @@ namespace Project_65130650.Areas.Admin.Controllers
                 var booking = _db.DatPhongs.Find(maDatPhong);
                 if (booking == null) return Json(new { success = false, error = "Không tìm thấy đặt phòng" });
 
-                // Generate ID
-                var ids = _db.ThanhToans.Select(t => t.maThanhToan).ToList();
-                var nextId = 1;
-                if (ids.Any())
+                // Generate ID using Helper
+                var paymentId = GenerateId("TT", "ThanhToan", "maThanhToan");
+                
+                // Safety check for length 5 (database constraint)
+                if (paymentId.Length > 5) 
                 {
-                    nextId = ids.Select(id => {
-                        int n;
-                        return int.TryParse(id.Substring(2), out n) ? n : 0;
-                    }).Max() + 1;
+                     // Fallback to shorter prefix if "TT" causes overflow (e.g., T9999)
+                     paymentId = GenerateId("T", "ThanhToan", "maThanhToan");
+                     if (paymentId.Length > 5) return Json(new { success = false, error = "Hết số phiếu chi (Mã > 5 ký tự). Vui lòng liên hệ Admin." });
                 }
-                var paymentId = "TT" + nextId.ToString("D3");
+
+                // Check nguoiXuLy exists to avoid FK violation
+                string currentUser = Session["UserId"] as string;
+                if (string.IsNullOrEmpty(currentUser)) currentUser = "Admin";
+                
+                // Verify if this user actually exists in DB
+                if (!_db.NguoiDungs.Any(u => u.maNguoiDung == currentUser))
+                {
+                    // Fallback to the first available Admin
+                    var firstAdmin = _db.NguoiDungs.FirstOrDefault(u => u.vaiTro == "Quản trị");
+                    currentUser = firstAdmin != null ? firstAdmin.maNguoiDung : null;
+                }
 
                 var payment = new Project_65130650.Models.ThanhToan
                 {
@@ -527,7 +618,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                     ngayThanhToan = DateTime.Now,
                     trangThaiThanhToan = "Thành công",
                     maGiaoDich = "TXN" + DateTime.Now.ToString("yyMMddHHmmssfff"), // Sinh mã giao dịch tự động
-                    nguoiXuLy = Session["UserId"] as string ?? "Admin"
+                    nguoiXuLy = currentUser
                 };
 
                 _db.ThanhToans.Add(payment);
@@ -535,9 +626,22 @@ namespace Project_65130650.Areas.Admin.Controllers
 
                 return Json(new { success = true, message = "Thanh toán thành công!" });
             }
+            catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+            {
+                var errorMessages = ex.EntityValidationErrors
+                        .SelectMany(x => x.ValidationErrors)
+                        .Select(x => x.ErrorMessage);
+                return Json(new { success = false, error = "Lỗi dữ liệu: " + string.Join("; ", errorMessages) });
+            }
             catch (Exception ex)
             {
-                return Json(new { success = false, error = ex.Message });
+                var msg = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    msg += " -> " + ex.InnerException.Message;
+                    if (ex.InnerException.InnerException != null) msg += " -> " + ex.InnerException.InnerException.Message;
+                }
+                return Json(new { success = false, error = msg });
             }
         }
 
@@ -697,7 +801,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                         user.email,
                         user.soDienThoai,
                         user.diaChi,
-                        user.gioiTinh,
+                        gioiTinh = user.gioiTinh != null ? user.gioiTinh.Trim() : null,
                         ngaySinh = user.ngaySinh.HasValue ? user.ngaySinh.Value.ToString("yyyy-MM-dd") : null,
                         maVaiTro = maVaiTro,
                         vaiTro = user.vaiTro,
@@ -752,7 +856,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                     soDienThoai = soDienThoai,
                     matKhau = matKhau, // Plain text (nên hash trong thực tế)
                     diaChi = diaChi,
-                    gioiTinh = gioiTinh,
+                    gioiTinh = !string.IsNullOrEmpty(gioiTinh) ? gioiTinh.Trim() : null,
                     ngaySinh = ngaySinh,
                     vaiTro = roleName,
                     trangThaiHoatDong = true,
@@ -812,7 +916,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                 user.email = email;
                 user.soDienThoai = soDienThoai;
                 user.diaChi = diaChi;
-                user.gioiTinh = gioiTinh;
+                user.gioiTinh = !string.IsNullOrEmpty(gioiTinh) ? gioiTinh.Trim() : null;
                 user.ngaySinh = ngaySinh;
                 user.vaiTro = roleName;
                 user.ngayCapNhat = DateTime.Now;
@@ -1667,7 +1771,9 @@ namespace Project_65130650.Areas.Admin.Controllers
             // Or use filtered stats? User request G.1 doesn't specify stats behavior but usually stats are global.
             // But preserving the existing simple stats is fine.
             // Let's keep global stats.
-            ViewBag.TotalRevenue = _db.ThanhToans.Sum(t => (decimal?)t.soTien) ?? 0;
+            ViewBag.TotalRevenue = _db.ThanhToans
+        .Where(t => t.trangThaiThanhToan == "Thành công" || t.trangThaiThanhToan == "Đã thanh toán")
+        .Sum(t => (decimal?)t.soTien) ?? 0;
             ViewBag.TotalTrans = _db.ThanhToans.Count();
             ViewBag.TransferCount = _db.ThanhToans.Count(t => t.phuongThucThanhToan == "Chuyển khoản");
             ViewBag.CashCount = _db.ThanhToans.Count(t => t.phuongThucThanhToan == "Tiền mặt");
@@ -1835,23 +1941,86 @@ namespace Project_65130650.Areas.Admin.Controllers
             ViewBag.Title = "Báo cáo & Thống kê";
             ViewBag.UserName = Session["UserName"];
 
-            // Thống kê theo tháng (6 tháng gần nhất)
+            // 1. REVENUE STATS (6 months)
             var sixMonthsAgo = DateTime.Today.AddMonths(-6);
             var monthlyRevenue = _db.ThanhToans
-                .Where(tt => tt.ngayThanhToan >= sixMonthsAgo)
+                .Where(tt => tt.ngayThanhToan >= sixMonthsAgo && (tt.trangThaiThanhToan == "Thành công" || tt.trangThaiThanhToan == "Đã thanh toán"))
                 .GroupBy(tt => new { tt.ngayThanhToan.Value.Year, tt.ngayThanhToan.Value.Month })
-                .Select(g => new
+                .Select(g => new RevenueReportModel
                 {
                     Year = g.Key.Year,
                     Month = g.Key.Month,
-                    Revenue = g.Sum(tt => tt.soTien),
+                    Revenue = g.Sum(tt => (decimal?)tt.soTien) ?? 0,
                     Count = g.Count()
                 })
                 .OrderBy(x => x.Year)
                 .ThenBy(x => x.Month)
                 .ToList();
-
             ViewBag.MonthlyRevenue = monthlyRevenue;
+
+            // 2. OCCUPANCY RATE (Current Month)
+            var thisMonthStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var nextMonthStart = thisMonthStart.AddMonths(1);
+            var totalDaysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            var totalRooms = _db.Phongs.Count(p => p.trangThaiHoatDong == true);
+            var totalCapacity = totalRooms * totalDaysInMonth; // Total room-nights available
+
+            // Simplistic calculation: count bookings overlapping this month * days overlapped
+            // A more precise calc implies iterating days. Here we approximate by "Booked Nights in Month"
+            // Let's use a simpler metric: # of active bookings right now vs total rooms
+            var currentOccupied = _db.DatPhongs.Count(d => d.trangThaiDatPhong == "Đã nhận phòng");
+            ViewBag.CurrentOccupancyRate = totalRooms > 0 ? (double)currentOccupied / totalRooms * 100 : 0;
+
+            // 3. CUSTOMER STATS
+            var totalCustomers = _db.NguoiDungs.Count(u => u.vaiTro == "Khách hàng");
+            var newCustomers = _db.NguoiDungs.Count(u => u.vaiTro == "Khách hàng" && u.ngayTao >= thisMonthStart);
+            ViewBag.TotalCustomers = totalCustomers;
+            ViewBag.NewCustomers = newCustomers;
+
+            // 4. SERVICE STATS (Top 5 Services by Revenue)
+            var topServices = _db.DichVuDatPhongs
+                .GroupBy(d => d.maDichVu)
+                .Select(g => new {
+                    ServiceId = g.Key,
+                    Revenue = g.Sum(x => (decimal?)x.thanhTien) ?? 0,
+                    UsageCount = g.Sum(x => (int?)x.soLuong) ?? 0
+                })
+                .OrderByDescending(x => x.Revenue)
+                .Take(5)
+                .ToList() // Client evaluation required if joining with Service names isn't easy in pure LINQ-to-Entities sometimes
+                .Select(x => new ServiceReportModel {
+                    ServiceId = x.ServiceId,
+                    Revenue = x.Revenue,
+                    UsageCount = x.UsageCount,
+                    ServiceName = _db.DichVus.FirstOrDefault(s => s.maDichVu == x.ServiceId)?.tenDichVu ?? "Unknown"
+                })
+                .ToList();
+            ViewBag.TopServices = topServices;
+
+            // 5. ROOM STATS (Top Room Types by Bookings)
+            var topRoomTypes = _db.DatPhongs
+                .Where(dp => dp.Phong != null && dp.Phong.LoaiPhong != null)
+                .GroupBy(dp => dp.Phong.LoaiPhong.tenLoaiPhong)
+                .Select(g => new RoomReportModel {
+                    RoomType = g.Key,
+                    BookingCount = g.Count()
+                })
+                .OrderByDescending(x => x.BookingCount)
+                .Take(5)
+                .ToList();
+            ViewBag.TopRoomTypes = topRoomTypes;
+
+            // 6. PAYMENT METHOD STATS
+            var paymentMethods = _db.ThanhToans
+                .Where(tt => tt.trangThaiThanhToan == "Thành công")
+                .GroupBy(tt => tt.phuongThucThanhToan)
+                .Select(g => new PaymentReportModel {
+                    Method = g.Key,
+                    Total = g.Sum(x => (decimal?)x.soTien) ?? 0,
+                    Count = g.Count()
+                })
+                .ToList();
+            ViewBag.PaymentStats = paymentMethods;
 
             return View();
         }

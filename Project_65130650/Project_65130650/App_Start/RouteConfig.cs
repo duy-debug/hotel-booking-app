@@ -32,6 +32,13 @@ namespace Project_65130650
                 defaults: new { controller = "Account65130650", action = "Logout" }
             );
 
+            // Ensure Root URL leads to Home/Index
+            routes.MapRoute(
+                name: "Home",
+                url: "",
+                defaults: new { controller = "Home", action = "Index" }
+            );
+
             // Default Route
             routes.MapRoute(
                 name: "Default",

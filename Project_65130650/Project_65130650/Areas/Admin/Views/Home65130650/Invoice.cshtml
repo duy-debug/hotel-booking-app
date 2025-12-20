@@ -55,8 +55,7 @@
                     <table>
                         <tr>
                             <td class="title">
-                                <h1 style="color: #2a85c6ff; margin: 0;">SHERATON</h1>
-                                <span style="font-size: 14px; color: #666; font-family: sans-serif;">Nha Trang Hotel</span>
+                                <img src="/Images/logo.png" style="width: 100%; max-width: 200px;" alt="SHERATON Nha Trang Hotel" />
                             </td>
                             <td>
                                 <strong>HÓA ĐƠN: #@Model.maDatPhong</strong><br>
@@ -95,7 +94,8 @@
             <tr class="item">
                 <td>
                     Phòng: <strong>@(Model.Phong?.soPhong ?? "N/A")</strong> - @(Model.Phong?.LoaiPhong?.tenLoaiPhong ?? "")<br>
-                    <small>Check-in: @Model.ngayNhanPhong.ToString("dd/MM/yyyy") | Check-out: @Model.ngayTraPhong.ToString("dd/MM/yyyy")</small>
+                    <small>Check-in: @Model.ngayNhanPhong.ToString("dd/MM/yyyy") | Check-out: @Model.ngayTraPhong.ToString("dd/MM/yyyy")</small><br>
+                    <small>Giá: @(Model.Phong?.LoaiPhong?.giaCoBan.ToString("N0") ?? "0") ₫/đêm</small>
                 </td>
                 <td>@Model.tienPhong.ToString("N0") ₫</td>
             </tr>

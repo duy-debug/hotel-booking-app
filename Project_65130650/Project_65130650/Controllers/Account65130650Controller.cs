@@ -31,215 +31,123 @@ namespace Project_65130650.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Login(LoginForm model, string returnUrl)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
-            // Tìm user trong database
-            var user = db.NguoiDungs.FirstOrDefault(u => 
-                u.email == model.Email && 
-                u.matKhau == model.MatKhau);
-
+            var user = GetAuthenticatedUser(model.Email, model.MatKhau);
             if (user == null)
             {
                 ModelState.AddModelError("", "Email hoặc mật khẩu không chính xác");
                 return View(model);
             }
 
-            // Kiểm tra tài khoản có bị vô hiệu hóa không
             if (user.trangThaiHoatDong == false)
             {
-                ModelState.AddModelError("", "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ admin.");
+                ModelState.AddModelError("", "Tài khoản của bạn đã bị vô hiệu hóa.");
                 return View(model);
             }
 
-            // Tạo authentication ticket
-            var ticket = new FormsAuthenticationTicket(
-                1,
-                user.email,
-                DateTime.Now,
-                DateTime.Now.AddMinutes(30),
-                model.RememberMe,
-                user.vaiTro,
-                FormsAuthentication.FormsCookiePath
-            );
+            // Thực hiện đăng nhập
+            SignInUser(user, model.RememberMe);
 
-            // Encrypt ticket
-            string encryptedTicket = FormsAuthentication.Encrypt(ticket);
-
-            // Create cookie
-            var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-            if (model.RememberMe)
-            {
-                authCookie.Expires = ticket.Expiration;
-            }
-            Response.Cookies.Add(authCookie);
-
-            // Lưu thông tin vào Session
-            Session["UserId"] = user.maNguoiDung;
-            Session["UserName"] = user.hoTen;
-            Session["UserEmail"] = user.email;
-            Session["UserRole"] = user.vaiTro;
-
-            // Redirect theo vai trò
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
                 return Redirect(returnUrl);
-            }
 
-            if (user.vaiTro == "Quản trị")
-            {
-                return RedirectToAction("Index", "Home65130650", new { area = "Admin" });
-            }
-            else
-            {
-                return RedirectToAction("Index", "Home65130650", new { area = "Customer" });
-            }
+            return RedirectToDefaultPage(user.vaiTro);
         }
 
-        // POST: Login AJAX (Cho modal - trả về JSON để hiển thị lỗi trong modal)
+        // POST: Login AJAX (Cho modal)
         [HttpPost]
         [AllowAnonymous]
         public ActionResult LoginAjax(LoginForm model)
         {
-            // Kiểm tra ModelState
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Json(new { success = false, errors = errors });
             }
 
-            try
-            {
-                // Tìm user trong database
-                var user = db.NguoiDungs.FirstOrDefault(u =>
-                    u.email == model.Email &&
-                    u.matKhau == model.MatKhau);
+            var user = GetAuthenticatedUser(model.Email, model.MatKhau);
+            if (user == null)
+                return Json(new { success = false, errors = new[] { "Email hoặc mật khẩu không chính xác" } });
 
-                if (user == null)
-                {
-                    return Json(new { success = false, errors = new[] { "Email hoặc mật khẩu không chính xác" } });
-                }
+            if (user.trangThaiHoatDong == false)
+                return Json(new { success = false, errors = new[] { "Tài khoản bị vô hiệu hóa." } });
 
-                // Kiểm tra tài khoản có bị vô hiệu hóa không
-                if (user.trangThaiHoatDong == false)
-                {
-                    return Json(new { success = false, errors = new[] { "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ admin." } });
-                }
+            // Thực hiện đăng nhập
+            SignInUser(user, model.RememberMe);
 
-                // Tạo authentication ticket
-                var ticket = new FormsAuthenticationTicket(
-                    1,
-                    user.email,
-                    DateTime.Now,
-                    DateTime.Now.AddMinutes(30),
-                    model.RememberMe,
-                    user.vaiTro,
-                    FormsAuthentication.FormsCookiePath
-                );
+            string redirectUrl = user.vaiTro == "Quản trị"
+                ? Url.Action("Index", "Home65130650", new { area = "Admin" })
+                : Url.Action("Index", "Home65130650", new { area = "Customer" });
 
-                // Encrypt ticket và tạo cookie
-                string encryptedTicket = FormsAuthentication.Encrypt(ticket);
-                var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
-                if (model.RememberMe)
-                {
-                    authCookie.Expires = ticket.Expiration;
-                }
-                Response.Cookies.Add(authCookie);
-
-                // Lưu thông tin vào Session
-                Session["UserId"] = user.maNguoiDung;
-                Session["UserName"] = user.hoTen;
-                Session["UserEmail"] = user.email;
-                Session["UserRole"] = user.vaiTro;
-
-                // Xác định redirect URL theo vai trò
-                string redirectUrl = user.vaiTro == "Quản trị"
-                    ? Url.Action("Index", "Home65130650", new { area = "Admin" })
-                    : Url.Action("Index", "Home65130650", new { area = "Customer" });
-
-                return Json(new { success = true, redirectUrl = redirectUrl });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, errors = new[] { "Đã xảy ra lỗi: " + ex.Message } });
-            }
+            return Json(new { success = true, redirectUrl = redirectUrl });
         }
 
-        // POST: Register AJAX (Cho modal - trả về JSON)
+        // --- HÀM DÙNG CHUNG ĐỂ TỐI ƯU CODE ---
+
+        private NguoiDung GetAuthenticatedUser(string email, string password)
+        {
+            return db.NguoiDungs.FirstOrDefault(u => u.email == email && u.matKhau == password);
+        }
+
+        private void SignInUser(NguoiDung user, bool rememberMe)
+        {
+            // 1. Tạo Ticket (Thời gian bạn có thể chỉnh ở đây cho đồng nhất)
+            var ticket = new FormsAuthenticationTicket(
+                1,
+                user.email,
+                DateTime.Now,
+                DateTime.Now.AddMinutes(30), // Cố định 30 phút ở cả 2 nơi
+                rememberMe,
+                user.vaiTro,
+                FormsAuthentication.FormsCookiePath
+            );
+
+            // 2. Mã hóa và tạo Cookie
+            string encryptedTicket = FormsAuthentication.Encrypt(ticket);
+            var authCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptedTicket);
+            if (rememberMe) authCookie.Expires = ticket.Expiration;
+            Response.Cookies.Add(authCookie);
+
+            // 3. Lưu Session
+            Session["UserId"] = user.maNguoiDung;
+            Session["UserName"] = user.hoTen;
+            Session["UserEmail"] = user.email;
+            Session["UserRole"] = user.vaiTro;
+        }
+
+        private ActionResult RedirectToDefaultPage(string role)
+        {
+            if (role == "Quản trị")
+                return RedirectToAction("Index", "Home65130650", new { area = "Admin" });
+            
+            return RedirectToAction("Index", "Home65130650", new { area = "Customer" });
+        }
+
+        // POST: Register AJAX (Cho modal)
         [HttpPost]
         [AllowAnonymous]
         public ActionResult RegisterAjax(RegisterForm model)
         {
-            // Kiểm tra ModelState
             if (!ModelState.IsValid)
             {
-                var errors = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Json(new { success = false, errors = errors });
             }
 
-            // Kiểm tra email đã tồn tại chưa
-            if (db.NguoiDungs.Any(u => u.email == model.Email))
-            {
-                return Json(new { success = false, errors = new[] { "Email này đã được đăng ký" } });
-            }
-
-            // Kiểm tra số điện thoại đã tồn tại chưa
-            if (db.NguoiDungs.Any(u => u.soDienThoai == model.SoDienThoai))
-            {
-                return Json(new { success = false, errors = new[] { "Số điện thoại này đã được sử dụng" } });
-            }
+            string errorMessage;
+            if (!IsRegistrationValid(model, out errorMessage))
+                return Json(new { success = false, errors = new[] { errorMessage } });
 
             try
             {
-                // Tạo mã người dùng mới
-                string newUserId = GenerateUserId();
-
-                // Tạo đối tượng NguoiDung
-                var newUser = new NguoiDung
-                {
-                    maNguoiDung = newUserId,
-                    hoTen = model.HoTen,
-                    email = model.Email,
-                    soDienThoai = model.SoDienThoai,
-                    matKhau = model.MatKhau,
-                    vaiTro = "Khách hàng",
-                    diaChi = model.DiaChi,
-                    ngaySinh = model.NgaySinh,
-                    gioiTinh = model.GioiTinh,
-                    trangThaiHoatDong = true,
-                    ngayTao = DateTime.Now,
-                    ngayCapNhat = DateTime.Now
-                };
-
-                db.NguoiDungs.Add(newUser);
-                db.SaveChanges();
-
+                CreateNewUser(model);
                 return Json(new { success = true, message = "Đăng ký thành công! Vui lòng đăng nhập." });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, errors = new[] { "Đã xảy ra lỗi khi đăng ký: " + ex.Message } });
+                return Json(new { success = false, errors = new[] { "Lỗi: " + ex.Message } });
             }
-        }
-
-        // GET: Register
-        [AllowAnonymous]
-        public ActionResult Register()
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-
-            return View();
         }
 
         // POST: Register (Form thường)
@@ -248,58 +156,66 @@ namespace Project_65130650.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterForm model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
+            if (!ModelState.IsValid) return View(model);
 
-            // Kiểm tra email đã tồn tại chưa
-            if (db.NguoiDungs.Any(u => u.email == model.Email))
+            string errorMessage;
+            if (!IsRegistrationValid(model, out errorMessage))
             {
-                ModelState.AddModelError("Email", "Email này đã được đăng ký");
-                return View(model);
-            }
-
-            // Kiểm tra số điện thoại đã tồn tại chưa
-            if (db.NguoiDungs.Any(u => u.soDienThoai == model.SoDienThoai))
-            {
-                ModelState.AddModelError("SoDienThoai", "Số điện thoại này đã được sử dụng");
+                ModelState.AddModelError("", errorMessage);
                 return View(model);
             }
 
             try
             {
-                // Tạo mã người dùng mới
-                string newUserId = GenerateUserId();
-
-                // Tạo đối tượng NguoiDung
-                var newUser = new NguoiDung
-                {
-                    maNguoiDung = newUserId,
-                    hoTen = model.HoTen,
-                    email = model.Email,
-                    soDienThoai = model.SoDienThoai,
-                    matKhau = model.MatKhau,
-                    vaiTro = "Khách hàng",
-                    diaChi = model.DiaChi,
-                    ngaySinh = model.NgaySinh,
-                    gioiTinh = model.GioiTinh,
-                    trangThaiHoatDong = true,
-                    ngayTao = DateTime.Now,
-                    ngayCapNhat = DateTime.Now
-                };
-
-                db.NguoiDungs.Add(newUser);
-                db.SaveChanges();
-
+                CreateNewUser(model);
                 TempData["SuccessMessage"] = "Đăng ký thành công! Vui lòng đăng nhập.";
                 return RedirectToAction("Login");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Đã xảy ra lỗi khi đăng ký: " + ex.Message);
+                ModelState.AddModelError("", "Lỗi: " + ex.Message);
                 return View(model);
             }
+        }
+
+        // --- HÀM DÙNG CHUNG CHO ĐĂNG KÝ ---
+
+        private bool IsRegistrationValid(RegisterForm model, out string errorMessage)
+        {
+            errorMessage = "";
+            if (db.NguoiDungs.Any(u => u.email == model.Email))
+            {
+                errorMessage = "Email này đã được đăng ký";
+                return false;
+            }
+            if (db.NguoiDungs.Any(u => u.soDienThoai == model.SoDienThoai))
+            {
+                errorMessage = "Số điện thoại này đã được sử dụng";
+                return false;
+            }
+            return true;
+        }
+
+        private void CreateNewUser(RegisterForm model)
+        {
+            var newUser = new NguoiDung
+            {
+                maNguoiDung = GenerateUserId(),
+                hoTen = model.HoTen,
+                email = model.Email,
+                soDienThoai = model.SoDienThoai,
+                matKhau = model.MatKhau,
+                vaiTro = "Khách hàng",
+                diaChi = model.DiaChi,
+                ngaySinh = model.NgaySinh,
+                gioiTinh = model.GioiTinh,
+                trangThaiHoatDong = true,
+                ngayTao = DateTime.Now,
+                ngayCapNhat = DateTime.Now
+            };
+
+            db.NguoiDungs.Add(newUser);
+            db.SaveChanges();
         }
 
         // Logout
@@ -323,7 +239,7 @@ namespace Project_65130650.Controllers
                 Response.Cookies.Add(cookie);
             }
 
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
 
         // Helper method: Generate User ID

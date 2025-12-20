@@ -60,7 +60,7 @@
                 <i class="fas fa-dollar-sign"></i>
             </div>
             <div class="stat-content">
-                <div class="stat-value">@String.Format("{0:N0}", ViewBag.RevenueThisMonth ?? 0) VNĐ</div>
+                <div class="stat-value">@String.Format("{0:N0}", ViewBag.RevenueThisMonth ?? 0) ₫</div>
                 <div class="stat-label">Doanh thu tháng này</div>
             </div>
         </div>
@@ -156,11 +156,14 @@
                                     <td>
                                         @{
                                             var statusClass = "badge-secondary";
-                                            if (booking.TrangThaiDatPhong == "Đã xác nhận") { statusClass = "badge-success"; }
-                                            else if (booking.TrangThaiDatPhong == "Chờ xác nhận") { statusClass = "badge-warning"; }
-                                            else if (booking.TrangThaiDatPhong == "Đã hủy") { statusClass = "badge-danger"; }
+                                            var statusIcon = "";
+                                            if (booking.TrangThaiDatPhong == "Đã xác nhận") { statusClass = "badge-success"; statusIcon = "fa-check"; }
+                                            else if (booking.TrangThaiDatPhong == "Chờ xác nhận") { statusClass = "badge-warning"; statusIcon = "fa-clock"; }
+                                            else if (booking.TrangThaiDatPhong == "Đã hủy") { statusClass = "badge-danger"; statusIcon = "fa-times"; }
+                                            else if (booking.TrangThaiDatPhong == "Đã nhận phòng") { statusClass = "badge-info"; statusIcon = "fa-key"; }
+                                            else if (booking.TrangThaiDatPhong == "Đã trả phòng") { statusClass = "badge-purple"; statusIcon = "fa-flag-checkered"; }
                                         }
-                                        <span class="badge @statusClass">@booking.TrangThaiDatPhong</span>
+                                        <span class="badge @statusClass"><i class="fas @statusIcon"></i> @booking.TrangThaiDatPhong</span>
                                     </td>
                                     <td>@String.Format("{0:dd/MM/yyyy HH:mm}", booking.NgayDat)</td>
                                 </tr>
@@ -399,6 +402,10 @@
             background: #f3f4f6;
             color: #6b7280;
         }
+        
+        .badge-info { background: #dbeafe; color: #2563eb; }
+        .badge-purple { background: #f3e8ff; color: #9333ea; }
+        .badge i { font-size: 11px; margin-right: 4px; }
 
         .customer-info {
             display: flex;

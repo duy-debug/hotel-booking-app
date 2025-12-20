@@ -147,6 +147,7 @@
     <Compile Include="Models\Model65130650DbContext.cs" />
     <Compile Include="Models\NguoiDung.cs" />
     <Compile Include="Models\Phong.cs" />
+    <Compile Include="Models\ReportModel65130650.cs" />
     <Compile Include="Models\ThanhToan.cs" />
     <Compile Include="Models\ViewModel\RoomCardViewModel.cs" />
     <Compile Include="Models\ViewModel\RoomDetailViewModel.cs" />

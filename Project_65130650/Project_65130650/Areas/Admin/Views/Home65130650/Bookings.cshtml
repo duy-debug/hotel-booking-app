@@ -138,7 +138,7 @@
                                         </td>
                                         <td>@String.Format("{0:dd/MM/yyyy}", booking.ngayNhanPhong)</td>
                                         <td>@String.Format("{0:dd/MM/yyyy}", booking.ngayTraPhong)</td>
-                                        <td><strong>@String.Format("{0:N0}", booking.tienPhong) VNĐ</strong></td>
+                                        <td><strong>@String.Format("{0:N0}", booking.tienPhong) ₫</strong></td>
                                         <td>
                                             @{
                                                 var statusClass = "badge-secondary";
@@ -756,11 +756,14 @@
                         }
 
                         // Fix NaN issue
-                        var tienPhong = parseFloat(d.tienPhong) || 0;
+                        var tienPhong = parseFloat(d.tienPhong) || 0; // DB lưu Tiền phòng (Giá * Ngày)
                         var totalService = parseFloat(d.totalServiceAmount) || 0;
                         var daThanhToan = parseFloat(d.totalPaid) || 0;
 
-                        var debt = (tienPhong + totalService) - daThanhToan;
+                        // Theo yêu cầu: Tổng = Tiền phòng + Dịch vụ
+                        var grandTotal = tienPhong + totalService;
+
+                        var debt = grandTotal - daThanhToan;
                         var debtHtml = debt > 0 ? `<span class="text-danger">${fmt.format(debt)}</span>` : `<span class="text-success">Đã thanh toán đủ</span>`;
                         
                         var cancelInfo = '';
@@ -769,7 +772,7 @@
                                 <div class="detail-item" style="grid-column: span 2; background-color: #fff;">
                                     <label class="text-danger" style="color: #dc2626; margin-bottom: 5px;">Thông tin hủy phòng:</label>
                                     <div style="color: #b91c1c; font-size: 13px;">
-                                        <div><i class="fas fa-comment-alt"></i> <strong>Lý do:</strong> ${d.lyDoHuy || 'Không có lý do'}</div>
+                                        <div><i class="fas fa-comment-alt"></i> <strong>Lý do:</strong> ${d.lyDoHuy || 'Khách hàng muốn hủy đơn đặt phòng'}</div>
                                         <div style="margin-top: 4px;"><i class="fas fa-calendar-times"></i> <strong>Ngày hủy:</strong> ${d.ngayHuy || 'N/A'}</div>
                                     </div>
                                 </div>
@@ -781,12 +784,14 @@
                             <div class="detail-item"><label>Khách hàng:</label><span>${d.customerName || 'N/A'}</span></div>
                             <div class="detail-item"><label>SĐT:</label><span>${d.customerPhone || 'N/A'}</span></div>
                             <div class="detail-item"><label>Phòng:</label><span class="room-badge">${d.roomNumber || 'N/A'}</span></div>
+                            <div class="detail-item"><label>Loại phòng:</label><span>${d.loaiPhong || 'N/A'}</span></div>
                             <div class="detail-item"><label>Ngày đến - đi:</label><span>${d.ngayNhanPhong} - ${d.ngayTraPhong}</span></div>
-                            <div class="detail-item"><label>Tiền phòng:</label><span>${fmt.format(tienPhong)}</span></div>
+                            <div class="detail-item"><label>Giá phòng/đêm:</label><span>${fmt.format(d.roomPrice || 0)}</span></div>
+                            <div class="detail-item"><label>Tổng tiền phòng:</label><span>${fmt.format(tienPhong)}</span></div>
                             <div class="detail-item"><label>Trạng thái:</label><span class="badge badge-secondary">${d.trangThai}</span></div>
                             ${cancelInfo}
                             ${servicesHtml}
-                            <div class="detail-item" style="margin-top:10px; background-color: #f8fafc;"><label><strong>Tổng tiền:</strong></label><span style="font-weight:700; color:#4f46e5;">${fmt.format(tienPhong + totalService)}</span></div>
+                            <div class="detail-item" style="margin-top:10px; background-color: #f8fafc;"><label><strong>Tổng thanh toán:</strong></label><span style="font-weight:700; color:#4f46e5;">${fmt.format(grandTotal)}</span></div>
                             <div class="detail-item"><label>Đã thanh toán:</label><span>${fmt.format(daThanhToan)}</span></div>
                             <div class="detail-item"><label><strong>Công nợ:</strong></label><strong>${debtHtml}</strong></div>
                         `;
