@@ -7,7 +7,7 @@
 
 <section class="landing-hero" id="top">
     <div class="landing-hero__content">
-        <p class="eyebrow">Shearaton Hotel Nha Trang</p>
+        <p class="eyebrow" >Shearaton Hotel Nha Trang</p>
         <h1>Trải nghiệm lưu trú 5 sao giữa lòng thành phố</h1>
         <p class="lead">
             Khám phá hệ thống phòng sang trọng, ẩm thực tinh tế và các sự kiện sôi động
@@ -273,6 +273,109 @@
         </ul>
     </div>
 </section>
+
+<footer class="landing-footer bg-slate-300 text-slate-600 reveal mt-16 relative overflow-hidden border-t border-slate-200 w-screen left-1/2 -translate-x-1/2">
+    <!-- Subtle accent line -->
+    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-sky-500/30 to-transparent"></div>
+    
+    <div class="max-w-[85%] mx-auto px-4 pt-16 pb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <!-- Brand Section -->
+            <div class="space-y-6">
+                <a href="#top" class="inline-block group transition-transform duration-300 hover:scale-105">
+                    <img src="@Url.Content("~/Images/logo.png")" alt="Shearaton" class="h-10 w-auto" />
+                </a>
+                <p class="text-sm leading-relaxed text-slate-500">
+                    Trải nghiệm tinh hoa nghỉ dưỡng tại tâm điểm vịnh biển Nha Trang. 
+                    Chúng tôi cam kết mang đến những dịch vụ đẳng cấp quốc tế và sự tận tâm trong từng khoảnh khắc.
+                </p>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/Sheraton" 
+                       class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#1877F2] hover:border-[#1877F2] hover:bg-blue-50 transition-all duration-300 shadow-sm active:scale-90"
+                       title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/sheratonhotels/" 
+                       class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#E4405F] hover:border-[#E4405F] hover:bg-pink-50 transition-all duration-300 shadow-sm active:scale-90"
+                       title="Instagram">
+                        <i class="fab fa-instagram text-lg"></i>
+                    </a>
+                    <a href="https://twitter.com/sheratonhotels" 
+                       class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#1DA1F2] hover:border-[#1DA1F2] hover:bg-blue-50 transition-all duration-300 shadow-sm active:scale-90"
+                       title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.youtube.com/user/SheratonHotels" 
+                       class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#FF0000] hover:border-[#FF0000] hover:bg-red-50 transition-all duration-300 shadow-sm active:scale-90"
+                       title="Youtube">
+                        <i class="fab fa-youtube text-lg"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="lg:ml-8">
+                <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-8">Khám phá</h4>
+                <ul class="space-y-4 text-sm font-medium">
+                    <li><a href="#hotel" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#hotel">Về khách sạn</a></li>
+                    <li><a href="#rooms" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#rooms">Hạng phòng & Suite</a></li>
+                    <li><a href="#services" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#services">Dịch vụ & Tiện ích</a></li>
+                    <li><a href="#dining" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#dining">Nhà hàng & Quầy Bar</a></li>
+                    <li><a href="#events" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#events">Sự kiện & Hội nghị</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact info -->
+            <div>
+                <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-8">Liên hệ</h4>
+                <ul class="space-y-4 text-sm font-medium">
+                    <li class="flex items-start gap-4">
+                        <i class="fas fa-map-marker-alt text-sky-500 mt-1"></i>
+                        <span class="text-slate-500">26-28 Trần Phú, Lộc Thọ, <br />Nha Trang, Khánh Hòa</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i class="fas fa-phone-alt text-sky-500"></i>
+                        <span class="text-slate-500">+84 258 388 0000</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i class="fas fa-envelope text-sky-500"></i>
+                        <span class="text-slate-500">reservations.nhatrang@sheraton.com</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Opening Hours -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md">
+                <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-6">Thời gian hoạt động</h4>
+                <ul class="space-y-4 text-xs font-medium">
+                    <li class="flex justify-between items-center py-2 border-b border-slate-50">
+                        <span class="text-slate-500">Nhà hàng</span>
+                        <span class="text-slate-900">06:00 - 22:00</span>
+                    </li>
+                    <li class="flex justify-between items-center py-2 border-b border-slate-50">
+                        <span class="text-slate-500">Spa & Wellness</span>
+                        <span class="text-slate-900">08:00 - 21:00</span>
+                    </li>
+                    <li class="flex justify-between items-center py-2 border-b border-slate-50">
+                        <span class="text-slate-500">Hồ bơi</span>
+                        <span class="text-slate-900">06:00 - 19:00</span>
+                    </li>
+                    <li class="flex justify-between items-center py-2">
+                        <span class="text-slate-500">Quầy Bar</span>
+                        <span class="text-slate-900">10:00 - 24:00</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bottom section -->
+        <div class="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
+            <p>&copy; @DateTime.Now.Year Shearaton Hotel Nha Trang. All rights reserved.</p>
+            <div class="flex gap-8">
+            </div>
+        </div>
+    </div>
+</footer>
 
 @section Styles {
     <style>
@@ -723,36 +826,7 @@
             right: 10px;
         }
 
-        /* Remove layout card wrapper for Home Index page only */
-        .bg-white.rounded-xl.border.border-slate-200\/70 {
-            border: none;
-            box-shadow: none;
-            border-radius: 0;
-            background: transparent;
-        }
-
-        /* Remove all borders on this page */
-        .landing-hero,
-        .landing-hero *,
-        .section,
-        .section *,
-        .dining-slider,
-        .dining-slider *,
-        .icon-features,
-        .icon-features * {
-            border: none !important;
-        }
-
-        /* Extra override: remove Tailwind borders & dividers on this page */
-        body main *,
-        body [class*="border-"],
-        body .border,
-        body [class*="divide-"],
-        body .divide-x,
-        body .divide-y {
-            border: none !important;
-            border-width: 0 !important;
-        }
+        /* Media Queries */
 
         @@media (max-width: 1024px) {
             .landing-hero {
@@ -779,6 +853,7 @@
             }
 
             .featured-rooms-grid {
+                grid-column: 1 / -1;
                 grid-template-columns: 1fr;
             }
 
@@ -791,6 +866,11 @@
                 flex-direction: column;
                 gap: 8px;
             }
+        }
+
+        /* Ẩn footer mặc định của layout trên trang chủ để không bị trùng lặp */
+        footer:not(.landing-footer):not(.bg-slate-950) {
+            display: none;
         }
     </style>
 }

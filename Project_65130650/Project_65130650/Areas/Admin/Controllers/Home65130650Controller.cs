@@ -12,13 +12,19 @@ using Project_65130650.Models.ViewModel;
 namespace Project_65130650.Areas.Admin.Controllers
 {
     /// <summary>
-    /// Controller cho Admin Area
-    /// Chỉ user có vai trò "Quản trị" mới được truy cập
+    /// Controller chính cho khu vực Quản trị (Admin Area)
+    /// Chỉ những người dùng có vai trò "Quản trị" mới được phép truy cập tất cả các Action trong này
     /// </summary>
     [Authorize(Roles = "Quản trị")]
     public class Home65130650Controller : Controller
     {
+        // Khởi tạo context kết nối cơ sở dữ liệu
         private readonly Model65130650DbContext _db = new Model65130650DbContext();
+
+        /// <summary>
+        /// GET: Admin/Home65130650/Index
+        /// Trang Dashboard hiển thị tổng quan số liệu thống kê của khách sạn
+        /// </summary>
 
         // GET: Admin/Home65130650
         public ActionResult Index()
@@ -101,7 +107,13 @@ namespace Project_65130650.Areas.Admin.Controllers
             return View();
         }
 
-        // GET: Admin/Home65130650/Bookings
+        /// <summary>
+        /// GET: Admin/Home65130650/Bookings
+        /// Trang quản lý danh sách các đơn đặt phòng với đầy đủ chức năng lọc, tìm kiếm và phân trang
+        /// </summary>
+        /// <param name="page">Số trang hiện tại</param>
+        /// <param name="search">Từ khóa tìm kiếm (Mã DP, Tên khách, SĐT...)</param>
+        /// <param name="status">Lọc theo trạng thái đơn hàng</param>
         public ActionResult Bookings(int page = 1, string search = "", string status = "")
         {
             ViewBag.Title = "Quản lý Đặt phòng";
@@ -164,8 +176,10 @@ namespace Project_65130650.Areas.Admin.Controllers
 
         // ==================== BOOKINGS MANAGEMENT ACTIONS ====================
         
-        // GET: Admin/Home65130650/GetBookingDetails
-        // GET: Admin/Home65130650/GetBookingDetails
+        /// <summary>
+        /// GET: Admin/Home65130650/GetBookingDetails
+        /// Lấy thông tin chi tiết của một đơn đặt phòng (bao gồm cả danh sách dịch vụ đã dùng) dưới dạng JSON
+        /// </summary>
         [HttpGet]
         public JsonResult GetBookingDetails(string id)
         {
@@ -215,9 +229,12 @@ namespace Project_65130650.Areas.Admin.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        // POST: Admin/Home65130650/UpdateBookingStatus
+        /// <summary>
+        /// POST: Admin/Home65130650/UpdateBookingStatus
+        /// Cập nhật trạng thái đơn đặt phòng (Xác nhận, Nhận phòng, Trả phòng, Hủy) và xử lý logic đi kèm
+        /// </summary>
         [HttpPost]
-        public JsonResult UpdateBookingStatus(string id, string status)
+        public JsonResult UpdateBookingStatus(string id, string status, string reason = "")
         {
             try
             {
@@ -233,27 +250,6 @@ namespace Project_65130650.Areas.Admin.Controllers
                     if (booking.ngayNhanPhong.Date > DateTime.Now.Date)
                     {
                         return Json(new { success = false, error = $"Chưa đến ngày nhận phòng ({booking.ngayNhanPhong:dd/MM/yyyy}). Không thể nhận phòng sớm." });
-                    }
-
-                    // VALIDATE DEPOSIT (Review request: Must pay at least 50% or full before check-in)
-                    decimal totalService = 0;
-                    if (booking.DichVuDatPhongs != null) totalService = booking.DichVuDatPhongs.Sum(d => d.thanhTien);
-                    decimal grandTotal = booking.tienPhong + totalService;
-
-                    decimal totalPaid = 0;
-                    if (booking.ThanhToans != null)
-                    {
-                        totalPaid = booking.ThanhToans
-                            .Where(t => t.trangThaiThanhToan == "Thành công" || t.trangThaiThanhToan == "Đã thanh toán")
-                            .Sum(t => t.soTien);
-                    }
-
-                    decimal minDeposit = grandTotal * 0.5m;
-
-                    if (totalPaid < minDeposit)
-                    {
-                         decimal missing = minDeposit - totalPaid;
-                         return Json(new { success = false, error = $"Yêu cầu đặt cọc trước ít nhất 50% tổng đơn ({minDeposit:N0} ₫). Khách hàng còn thiếu {missing:N0} ₫ để đủ điều kiện nhận phòng." });
                     }
                 }
                 
@@ -280,6 +276,14 @@ namespace Project_65130650.Areas.Admin.Controllers
                 }
 
 
+                if (status == "Đã trả phòng")
+                {
+                    // Lưu ngày trả phòng dự kiến vào Session (biến tạm) để in hóa đơn
+                    Session["OriginalCheckout_" + id] = booking.ngayTraPhong;
+                    // Cập nhật ngày thực tế là hiện tại
+                    booking.ngayTraPhong = DateTime.Now;
+                }
+
                 booking.trangThaiDatPhong = status;
                 booking.ngayCapNhat = DateTime.Now;
 
@@ -288,12 +292,12 @@ namespace Project_65130650.Areas.Admin.Controllers
                 {
                     if (status == "Đã nhận phòng") booking.Phong.trangThai = "Đang sử dụng";
                     else if (status == "Đã trả phòng" || status == "Đã hủy") booking.Phong.trangThai = "Còn trống";
-                    else if (status == "Đã xác nhận") booking.Phong.trangThai = "Đã đặt";
                 }
 
                 if (status == "Đã hủy")
                 {
                     booking.ngayHuy = DateTime.Now;
+                    booking.lyDoHuy = string.IsNullOrEmpty(reason) ? "Khách hàng muốn hủy đơn đặt phòng" : reason;
                 }
 
                 _db.SaveChanges();
@@ -305,7 +309,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
         
-        // POST: Admin/Home65130650/GetAvailableRooms
+        /// <summary>
+        /// POST: Admin/Home65130650/GetAvailableRooms
+        /// Tìm danh sách các phòng còn trống trong một khoảng thời gian cụ thể (dùng cho đặt phòng trực tiếp)
+        /// </summary>
         [HttpPost]
         public JsonResult GetAvailableRooms(string checkIn, string checkOut)
         {
@@ -327,7 +334,10 @@ namespace Project_65130650.Areas.Admin.Controllers
                     .ToList();
 
                 var availableRooms = _db.Phongs
-                    .Where(p => !bookedRoomIds.Contains(p.maPhong) && p.trangThaiHoatDong == true)
+                    .Where(p => !bookedRoomIds.Contains(p.maPhong) && 
+                                p.trangThaiHoatDong == true && 
+                                p.trangThai != "Đang sử dụng" && 
+                                p.trangThai != "Bảo trì")
                     .Select(p => new {
                         maPhong = p.maPhong,
                         soPhong = p.soPhong,
@@ -344,7 +354,9 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // Helper to generate ID
+        /// <summary>
+        /// Hàm hỗ trợ tự động sinh mã ID mới dựa trên tiền tố và bảng dữ liệu (VD: DP001, ND002)
+        /// </summary>
         private string GenerateId(string prefix, string tableName, string columnName, int padLength = 3)
         {
             // Filter by prefix to ensure we increment the correct sequence (e.g. ignore NV001 when generating KHxxx)
@@ -365,7 +377,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             return prefix + nextNumber.ToString("D" + padLength); 
         }
 
-        // POST: Admin/Home65130650/CreateWalkInBooking
+        /// <summary>
+        /// POST: Admin/Home65130650/CreateWalkInBooking
+        /// Xử lý tạo mới đơn đặt phòng và khách hàng trực tiếp tại quầy (Walk-in Booking)
+        /// </summary>
         [HttpPost]
         public JsonResult CreateWalkInBooking(string hoTen, string sdt, string maPhong, 
                                                string checkIn, string checkOut, decimal tienCoc, int soKhach = 1, string yeuCauDacBiet = "", string phuongThuc = "Tiền mặt", List<string> serviceIds = null)
@@ -418,7 +433,11 @@ namespace Project_65130650.Areas.Admin.Controllers
                     return Json(new { success = false, error = "Phòng này vừa có người đặt. Vui lòng chọn phòng khác." });
 
                 var room = _db.Phongs.Find(maPhong);
-                decimal roomPrice = room?.LoaiPhong?.giaCoBan ?? 0;
+                if (room == null) return Json(new { success = false, error = "Không tìm thấy thông tin phòng." });
+                if (room.trangThai == "Bảo trì") return Json(new { success = false, error = "Phòng đang trong trạng thái bảo trì, không thể đặt." });
+                if (room.trangThai == "Đang sử dụng") return Json(new { success = false, error = "Phòng đang có khách ở, vui lòng chọn phòng khác." });
+
+                decimal roomPrice = room.LoaiPhong?.giaCoBan ?? 0;
                 int days = (int)(end - start).TotalDays;
                 if (days < 1) days = 1;
                 decimal totalRoomPrice = roomPrice * days;
@@ -456,6 +475,13 @@ namespace Project_65130650.Areas.Admin.Controllers
                 }
 
                 decimal grandTotal = totalRoomPrice + totalServicePrice;
+                decimal minDeposit = grandTotal * 0.5m;
+
+                // Ràng buộc điều kiện: Phải đặt cọc tối thiểu 50% tổng số tiền phòng và dịch vụ
+                if (tienCoc < minDeposit)
+                {
+                    return Json(new { success = false, error = $"Yêu cầu đặt cọc tối thiểu 50% tổng dự kiến ({minDeposit:N0} ₫). Vui lòng nhập số tiền cọc hợp lệ." });
+                }
 
                 // Validation logic tiền cọc: Không được lớn hơn Tổng tiền dự kiến (Phòng + Dịch vụ)
                 if (tienCoc > grandTotal)
@@ -485,13 +511,8 @@ namespace Project_65130650.Areas.Admin.Controllers
                 };
                 _db.DatPhongs.Add(booking);
                 
-                // Cập nhật trạng thái phòng sang 'Đã đặt'
-                if (room != null)
-                {
-                    room.trangThai = "Đã đặt";
-                    room.ngayCapNhat = DateTime.Now;
-                    _db.Entry(room).State = System.Data.Entity.EntityState.Modified;
-                }
+                // No longer updating room status to 'Đã đặt' here as per requirement. 
+                // Availability is handled by date overlapping logic.
                 
                 _db.SaveChanges(); // Lưu booking và cập nhật trạng thái phòng
 
@@ -577,6 +598,10 @@ namespace Project_65130650.Areas.Admin.Controllers
 
 
 
+        /// <summary>
+        /// POST: Admin/Home65130650/AddPayment
+        /// Ghi nhận một phiếu thu tiền (thanh toán) mới cho đơn đặt phòng cụ thể
+        /// </summary>
         [HttpPost]
         public ActionResult AddPayment(string maDatPhong, decimal soTien, string phuongThuc, string ghiChu)
         {
@@ -646,13 +671,28 @@ namespace Project_65130650.Areas.Admin.Controllers
         }
 
 
-        // GET: Admin/Home65130650/Invoice/DPxxx
+
+
+        /// <summary>
+        /// GET: Admin/Home65130650/Invoice/DPxxx
+        /// Hiển thị hóa đơn chi tiết để in ấn cho khách hàng
+        /// </summary>
         public ActionResult Invoice(string id)
         {
             if (string.IsNullOrEmpty(id)) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             
             var booking = _db.DatPhongs.Find(id);
             if (booking == null) return HttpNotFound();
+
+            // Lấy ngày trả phòng dự kiến từ biến tạm (Session) nếu có
+            if (Session["OriginalCheckout_" + id] != null)
+            {
+                ViewBag.OriginalCheckout = (DateTime)Session["OriginalCheckout_" + id];
+            }
+            else
+            {
+                ViewBag.OriginalCheckout = booking.ngayTraPhong;
+            }
 
             // Tính toán thêm các số liệu cần thiết để hiển thị trong View
             ViewBag.TotalService = booking.DichVuDatPhongs.Sum(d => (decimal?)d.thanhTien) ?? 0;
@@ -685,7 +725,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             return View(booking);
         }
 
-        // GET: Admin/Home65130650/Users
+        /// <summary>
+        /// GET: Admin/Home65130650/Users
+        /// Quản lý danh sách người dùng (Nhân viên & Khách hàng) trong hệ thống
+        /// </summary>
         public ActionResult Users(int page = 1, int pageSize = 10, string search = "", string role = "", string status = "")
         {
             ViewBag.Title = "Quản lý Người dùng";
@@ -828,7 +871,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/CreateUser
+        /// <summary>
+        /// POST: Admin/Home65130650/CreateUser
+        /// Tạo mới một tài khoản người dùng từ giao diện quản trị
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult CreateUser(string hoTen, string email, string soDienThoai, string matKhau,
@@ -890,7 +936,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/UpdateUser
+        /// <summary>
+        /// POST: Admin/Home65130650/UpdateUser
+        /// Cập nhật thông tin chi tiết của người dùng hiện có
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult UpdateUser(string maNguoiDung, string hoTen, string email, string soDienThoai,
@@ -946,7 +995,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/ToggleUserStatus
+        /// <summary>
+        /// POST: Admin/Home65130650/ToggleUserStatus
+        /// Kích hoạt hoặc vô hiệu hóa tài khoản người dùng (Khóa/Mở khóa)
+        /// </summary>
         [HttpPost]
         public JsonResult ToggleUserStatus(string id)
         {
@@ -976,7 +1028,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/ResetUserPassword
+        /// <summary>
+        /// POST: Admin/Home65130650/ResetUserPassword
+        /// Đặt lại mật khẩu mặc định cho người dùng trong trường hợp họ quên mật khẩu
+        /// </summary>
         [HttpPost]
         public JsonResult ResetUserPassword(string id, string newPassword)
         {
@@ -1045,7 +1100,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/CreateRoom
+        /// <summary>
+        /// POST: Admin/Home65130650/CreateRoom
+        /// Thêm một phòng mới vào hệ thống khách sạn
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult CreateRoom(Phong model)
@@ -1072,7 +1130,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/UpdateRoom
+        /// <summary>
+        /// POST: Admin/Home65130650/UpdateRoom
+        /// Cập nhật thông tin của một phòng
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult UpdateRoom(Phong model)
@@ -1160,9 +1221,11 @@ namespace Project_65130650.Areas.Admin.Controllers
             return "P" + (maxVal + 1).ToString("D4");
         }
 
-            // GET: Admin/Home65130650/RoomTypes
-            // GET: Admin/Home65130650/RoomTypes
-            public ActionResult RoomTypes(int page = 1, string search = "", string availability = "")
+        /// <summary>
+        /// GET: Admin/Home65130650/RoomTypes
+        /// Quản lý danh mục các loại phòng và cấu hình giá
+        /// </summary>
+        public ActionResult RoomTypes(int page = 1, string search = "", string availability = "")
             {
                 ViewBag.Title = "Quản lý Loại phòng";
                 ViewBag.UserName = Session["UserName"];
@@ -1240,7 +1303,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/CreateRoomType
+        /// <summary>
+        /// POST: Admin/Home65130650/CreateRoomType
+        /// Thêm loại phòng mới kèm theo hình ảnh minh họa
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult CreateRoomType(LoaiPhong model, System.Web.HttpPostedFileBase imageFile)
@@ -1286,7 +1352,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/UpdateRoomType
+        /// <summary>
+        /// POST: Admin/Home65130650/UpdateRoomType
+        /// Cập nhật thông tin và hình ảnh của loại phòng
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult UpdateRoomType(LoaiPhong model, System.Web.HttpPostedFileBase imageFile)
@@ -1393,7 +1462,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             return "LP" + (maxVal + 1).ToString("D3");
         }
 
-        // GET: Admin/Home65130650/Rooms
+        /// <summary>
+        /// GET: Admin/Home65130650/Rooms
+        /// Quản lý danh sách phòng với chức năng lọc theo tầng, loại phòng và trạng thái
+        /// </summary>
         public ActionResult Rooms(int page = 1, string search = "", string status = "", string floor = "", string availability = "")
         {
             ViewBag.Title = "Quản lý Phòng";
@@ -1477,8 +1549,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             return View(rooms);
         }
 
-        // GET: Admin/Home65130650/Services
-        // GET: Admin/Home65130650/Services
+        /// <summary>
+        /// GET: Admin/Home65130650/Services
+        /// Quản lý danh sách các dịch vụ đi kèm của khách sạn (Spa, Nhà hàng, Giặt là...)
+        /// </summary>
         public ActionResult Services(int page = 1, string search = "", string availability = "", string serviceType = "")
         {
             ViewBag.Title = "Quản lý Dịch vụ";
@@ -1567,7 +1641,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/CreateService
+        /// <summary>
+        /// POST: Admin/Home65130650/CreateService
+        /// Thêm dịch vụ mới kèm theo hình ảnh minh họa
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult CreateService(DichVu model, System.Web.HttpPostedFileBase imageFile)
@@ -1607,7 +1684,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/UpdateService
+        /// <summary>
+        /// POST: Admin/Home65130650/UpdateService
+        /// Cập nhật thông tin chi tiết và giá cả dịch vụ
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult UpdateService(DichVu model, System.Web.HttpPostedFileBase imageFile)
@@ -1660,7 +1740,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             }
         }
 
-        // POST: Admin/Home65130650/ToggleServiceStatus
+        /// <summary>
+        /// POST: Admin/Home65130650/ToggleServiceStatus
+        /// Kích hoạt hoặc ngừng cung cấp dịch vụ
+        /// </summary>
         [HttpPost]
         public JsonResult ToggleServiceStatus(string id)
         {
@@ -2194,6 +2277,9 @@ namespace Project_65130650.Areas.Admin.Controllers
         }
 
         // Gom lỗi validation để trả về chi tiết
+        /// <summary>
+        /// Hàm hỗ trợ: Chuyển đổi các lỗi validation từ Entity Framework sang chuỗi văn bản dễ đọc
+        /// </summary>
         private string BuildValidationErrorMessage(DbEntityValidationException ex)
         {
             var errors = ex.EntityValidationErrors
@@ -2203,7 +2289,9 @@ namespace Project_65130650.Areas.Admin.Controllers
             return "Lỗi dữ liệu: " + string.Join("; ", errors);
         }
 
-        // Helper: format validation errors from GetValidationErrors
+        /// <summary>
+        /// Hàm hỗ trợ: Định dạng danh sách lỗi validation cho người dùng
+        /// </summary>
         private string FormatValidationErrors(IEnumerable<DbEntityValidationResult> results)
         {
             var errors = results
@@ -2220,7 +2308,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             return ex.Message;
         }
 
-        // POST: Admin/Home65130650/Logout
+        /// <summary>
+        /// POST: Admin/Home65130650/Logout
+        /// Đăng xuất khỏi hệ thống quản trị và xóa các thông tin xác thực
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Logout()

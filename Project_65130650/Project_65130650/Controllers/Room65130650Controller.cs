@@ -15,7 +15,7 @@ namespace Project_65130650.Controllers
         // GET: Room
         public ActionResult Index(string search, string loaiPhong, decimal? minPrice, decimal? maxPrice, int? minCapacity, string sortOrder, string status, int page = 1)
         {
-            int pageSize = 6; // Số phòng mỗi trang
+            int pageSize = 9; // Số phòng mỗi trang
 
             // Query lấy tất cả loại phòng đang hoạt động
             var query = from lp in _db.LoaiPhongs

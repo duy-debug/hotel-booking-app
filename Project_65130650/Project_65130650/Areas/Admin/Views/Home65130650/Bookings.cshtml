@@ -11,7 +11,7 @@
         </div>
         <div class="header-actions">
             <button class="btn btn-primary" onclick="openCreateBookingModal()">
-                <i class="fas fa-plus"></i> Đặt phòng trực tiếp
+                <i class="fas fa-plus"></i> <b>Đặt phòng trực tiếp</b> 
             </button>
         </div>
     </div>
@@ -39,7 +39,7 @@
                 <div class="stat-label">Đã xác nhận</div>
             </div>
         </div>
-        <div class="stat-box stat-purple">
+        <div class="stat-box stat-indigo">
             <i class="fas fa-key"></i>
             <div>
                 <div class="stat-number">@ViewBag.CheckedInBookingsCount</div>
@@ -102,7 +102,7 @@
                                     <th>Phòng</th>
                                     <th>Ngày nhận</th>
                                     <th>Ngày trả</th>
-                                    <th>Tiền phòng</th>
+                                    <th>Tổng tiền</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
@@ -147,7 +147,7 @@
                                                 else if (booking.trangThaiDatPhong == "Chờ xác nhận") { statusClass = "badge-warning"; statusIcon = "fa-clock"; }
                                                 else if (booking.trangThaiDatPhong == "Đã hủy") { statusClass = "badge-danger"; statusIcon = "fa-times"; }
                                                 else if (booking.trangThaiDatPhong == "Đã nhận phòng") { statusClass = "badge-info"; statusIcon = "fa-key"; }
-                                                else if (booking.trangThaiDatPhong == "Đã trả phòng") { statusClass = "badge-purple"; statusIcon = "fa-flag-checkered"; }
+                                                else if (booking.trangThaiDatPhong == "Đã trả phòng") { statusClass = "badge-success"; statusIcon = "fa-flag-checkered"; }
                                             }
                                             <span class="badge @statusClass"><i class="fas @statusIcon"></i> @booking.trangThaiDatPhong</span>
                                         </td>
@@ -424,6 +424,27 @@
     </div>
 </div>
 
+<!-- Modal Lý do Hủy phòng -->
+<div id="cancelModal" class="custom-modal">
+    <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-header">
+            <h3>Lý do hủy phòng</h3>
+            <span class="close" onclick="closeCancelModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="cancelMaDatPhong">
+            <div class="form-group">
+                <label>Nhập lý do hủy <span class="text-danger">*</span></label>
+                <textarea class="form-control" id="cancelReason" rows="3" placeholder="Nhập lý do khách hủy phòng..."></textarea>
+            </div>
+            <div class="text-right mt-3">
+                <button type="button" class="btn btn-secondary" onclick="closeCancelModal()">Quay lại</button>
+                <button type="button" class="btn btn-danger" onclick="submitCancel()"><i class="fas fa-check"></i> Xác nhận hủy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     @section Styles {
         <style>
             .page-container { padding: 20px; }
@@ -442,14 +463,15 @@
             .stat-blue i { background: #dbeafe; color: #2563eb; }
             .stat-orange i { background: #ffedd5; color: #ea580c; }
             .stat-green i { background: #dcfce7; color: #16a34a; }
-            .stat-purple i { background: #f3e8ff; color: #9333ea; }
+            .stat-indigo i { background: #e0e7ff; color: #4338ca; }
             .stat-teal i { background: #ccfbf1; color: #0d9488; }
             .stat-red i { background: #fee2e2; color: #dc2626; }
             .stat-number { font-size: 22px; font-weight: 700; color: #111827; line-height: 1.2; }
             .stat-label { font-size: 12px; color: #6b7280; }
 
-            .content-card { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08); overflow: hidden; min-height: 600px; }
-            .card-body { padding: 20px; }
+            .content-card { background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08); overflow: hidden; min-height: 700px; display: flex; flex-direction: column; }
+            .card-body { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+            #tableContainer { flex: 1; display: flex; flex-direction: column; }
             
             .table-controls { 
                 display: flex; 
@@ -562,17 +584,17 @@
             }
 
             .dropdown-content a:hover {
-                background-color: #f3f4f6;
-                color: #4f46e5;
+                background-color: #f0f9ff;
+                color: #0d4ea6;
             }
 
             .dropdown-btn:hover {
-                border-color: #4f46e5;
-                color: #4f46e5;
+                border-color: #0d4ea6;
+                color: #0d4ea6;
             }
             
             .dropdown-btn:hover i {
-                color: #4f46e5; /* Đổi màu icon mũi tên */
+                color: #0d4ea6; /* Đổi màu icon mũi tên */
             }
             .form-control[type="date"] {
                 width: 150px;
@@ -606,9 +628,9 @@
             .badge-success { background: #dcfce7; color: #16a34a; }
             .badge-warning { background: #fef3c7; color: #d97706; }
             .badge-info { background: #dbeafe; color: #2563eb; }
-            .badge-primary { background: #eef2ff; color: #4f46e5; }
+            .badge-primary { background: #f0f9ff; color: #0d4ea6; }
             .badge-danger { background: #fee2e2; color: #dc2626; }
-            .badge-purple { background: #f3e8ff; color: #9333ea; }
+            .badge-purple { background: #dcfce7; color: #16a34a; }
             .badge-secondary { background: #f3f4f6; color: #6b7280; }
             .badge i { font-size: 11px; }
                 .room-badge { background: #f0f9ff; color: #0284c7; padding: 5px 10px; border-radius: 6px; font-weight: 600; font-size: 13px; }
@@ -624,14 +646,14 @@
             .btn-danger:hover { background: #fecaca; }
             .btn-warning { background: #fef3c7; color: #d97706; }
             .btn-warning:hover { background: #fde68a; }
-            .btn-primary { background: #eef2ff; color: #4f46e5; }
-            .btn-primary:hover { background: #e0e7ff; }
+            .btn-primary { background: #0d4ea6; color: white; }
+            .btn-primary:hover { background: #0a3d82; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(13, 78, 166, 0.3); }
 
-        .pagination-wrapper { display: flex; justify-content: center; margin-top: 20px; }
+        .pagination-wrapper { display: flex; justify-content: center; margin-top: auto; padding-top: 20px; }
         .pagination-controls { display: flex; gap: 5px; }
         .pagination-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 1px solid #e5e7eb; border-radius: 4px; text-decoration: none; color: #374151; }
-        .pagination-btn.current { background: #4f46e5; color: white; border-color: #4f46e5; }
-        .pagination-btn:hover:not(.current) { background: #f9fafb; }
+        .pagination-btn.current { background: #0d4ea6; color: white; border-color: #0d4ea6; }
+        .pagination-btn:hover:not(.current) { background: #f0f9ff; border-color: #0d4ea6; color: #0d4ea6; }
         .empty-state { text-align: center; padding: 40px; color: #9ca3af; }
 
         /* Modal Custom - Đổi tên từ class .modal sang .custom-modal để tránh conflict Bootstrap */
@@ -647,7 +669,7 @@
         .detail-item span { color: #111827; font-weight: 500; }
         .service-list { margin-top: 10px; background: #f9fafb; padding: 10px; border-radius: 8px; }
         .service-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 13px; color: #4b5563; }
-        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+        .btn { padding: 8px 16px; border-radius: 6px; border: none; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.3s ease; }
         
         @@media (max-width: 992px) {
             .stats-row { grid-template-columns: repeat(2, 1fr); }
@@ -763,8 +785,9 @@
                         // Theo yêu cầu: Tổng = Tiền phòng + Dịch vụ
                         var grandTotal = tienPhong + totalService;
 
-                        var debt = grandTotal - daThanhToan;
-                        var debtHtml = debt > 0 ? `<span class="text-danger">${fmt.format(debt)}</span>` : `<span class="text-success">Đã thanh toán đủ</span>`;
+                        // Yêu cầu: Khi hủy phòng thì mặc định công nợ là 0đ
+                        var debt = (d.trangThai === 'Đã hủy') ? 0 : (grandTotal - daThanhToan);
+                        var debtHtml = debt > 0 ? `<span class="text-danger">${fmt.format(debt)}</span>` : `<span class="text-success">0 ₫ (Không có dư nợ)</span>`;
                         
                         var cancelInfo = '';
                         if (d.trangThai === 'Đã hủy') {
@@ -791,7 +814,7 @@
                             <div class="detail-item"><label>Trạng thái:</label><span class="badge badge-secondary">${d.trangThai}</span></div>
                             ${cancelInfo}
                             ${servicesHtml}
-                            <div class="detail-item" style="margin-top:10px; background-color: #f8fafc;"><label><strong>Tổng thanh toán:</strong></label><span style="font-weight:700; color:#4f46e5;">${fmt.format(grandTotal)}</span></div>
+                            <div class="detail-item" style="margin-top:10px; background-color: #f8fafc;"><label><strong>Tổng thanh toán:</strong></label><span style="font-weight:700; color:#0d4ea6;">${fmt.format(grandTotal)}</span></div>
                             <div class="detail-item"><label>Đã thanh toán:</label><span>${fmt.format(daThanhToan)}</span></div>
                             <div class="detail-item"><label><strong>Công nợ:</strong></label><strong>${debtHtml}</strong></div>
                         `;
@@ -814,6 +837,8 @@
                         } else if (d.trangThai === "Đã trả phòng") {
                             btnHtml += ` <a href="/Admin/Home65130650/Invoice/${d.maDatPhong}" target="_blank" class="btn btn-dark"><i class="fas fa-print"></i> In hóa đơn</a>`;
                         }
+                        
+                        
                         
                         $('#modalActions').html(btnHtml).show();
                         openModal('#viewModal');
@@ -988,6 +1013,13 @@
 
         // --- 6. Status Update ---
         function updateStatus(id, status) {
+            if (status === 'Đã hủy') {
+                $('#cancelMaDatPhong').val(id);
+                $('#cancelReason').val('');
+                openModal('#cancelModal');
+                return;
+            }
+
             if (!confirm(`Bạn có chắc chắn muốn chuyển trạng thái thành "${status}"?`)) return;
             $.ajax({
                 url: '@Url.Action("UpdateBookingStatus", "Home65130650", new { area = "Admin" })',
@@ -1002,6 +1034,29 @@
                 }
             });
         }
+
+        function closeCancelModal() { closeModal('#cancelModal'); }
+
+        function submitCancel() {
+            var id = $('#cancelMaDatPhong').val();
+            var reason = $('#cancelReason').val();
+            if (!reason) { alert('Vui lòng nhập lý do hủy'); return; }
+
+            $.ajax({
+                url: '@Url.Action("UpdateBookingStatus", "Home65130650", new { area = "Admin" })',
+                type: 'POST',
+                data: { id: id, status: 'Đã hủy', reason: reason },
+                success: function(res) {
+                    if (res.success) {
+                        alert('Đã hủy đơn đặt phòng thành công.');
+                        closeCancelModal();
+                        closeViewModal();
+                        performSearch();
+                    } else { alert(res.error); }
+                }
+            });
+        }
+
 
 
         // --- 7. UI Helpers ---

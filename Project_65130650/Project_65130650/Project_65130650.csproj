@@ -138,9 +138,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\EmailHelper.cs" />
     <Compile Include="Models\DatPhong.cs" />
     <Compile Include="Models\DichVu.cs" />
     <Compile Include="Models\DichVuDatPhong.cs" />
+    <Compile Include="Models\Forms\ForgotPasswordForm.cs" />
     <Compile Include="Models\Forms\LoginForm.cs" />
     <Compile Include="Models\Forms\RegisterForm.cs" />
     <Compile Include="Models\LoaiPhong.cs" />
@@ -269,6 +271,8 @@
     <Content Include="Views\Account65130650\Register.cshtml" />
     <Content Include="Views\Home\RoomDetail.cshtml" />
     <Content Include="Views\Room65130650\Index.cshtml" />
+    <Content Include="Views\Account65130650\ForgotPassword.cshtml" />
+    <Content Include="Views\Account65130650\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

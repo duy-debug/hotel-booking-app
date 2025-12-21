@@ -7,24 +7,22 @@
             <i class="fas fa-times"></i>
         </button>
 
-        <div class="auth-card white-bg" style="padding: 24px; max-height: 85vh; overflow-y: auto;">
-            <div class="auth-card_header" style="margin-bottom: 16px; gap: 12px;">
-                <div class="auth-card_logo" style="width: 48px; height: 48px; font-size: 20px; border-radius: 12px;">
+        <div class="auth-card white-bg" style="max-height: 85vh; overflow-y: auto;">
+            <div class="auth-card_header" style="margin-bottom: 24px; display: flex; align-items: center; gap: 16px;">
+                <div class="auth-card_logo">
                     <i class="fas fa-user-plus"></i>
                 </div>
                 <div>
-                    <h1 id="registerModalTitle" style="font-size: 20px; margin-bottom: 2px;">Đăng Ký</h1>
-                    <p style="font-size: 13px; margin: 0;">Tạo tài khoản để đặt phòng nhanh chóng</p>
+                    <h1 id="registerModalTitle">Đăng Ký</h1>
+                    <p>Tạo tài khoản để đặt phòng nhanh chóng</p>
                 </div>
             </div>
 
-            <!-- Thông báo lỗi -->
-            <div id="registerErrorContainer" class="auth-validation" style="display: none; padding: 8px 12px; margin-bottom: 12px; font-size: 13px;">
-                <ul id="registerErrorList" style="margin: 0; padding-left: 16px; color: #dc2626;"></ul>
+            <div id="registerErrorContainer" class="auth-validation">
+                <ul id="registerErrorList"></ul>
             </div>
 
-            <!-- Thông báo thành công -->
-            <div id="registerSuccessContainer" style="display: none; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; color: #166534; font-size: 13px;">
+            <div id="registerSuccessContainer" style="display: none; background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.4); border-radius: 8px; padding: 12px; margin-bottom: 20px; color: #166534; font-size: 14px;">
                 <i class="fas fa-check-circle"></i>
                 <span id="registerSuccessMessage"></span>
             </div>
@@ -32,112 +30,106 @@
             <form id="registerForm" class="auth-form">
                 @Html.AntiForgeryToken()
 
-                <!-- Row 1: Họ tên + SĐT -->
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Họ và tên <span style="color: red;">*</span></label>
+                        <label>Họ và tên <span style="color: red;">*</span></label>
                         <div class="input-wrapper">
-                            <i class="fas fa-user input-icon" style="font-size: 12px; left: 10px;"></i>
-                            @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", placeholder = "Nguyễn Văn A", id = "regHoTen", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
+                            @Html.TextBoxFor(m => m.HoTen, new { @class = "form-control", placeholder = "Nguyễn Văn A", id = "regHoTen" })
+                            <i class="fas fa-user input-icon"></i>
                         </div>
-                        <span class="field-validation-error" id="regHoTenError" style="font-size: 11px;"></span>
+                        <span class="field-validation-error" id="regHoTenError"></span>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Số điện thoại <span style="color: red;">*</span></label>
+                        <label>Số điện thoại <span style="color: red;">*</span></label>
                         <div class="input-wrapper">
-                            <i class="fas fa-phone input-icon" style="font-size: 12px; left: 10px;"></i>
-                            @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control", placeholder = "0901234567", id = "regSoDienThoai", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
+                            @Html.TextBoxFor(m => m.SoDienThoai, new { @class = "form-control", placeholder = "0901234567", id = "regSoDienThoai" })
+                            <i class="fas fa-phone input-icon"></i>
                         </div>
-                        <span class="field-validation-error" id="regSoDienThoaiError" style="font-size: 11px;"></span>
+                        <span class="field-validation-error" id="regSoDienThoaiError"></span>
                     </div>
                 </div>
 
-                <!-- Row 2: Email -->
-                <div class="form-group" style="margin-bottom: 10px;">
-                    <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Email <span style="color: red;">*</span></label>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label>Email <span style="color: red;">*</span></label>
                     <div class="input-wrapper">
-                        <i class="fas fa-envelope input-icon" style="font-size: 12px; left: 10px;"></i>
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "example@email.com", type = "email", id = "regEmail", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "example@email.com", type = "email", id = "regEmail" })
+                        <i class="fas fa-envelope input-icon"></i>
                     </div>
-                    <span class="field-validation-error" id="regEmailError" style="font-size: 11px;"></span>
+                    <span class="field-validation-error" id="regEmailError"></span>
                 </div>
 
-                <!-- Row 3: Mật khẩu + Xác nhận -->
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Mật khẩu <span style="color: red;">*</span></label>
+                        <label>Mật khẩu <span style="color: red;">*</span></label>
                         <div class="input-wrapper">
-                            <i class="fas fa-lock input-icon" style="font-size: 12px; left: 10px;"></i>
-                            @Html.PasswordFor(m => m.MatKhau, new { @class = "form-control", placeholder = "••••••••", id = "regMatKhau", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
+                            @Html.PasswordFor(m => m.MatKhau, new { @class = "form-control", placeholder = "••••••••", id = "regMatKhau" })
+                            <i class="fas fa-lock input-icon"></i>
                         </div>
-                        <span class="field-validation-error" id="regMatKhauError" style="font-size: 11px;"></span>
+                        <span class="field-validation-error" id="regMatKhauError"></span>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Xác nhận MK <span style="color: red;">*</span></label>
+                        <label>Xác nhận mật khẩu <span style="color: red;">*</span></label>
                         <div class="input-wrapper">
-                            <i class="fas fa-lock input-icon" style="font-size: 12px; left: 10px;"></i>
-                            @Html.PasswordFor(m => m.XacNhanMatKhau, new { @class = "form-control", placeholder = "••••••••", id = "regXacNhanMatKhau", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
+                            @Html.PasswordFor(m => m.XacNhanMatKhau, new { @class = "form-control", placeholder = "••••••••", id = "regXacNhanMatKhau" })
+                            <i class="fas fa-lock input-icon"></i>
                         </div>
-                        <span class="field-validation-error" id="regXacNhanMatKhauError" style="font-size: 11px;"></span>
+                        <span class="field-validation-error" id="regXacNhanMatKhauError"></span>
                     </div>
                 </div>
 
-                <!-- Gợi ý mật khẩu -->
-                <div style="background: #f8fafc; padding: 6px 10px; border-radius: 6px; margin-bottom: 10px; font-size: 11px; color: #64748b;">
-                    <i class="fas fa-info-circle"></i> Mật khẩu: tối thiểu 6 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt
+                <div style="background: #f8fafc; padding: 10px 14px; border-radius: 10px; margin-bottom: 16px; font-size: 13px; color: #64748b; border: 1px solid #e2e8f0;">
+                    <i class="fas fa-info-circle"></i> Mật khẩu: tối thiểu 8 ký tự, có chữ hoa, thường, số và ký tự đặc biệt.
                 </div>
 
-                <!-- Row 4: Địa chỉ -->
-                <div class="form-group" style="margin-bottom: 10px;">
-                    <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Địa chỉ</label>
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label>Địa chỉ</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-map-marker-alt input-icon" style="font-size: 12px; left: 10px;"></i>
-                        @Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control", placeholder = "Địa chỉ của bạn", id = "regDiaChi", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
+                        @Html.TextBoxFor(m => m.DiaChi, new { @class = "form-control", placeholder = "Địa chỉ của bạn", id = "regDiaChi" })
+                        <i class="fas fa-map-marker-alt input-icon"></i>
                     </div>
                 </div>
 
-                <!-- Row 5: Ngày sinh + Giới tính -->
-                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+                <div class="form-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Ngày sinh</label>
+                        <label>Ngày sinh</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-calendar input-icon" style="font-size: 12px; left: 10px;"></i>
-                            @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", id = "regNgaySinh", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
+                            @Html.TextBoxFor(m => m.NgaySinh, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", id = "regNgaySinh" })
+                            <i class="fas fa-calendar input-icon"></i>
                         </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 0;">
-                        <label style="font-size: 12px; font-weight: 600; margin-bottom: 4px; display: block;">Giới tính</label>
+                        <label>Giới tính</label>
                         <div class="input-wrapper">
-                            <i class="fas fa-venus-mars input-icon" style="font-size: 12px; left: 10px;"></i>
                             @Html.DropDownListFor(m => m.GioiTinh, new List<SelectListItem>
                             {
                                 new SelectListItem { Text = "-- Chọn --", Value = "" },
                                 new SelectListItem { Text = "Nam", Value = "Nam" },
                                 new SelectListItem { Text = "Nữ", Value = "Nữ" },
                                 new SelectListItem { Text = "Khác", Value = "Khác" }
-                            }, new { @class = "form-control", id = "regGioiTinh", style = "padding: 8px 10px 8px 32px; font-size: 13px; border-radius: 8px;" })
+                            }, new { @class = "form-control", id = "regGioiTinh" })
+                            <i class="fas fa-venus-mars input-icon"></i>
                         </div>
                     </div>
                 </div>
 
-                <!-- Checkbox điều khoản -->
-                <div style="background: #f8fafc; padding: 8px 10px; border-radius: 8px; margin-bottom: 12px;">
-                    <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 12px; cursor: pointer; margin: 0;">
-                        @Html.CheckBoxFor(m => m.DongYDieuKhoan, new { id = "agreeTerms", style = "margin-top: 2px;" })
-                        <span>Tôi đồng ý với <a href="https://policies.google.com/terms?hl=vi" style="color: #0d4ea6;">Điều khoản dịch vụ</a> và <a href="https://policies.google.com/privacy?hl=vi" style="color: #0d4ea6;">Chính sách bảo mật</a></span>
+                <div style="background: #f8fafc; padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
+                    <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 13px; cursor: pointer; margin: 0; line-height: 1.4;">
+                        @Html.CheckBoxFor(m => m.DongYDieuKhoan, new { id = "agreeTerms", style = "margin-top: 3px;" })
+                        <span>Tôi đồng ý với <a href="https://policies.google.com/terms?hl=vi" style="color: #0d4ea6; font-weight: 600;">Điều khoản dịch vụ</a> và <a href="https://policies.google.com/privacy?hl=vi" style="color: #0d4ea6; font-weight: 600;">Chính sách bảo mật</a></span>
                     </label>
                 </div>
-                <span class="field-validation-error" id="regDongYDieuKhoanError" style="font-size: 11px; display: block; margin-top: -8px; margin-bottom: 8px;"></span>
+                <span class="field-validation-error" id="regDongYDieuKhoanError" style="margin-top: -15px; margin-bottom: 15px; display: block;"></span>
 
-                <button type="submit" class="btn-primary w-100" id="registerSubmitBtn" style="padding: 10px 16px; font-size: 14px; border-radius: 10px;">
+                <button type="submit" class="btn-primary" id="registerSubmitBtn" style="width: 100%;">
                     <i class="fas fa-user-plus"></i> Đăng Ký Ngay
                 </button>
             </form>
 
-            <div style="text-align: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 13px;">
+            <div style="text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid #f1f5f9; font-size: 14px;">
                 Đã có tài khoản?
-                <button type="button" class="link-button" data-open-modal="login" style="font-size: 13px;">Đăng nhập ngay</button>
+                <button type="button" class="link-button" data-open-modal="login">Đăng nhập ngay</button>
             </div>
+        </div>
         </div>
     </div>
 </div>
@@ -180,7 +172,11 @@
                 else if (!/^0[0-9]{9,10}$/.test(soDienThoai)) { document.getElementById('regSoDienThoaiError').textContent = 'SĐT không hợp lệ'; hasError = true; }
                 if (!email) { document.getElementById('regEmailError').textContent = 'Email không được để trống'; hasError = true; }
                 if (!matKhau) { document.getElementById('regMatKhauError').textContent = 'Mật khẩu không được để trống'; hasError = true; }
-                else if (matKhau.length < 6) { document.getElementById('regMatKhauError').textContent = 'Tối thiểu 6 ký tự'; hasError = true; }
+                else if (matKhau.length < 8) { document.getElementById('regMatKhauError').textContent = 'Tối thiểu 8 ký tự'; hasError = true; }
+                else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@@$!%*?&])/.test(matKhau)) { 
+                    document.getElementById('regMatKhauError').textContent = 'Phải có chữ hoa, thường, số và ký tự đặc biệt'; 
+                    hasError = true; 
+                }
                 if (!xacNhanMatKhau) { document.getElementById('regXacNhanMatKhauError').textContent = 'Vui lòng xác nhận'; hasError = true; }
                 else if (matKhau !== xacNhanMatKhau) { document.getElementById('regXacNhanMatKhauError').textContent = 'Mật khẩu không khớp'; hasError = true; }
                 if (!dongYDieuKhoan) { document.getElementById('regDongYDieuKhoanError').textContent = 'Bạn phải đồng ý với điều khoản'; hasError = true; }

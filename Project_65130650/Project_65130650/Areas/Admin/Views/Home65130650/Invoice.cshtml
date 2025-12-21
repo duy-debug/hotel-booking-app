@@ -94,7 +94,9 @@
             <tr class="item">
                 <td>
                     Phòng: <strong>@(Model.Phong?.soPhong ?? "N/A")</strong> - @(Model.Phong?.LoaiPhong?.tenLoaiPhong ?? "")<br>
-                    <small>Check-in: @Model.ngayNhanPhong.ToString("dd/MM/yyyy") | Check-out: @Model.ngayTraPhong.ToString("dd/MM/yyyy")</small><br>
+                    <small>Check-in: @Model.ngayNhanPhong.ToString("dd/MM/yyyy HH:mm")</small><br />
+                    <small>Check-out (Dự kiến): @(((DateTime)ViewBag.OriginalCheckout).ToString("dd/MM/yyyy"))</small><br />
+                    <small>Check-out (Thực tế): @Model.ngayTraPhong.ToString("dd/MM/yyyy HH:mm")</small><br />
                     <small>Giá: @(Model.Phong?.LoaiPhong?.giaCoBan.ToString("N0") ?? "0") ₫/đêm</small>
                 </td>
                 <td>@Model.tienPhong.ToString("N0") ₫</td>

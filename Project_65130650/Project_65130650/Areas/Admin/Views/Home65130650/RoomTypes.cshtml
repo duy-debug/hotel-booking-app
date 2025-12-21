@@ -261,13 +261,14 @@
         .header-content h3 { font-size: 24px; font-weight: 700; color: #111827; margin: 0; }
         
         .btn { padding: 10px 20px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-primary { background: #4f46e5; color: white; }
-        .btn-primary:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); }
+        .btn-primary { background: #0d4ea6; color: white; }
+        .btn-primary:hover { background: #0a3d82; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(13, 78, 166, 0.3); }
         .btn-secondary { background: #6b7280; color: white; }
         .btn-secondary:hover { background: #4b5563; }
 
-        .content-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08); overflow: hidden; }
-        .card-body { padding: 30px; }
+        .content-card { background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08); overflow: hidden; min-height: 700px; display: flex; flex-direction: column; }
+        .card-body { padding: 30px; flex: 1; display: flex; flex-direction: column; }
+        #tableContainer { flex: 1; display: flex; flex-direction: column; }
         
         .table-controls { display: flex; gap: 16px; margin-bottom: 24px; }
         .search-box { flex: 1; position: relative; }
@@ -280,7 +281,7 @@
         .dropdown-content { display: none; position: absolute; background-color: white; min-width: 100%; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100; margin-top: 5px; padding: 5px 0; border: 1px solid #f3f4f6; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease; }
         .custom-dropdown.active .dropdown-content { display: block; opacity: 1; transform: translateY(0); }
         .dropdown-content a { color: #374151; padding: 10px 16px; text-decoration: none; display: block; font-size: 14px; transition: background 0.2s; }
-        .dropdown-content a:hover { background-color: #f3f4f6; color: #4f46e5; }
+        .dropdown-content a:hover { background-color: #f0f9ff; color: #0d4ea6; }
         
         /* Table Styles */
         .table-responsive { overflow-x: auto; }
@@ -306,11 +307,11 @@
         .btn-icon.btn-success:hover { background: #16a34a; color: white; }
 
         /* Pagination Styles */
-        .pagination-wrapper { display: flex; justify-content: center; align-items: center; padding: 20px 0; border-top: 1px solid #e5e7eb; margin-top: 20px; }
+        .pagination-wrapper { display: flex; justify-content: center; align-items: center; padding: 20px 0; border-top: 1px solid #e5e7eb; margin-top: auto; }
         .pagination-controls { display: flex; gap: 4px; }
         .pagination-btn { display: flex; align-items: center; justify-content: center; min-width: 36px; height: 36px; padding: 0 8px; border: 1px solid #e5e7eb; border-radius: 6px; background: white; color: #374151; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
-        .pagination-btn:hover { background: #f9fafb; border-color: #4f46e5; color: #4f46e5; }
-        .pagination-btn.current { background: #4f46e5; border-color: #4f46e5; color: white; }
+        .pagination-btn:hover { background: #f0f9ff; border-color: #0d4ea6; color: #0d4ea6; }
+        .pagination-btn.current { background: #0d4ea6; border-color: #0d4ea6; color: white; }
 
         /* Modal Styles */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow: auto; }

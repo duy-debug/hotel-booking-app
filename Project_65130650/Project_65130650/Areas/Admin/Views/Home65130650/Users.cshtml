@@ -98,10 +98,11 @@
                     </div>
                 </div>
 
-                @if (Model != null && Model.Any())
-                {
-                    <div class="table-responsive">
-                        <table class="data-table" id="usersTable">
+                <div id="tableContainer">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="data-table" id="usersTable">
                             <thead>
                                 <tr>
                                     <th>STT</th>
@@ -116,7 +117,7 @@
                             </thead>
                             <tbody>
                                 @{
-                                    int stt = 1;
+                                    int stt = (ViewBag.CurrentPage - 1) * ViewBag.PageSize + 1;
                                 }
                                 @foreach (var user in Model)
                                 {
@@ -190,7 +191,7 @@
                             <div class="pagination-controls">
                                 @if (ViewBag.CurrentPage > 1)
                                 {
-                                    <a href="@Url.Action("Users", new { page = ViewBag.CurrentPage - 1, search = ViewBag.Search, role = ViewBag.Role, status = ViewBag.Status })" class="pagination-btn prev">
+                                    <a href="javascript:void(0)" onclick="changePage(@(ViewBag.CurrentPage - 1))" class="pagination-btn prev">
                                         <i class="fas fa-angle-left"></i>
                                     </a>
                                 }
@@ -203,13 +204,13 @@
                                     }
                                     else
                                     {
-                                        <a href="@Url.Action("Users", new { page = i, search = ViewBag.Search, role = ViewBag.Role, status = ViewBag.Status })" class="pagination-btn">@i</a>
+                                        <a href="javascript:void(0)" onclick="changePage(@i)" class="pagination-btn">@i</a>
                                     }
                                 }
 
                                 @if (ViewBag.CurrentPage < ViewBag.TotalPages)
                                 {
-                                    <a href="@Url.Action("Users", new { page = ViewBag.CurrentPage + 1, search = ViewBag.Search, role = ViewBag.Role, status = ViewBag.Status })" class="pagination-btn next">
+                                    <a href="javascript:void(0)" onclick="changePage(@(ViewBag.CurrentPage + 1))" class="pagination-btn next">
                                         <i class="fas fa-angle-right"></i>
                                     </a>
                                     }
@@ -224,6 +225,7 @@
                         <p>Chưa có người dùng nào</p>
                     </div>
                 }
+                </div>
             </div>
         </div>
     </div>
@@ -353,7 +355,7 @@
             }
 
                 .header-content h1 i {
-                    color: #4f46e5;
+                    color: #0d4ea6;
                 }
 
             .header-content p {
@@ -395,7 +397,7 @@
                 }
 
             .stat-blue i {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #0d4ea6 0%, #173b75 100%);
                 color: white;
             }
 
@@ -405,7 +407,7 @@
             }
 
             .stat-purple i {
-                background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+                background: linear-gradient(135deg, #0ea5e9 0%, #0d4ea6 100%);
                 color: white;
             }
 
@@ -443,14 +445,14 @@
             }
 
             .btn-primary {
-                background: #4f46e5;
+                background: #0d4ea6;
                 color: white;
             }
 
                 .btn-primary:hover {
-                    background: #4338ca;
+                    background: #0a3d82;
                     transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+                    box-shadow: 0 4px 12px rgba(13, 78, 166, 0.3);
                 }
 
             .content-card {
@@ -458,11 +460,22 @@
                 border-radius: 16px;
                 box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
                 overflow: hidden;
-                min-height: 650px;
+                min-height: 700px;
+                display: flex;
+                flex-direction: column;
             }
 
             .card-body {
                 padding: 30px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #tableContainer {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
             }
 
             .table-controls {
@@ -498,8 +511,8 @@
 
                     .search-box input:focus {
                         outline: none;
-                        border-color: #4f46e5;
-                        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+                        border-color: #0d4ea6;
+                        box-shadow: 0 0 0 3px rgba(13, 78, 166, 0.1);
                     }
 
             .filter-group {
@@ -571,13 +584,13 @@
             }
 
             .dropdown-content a:hover {
-                background-color: #f3f4f6;
-                color: #4f46e5;
+                background-color: #f0f9ff;
+                color: #0d4ea6;
             }
 
             .dropdown-btn:hover {
-                border-color: #4f46e5;
-                color: #4f46e5;
+                border-color: #0d4ea6;
+                color: #0d4ea6;
             }
 
             .table-responsive {
@@ -623,7 +636,7 @@
                 width: 40px;
                 height: 40px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #0d4ea6 0%, #173b75 100%);
                 color: white;
                 display: flex;
                 align-items: center;
@@ -643,8 +656,8 @@
             }
 
             .badge-primary {
-                background: #eef2ff;
-                color: #4f46e5;
+                background: #f0f9ff;
+                color: #0d4ea6;
             }
 
             .badge-success {
@@ -884,7 +897,7 @@
                 align-items: center;
                 padding: 20px 0;
                 border-top: 1px solid #e5e7eb;
-                margin-top: 20px;
+                margin-top: auto;
             }
 
             .pagination-info {
@@ -915,14 +928,14 @@
             }
 
             .pagination-btn:hover {
-                background: #f9fafb;
-                border-color: #4f46e5;
-                color: #4f46e5;
+                background: #f0f9ff;
+                border-color: #0d4ea6;
+                color: #0d4ea6;
             }
 
             .pagination-btn.current {
-                background: #4f46e5;
-                border-color: #4f46e5;
+                background: #0d4ea6;
+                border-color: #0d4ea6;
                 color: white;
             }
 
@@ -986,21 +999,39 @@
                     performSearch();
                 });
 
-                function performSearch() {
+                function performSearch(page = 1) {
                     var searchValue = $('#searchInput').val().trim();
                     var roleValue = $('#roleFilter').val();
                     var statusValue = $('#statusFilter').val();
                     
                     var url = '@Url.Action("Users", "Home65130650", new { area = "Admin" })';
-                    var params = new URLSearchParams();
                     
-                    if (searchValue) params.append('search', searchValue);
-                    if (roleValue) params.append('role', roleValue);
-                    if (statusValue) params.append('status', statusValue);
-                    
-                    var fullUrl = params.toString() ? url + '?' + params.toString() : url;
-                    window.location.href = fullUrl;
+                    $.ajax({
+                        url: url,
+                        type: 'GET',
+                        data: {
+                            page: page,
+                            search: searchValue,
+                            role: roleValue,
+                            status: statusValue
+                        },
+                        success: function(result) {
+                            var newContent = $(result).find('#tableContainer').html();
+                            if (newContent) {
+                                $('#tableContainer').html(newContent);
+                            } else {
+                                location.reload();
+                            }
+                        },
+                        error: function() {
+                            console.error('Lỗi tải dữ liệu');
+                        }
+                    });
                 }
+
+                window.changePage = function(page) {
+                    performSearch(page);
+                };
 
                 // Form Submit với báo lỗi chi tiết
                 $('#userForm').on('submit', function(e) {
@@ -1018,7 +1049,8 @@
                     .done(function(res) {
                         if(res.success) {
                             alert(res.message);
-                            location.reload();
+                            closeModal();
+                            performSearch();
                         } else {
                             alert(res.error || 'Không rõ lỗi');
                         }
@@ -1183,7 +1215,7 @@
                         .done(function(res) {
                             if(res.success) {
                                 alert(res.message);
-                                location.reload();
+                                performSearch();
                             } else {
                                 alert(res.error);
                             }

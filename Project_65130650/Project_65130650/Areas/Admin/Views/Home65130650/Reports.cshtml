@@ -14,7 +14,7 @@
     <div class="reports-grid">
         <!-- Revenue Report -->
         <div class="report-card">
-            <div class="report-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="report-icon" style="background: linear-gradient(135deg, #0d4ea6 0%, #173b75 100%);">
                 <i class="fas fa-chart-bar"></i>
             </div>
             <h3>Doanh thu theo tháng</h3>
@@ -44,7 +44,7 @@
 
         <!-- Service Report -->
         <div class="report-card">
-            <div class="report-icon" style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);">
+            <div class="report-icon" style="background: linear-gradient(135deg, #0ea5e9 0%, #0d4ea6 100%);">
                 <i class="fas fa-concierge-bell"></i>
             </div>
             <h3>Dịch vụ</h3>
@@ -283,8 +283,8 @@
                 datasets: [{
                     label: 'Doanh thu (VNĐ)',
                     data: monthlyRevenueData.map(d => d.Revenue),
-                    borderColor: '#4f46e5',
-                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    borderColor: '#0d4ea6',
+                    backgroundColor: 'rgba(13, 78, 166, 0.1)',
                     tension: 0.4,
                     fill: true
                 }]
@@ -315,7 +315,7 @@
                 datasets: [{
                     label: 'Doanh thu',
                     data: topServicesData.map(d => d.Revenue),
-                    backgroundColor: '#a855f7'
+                    backgroundColor: '#0ea5e9'
                 }]
             },
             options: { responsive: true }
@@ -373,7 +373,7 @@
         .page-container { padding: 30px; }
         .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; }
         .header-content h1 { font-size: 28px; font-weight: 700; color: #111827; margin: 0 0 8px 0; display: flex; align-items: center; gap: 12px; }
-        .header-content h1 i { color: #4f46e5; }
+        .header-content h1 i { color: #0d4ea6; }
         .header-content p { color: #6b7280; margin: 0; }
         
         .reports-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
@@ -383,8 +383,8 @@
         .report-card h3 { margin: 0 0 12px 0; font-size: 20px; font-weight: 700; color: #111827; }
         .report-card p { color: #6b7280; font-size: 14px; line-height: 1.6; margin-bottom: 24px; }
         
-        .btn-outline { background: white; color: #4f46e5; border: 2px solid #4f46e5; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; width: 100%; display: block; }
-        .btn-outline:hover { background: #4f46e5; color: white; }
+        .btn-outline { background: white; color: #0d4ea6; border: 2px solid #0d4ea6; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; width: 100%; display: block; }
+        .btn-outline:hover { background: #0d4ea6; color: white; }
 
         /* Modal Styles */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow: auto; }
@@ -402,14 +402,14 @@
         .data-table th { background-color: #f9fafb; font-weight: 600; color: #374151; }
         .mt-3 { margin-top: 1rem; }
         .text-center { text-align: center; }
-        .text-primary { color: #4f46e5; }
+        .text-primary { color: #0d4ea6; }
         
         .pie-chart-container { width: 300px; margin: 0 auto; }
         
         .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
         .stat-box { background: #f9fafb; padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px; }
         .stat-box i { font-size: 24px; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 10px; color: white; }
-        .stat-blue i { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-blue i { background: linear-gradient(135deg, #0d4ea6 0%, #173b75 100%); }
         .stat-green i { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
         .stat-number { font-size: 24px; font-weight: 700; color: #111827; }
         .stat-label { font-size: 13px; color: #6b7280; }
