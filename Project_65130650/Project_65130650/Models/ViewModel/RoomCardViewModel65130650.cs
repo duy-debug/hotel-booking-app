@@ -2,7 +2,7 @@
 
 namespace Project_65130650.Models.ViewModels
 {
-    public class RoomCardViewModel
+    public class RoomCardViewModel65130650
     {
         public string MaPhong { get; set; }
         public string SoPhong { get; set; }

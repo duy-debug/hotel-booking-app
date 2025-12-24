@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Project_65130650.Models.ViewModels
 {
-    public class RoomListViewModel
+    public class RoomListViewModel65130650
     {
         // Danh sách phòng (hiển thị theo loại phòng)
-        public List<RoomTypeItemViewModel> Rooms { get; set; }
+        public List<RoomTypeItemViewModel65130650> Rooms { get; set; }
 
         // Thông tin phân trang
         public int CurrentPage { get; set; }
@@ -24,12 +24,12 @@ namespace Project_65130650.Models.ViewModels
         public string Status { get; set; } // "available", "soldout"
 
         // Danh sách loại phòng cho dropdown filter
-        public List<LoaiPhongFilterItem> LoaiPhongs { get; set; }
+        public List<LoaiPhongFilterItem65130650> LoaiPhongs { get; set; }
 
-        public RoomListViewModel()
+        public RoomListViewModel65130650()
         {
-            Rooms = new List<RoomTypeItemViewModel>();
-            LoaiPhongs = new List<LoaiPhongFilterItem>();
+            Rooms = new List<RoomTypeItemViewModel65130650>();
+            LoaiPhongs = new List<LoaiPhongFilterItem65130650>();
             CurrentPage = 1;
             PageSize = 6;
         }
@@ -38,7 +38,7 @@ namespace Project_65130650.Models.ViewModels
         public bool HasNextPage => CurrentPage < TotalPages;
     }
 
-    public class RoomTypeItemViewModel
+    public class RoomTypeItemViewModel65130650
     {
         public string MaLoaiPhong { get; set; }
         public string TenLoaiPhong { get; set; }
@@ -57,7 +57,7 @@ namespace Project_65130650.Models.ViewModels
         public string TrangThaiHienThi { get; set; }
     }
 
-    public class LoaiPhongFilterItem
+    public class LoaiPhongFilterItem65130650
     {
         public string MaLoaiPhong { get; set; }
         public string TenLoaiPhong { get; set; }

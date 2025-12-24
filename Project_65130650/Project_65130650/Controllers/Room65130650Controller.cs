@@ -137,7 +137,7 @@ namespace Project_65130650.Controllers
                         }
                     }
 
-                    return new RoomTypeItemViewModel
+                    return new RoomTypeItemViewModel65130650
                     {
                         MaLoaiPhong = x.LoaiPhong.maLoaiPhong,
                         TenLoaiPhong = x.LoaiPhong.tenLoaiPhong,
@@ -162,7 +162,7 @@ namespace Project_65130650.Controllers
                                   p.trangThai == "Còn trống" &&
                                   (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null))
                               where soPhongTrong > 0
-                              select new LoaiPhongFilterItem
+                              select new LoaiPhongFilterItem65130650
                               {
                                   MaLoaiPhong = lp.maLoaiPhong,
                                   TenLoaiPhong = lp.tenLoaiPhong,
@@ -170,7 +170,7 @@ namespace Project_65130650.Controllers
                               }).ToList();
 
             // Tạo ViewModel
-            var viewModel = new RoomListViewModel
+            var viewModel = new RoomListViewModel65130650
             {
                 Rooms = rooms,
                 CurrentPage = page,

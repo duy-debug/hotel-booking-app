@@ -139,22 +139,23 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\EmailHelper.cs" />
+    <Compile Include="Helpers\RoleAuthorizeAttribute.cs" />
     <Compile Include="Models\DatPhong.cs" />
     <Compile Include="Models\DichVu.cs" />
     <Compile Include="Models\DichVuDatPhong.cs" />
-    <Compile Include="Models\Forms\ForgotPasswordForm.cs" />
-    <Compile Include="Models\Forms\LoginForm.cs" />
-    <Compile Include="Models\Forms\RegisterForm.cs" />
+    <Compile Include="Models\Forms\ForgotPasswordForm65130650.cs" />
+    <Compile Include="Models\Forms\LoginForm65130650.cs" />
+    <Compile Include="Models\Forms\RegisterForm65130650.cs" />
     <Compile Include="Models\LoaiPhong.cs" />
     <Compile Include="Models\Model65130650DbContext.cs" />
     <Compile Include="Models\NguoiDung.cs" />
     <Compile Include="Models\Phong.cs" />
     <Compile Include="Models\ReportModel65130650.cs" />
     <Compile Include="Models\ThanhToan.cs" />
-    <Compile Include="Models\ViewModel\RoomCardViewModel.cs" />
-    <Compile Include="Models\ViewModel\RoomDetailViewModel.cs" />
-    <Compile Include="Models\ViewModel\RoomListViewModel.cs" />
-    <Compile Include="Models\ViewModel\RecentBookingViewModel.cs" />
+    <Compile Include="Models\ViewModel\RoomCardViewModel65130650.cs" />
+    <Compile Include="Models\ViewModel\RoomDetailViewModel65130650.cs" />
+    <Compile Include="Models\ViewModel\RoomListViewModel65130650.cs" />
+    <Compile Include="Models\ViewModel\RecentBookingViewModel65130650.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +245,8 @@
     <Content Include="Areas\Admin\Views\Home65130650\Profile.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Users.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Invoice.cshtml" />
+    <Content Include="AppSettings.config" />
+    <Content Include="AppSettings.config.example" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

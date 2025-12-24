@@ -6,7 +6,7 @@ namespace Project_65130650.Models.Forms
     /// Model đại diện cho form "Đăng nhập"
     /// Được dùng để nhận và kiểm tra tính hợp lệ của thông tin tài khoản
     /// </summary>
-    public class LoginForm
+    public class LoginForm65130650
     {
         [Required(ErrorMessage = "Email không được để trống")]
         [EmailAddress(ErrorMessage = "Địa chỉ email không đúng định dạng")]

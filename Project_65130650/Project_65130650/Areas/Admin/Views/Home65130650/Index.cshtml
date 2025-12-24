@@ -108,7 +108,7 @@
             </a>
         </div>
         <div class="card-body">
-            @if (ViewBag.RecentBookings != null && ((IEnumerable<RecentBookingViewModel>)ViewBag.RecentBookings).Any())
+            @if (ViewBag.RecentBookings != null && ((IEnumerable<RecentBookingViewModel65130650>)ViewBag.RecentBookings).Any())
             {
                 <div class="table-responsive">
                     <table class="data-table">
@@ -124,7 +124,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var booking in (IEnumerable<RecentBookingViewModel>)ViewBag.RecentBookings)
+                            @foreach (var booking in (IEnumerable<RecentBookingViewModel65130650>)ViewBag.RecentBookings)
                             {
                                 <tr>
                                     <td><span class="badge badge-primary">@booking.MaDatPhong</span></td>

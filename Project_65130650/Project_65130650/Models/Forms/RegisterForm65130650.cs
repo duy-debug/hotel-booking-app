@@ -7,7 +7,7 @@ namespace Project_65130650.Models.Forms
     /// Model đại diện cho form "Đăng ký tài khoản"
     /// Chứa các quy tắc kiểm tra (Validation) cho thông tin khách hàng mới
     /// </summary>
-    public class RegisterForm
+    public class RegisterForm65130650
     {
         [Required(ErrorMessage = "Họ tên không được để trống")]
         [StringLength(100, ErrorMessage = "Họ tên không được vượt quá 100 ký tự")]

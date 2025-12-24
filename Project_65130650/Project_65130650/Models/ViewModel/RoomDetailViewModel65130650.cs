@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Project_65130650.Models.ViewModels
 {
-    public class RoomDetailViewModel
+    public class RoomDetailViewModel65130650
     {
         // Thông tin loại phòng
         public string MaLoaiPhong { get; set; }

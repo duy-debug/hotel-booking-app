@@ -234,7 +234,7 @@
         @@media (max-width: 768px) {
             .auth-card {
                 padding: 28px;
-            }
+            }   
 
             .auth-modal_close {
                 top: 8px;
@@ -246,6 +246,147 @@
         .nav-link-active {
             color: #0ea5e9 !important; /* sky-500 */
             border-bottom-color: #0ea5e9 !important;
+        }
+
+        .user-dropdown-logout:hover {
+            background-color: #fef2f2;
+        }
+
+        .user-dropdown-logout i {
+            color: #ef4444 !important;
+        }
+
+        /* Sync Profile Style with Admin */
+        .user-profile-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 6px 14px;
+            border-radius: 999px;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid #e2e8f0;
+        }
+
+        .user-profile-container:hover {
+            background: #f0f9ff;
+            border-color: #bae6fd;
+        }
+
+        .user-profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0d4ea6, #3da9fc);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(13, 78, 166, 0.15);
+        }
+
+        .user-profile-info {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.2;
+        }
+
+        .user-profile-name {
+            font-weight: 600;
+            font-size: 13px;
+            color: #1e293b;
+        }
+
+        .user-profile-role {
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .user-profile-chevron {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .user-profile-container:hover .user-profile-chevron {
+            transform: translateY(2px);
+            color: #0d4ea6;
+        }
+
+        /* Professional Dropdown Box */
+        .user-dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            min-width: 220px;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .user-profile-container:hover .user-dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Dropdown Items styling */
+        .user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #475569;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .user-dropdown-item:hover {
+            background-color: #f8fafc;
+            color: #0d4ea6;
+        }
+
+        .user-dropdown-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+            color: #94a3b8;
+            transition: color 0.2s ease;
+        }
+
+        .user-dropdown-item:hover i {
+            color: #0d4ea6;
+        }
+
+        .user-dropdown-divider {
+            height: 1px;
+            background-color: #f1f5f9;
+            margin: 4px 0;
+        }
+
+        .user-dropdown-logout {
+            color: #ef4444 !important;
+        }
+
+        .user-dropdown-logout:hover {
+            background-color: #fef2f2;
+        }
+
+        .user-dropdown-logout i {
+            color: #ef4444 !important;
         }
     </style>
  </head>
@@ -269,26 +410,77 @@
 
                 <!-- Menu giữa -->
                 <nav class="hidden md:flex flex-1 justify-center items-center gap-6 text-sm font-medium text-slate-600">
-                    <a href="@Url.Action("Index", "Home")#hotel" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#hotel">Khách Sạn</a>
-                    <a href="@Url.Action("Index", "Home")#rooms" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#rooms">Phòng, Suite & Penthouse</a>
-                    <a href="@Url.Action("Index", "Home")#services" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#services">Dịch Vụ</a>
-                    <a href="@Url.Action("Index", "Home")#location" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#location">Vị Trí</a>
-                    <a href="@Url.Action("Index", "Home")#dining" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#dining">Nhà Hàng & Quầy Bar</a>
-                    <a href="@Url.Action("Index", "Home")#events" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#events">Sự Kiện & Sống Động</a>
+                    <a href="~/Home/Index#hotel" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#hotel">Khách Sạn</a>
+                    <a href="~/Home/Index#rooms" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#rooms">Phòng, Suite & Penthouse</a>
+                    <a href="~/Home/Index#services" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#services">Dịch Vụ</a>
+                    <a href="~/Home/Index#location" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#location">Vị Trí</a>
+                    <a href="~/Home/Index#dining" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#dining">Nhà Hàng & Quầy Bar</a>
+                    <a href="~/Home/Index#events" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#events">Sự Kiện & Sống Động</a>
                 </nav>
-
                 <!-- Nút auth bên phải -->
                 <div class="hidden md:flex items-center gap-3 ml-4">
-                    <button type="button"
-                            class="px-3 py-1.5 text-sm font-medium text-slate-600 border border-sky-200 rounded-full hover:bg-sky-50 transition-colors"
-                            data-open-modal="login">
-                        Đăng nhập
-                    </button>
-                    <button type="button"
-                            class="px-3 py-1.5 text-sm font-medium text-white bg-sky-500 rounded-full hover:bg-sky-600 shadow-sm transition-colors"
-                            data-open-modal="register">
-                        Đăng ký
-                    </button>
+                    <!-- Thêm cụm "Xin chào!" -->
+                    @if (Request.IsAuthenticated && Session["UserName"] != null)
+                    {
+                    <p class="text-sky-600 font-semibold">Xin chào!</p>
+                        <div class="user-profile-container">
+                            <div class="user-profile-avatar">
+                                @Session["UserName"].ToString().Substring(0, 1).ToUpper()
+                            </div>
+                            <div class="user-profile-info">
+                                <span class="user-profile-name">@Session["UserName"]</span>
+                                <span class="user-profile-role">@Session["UserRole"]</span>
+                            </div>
+                            <i class="fas fa-chevron-down user-profile-chevron"></i>
+
+                            <div class="user-dropdown-menu">
+                                @if (Session["UserRole"]?.ToString() == "Quản trị")
+                                {
+                                    <a href="@Url.Action("Index", "Home65130650", new { area = "Admin" })" class="user-dropdown-item font-semibold text-sky-600">
+                                        <i class="fas fa-user-shield text-sky-600"></i>
+                                        <span>Quản trị hệ thống</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("Index", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
+                                        <i class="fas fa-user-circle"></i>
+                                        <span>Quản lý tài khoản</span>
+                                    </a>
+                                    <a href="@Url.Action("Index", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Đơn đặt phòng của tôi</span>
+                                    </a>
+                                }
+                                <a href="@Url.Action("Index", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
+                                    <i class="fas fa-credit-card"></i>
+                                    <span>Thanh toán</span>
+                                </a>
+                                <a href="@Url.Action("Index", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
+                                    <i class="fas fa-headset"></i>
+                                    <span>Liên hệ hỗ trợ</span>
+                                </a>
+                                <div class="user-dropdown-divider"></div>
+                                <a href="@Url.Action("Logout", "Account65130650", new { area = "" })" class="user-dropdown-item user-dropdown-logout font-bold">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>Đăng xuất</span>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <button type="button"
+                                class="px-3 py-1.5 text-sm font-medium text-slate-600 border border-sky-200 rounded-full hover:bg-sky-50 transition-colors"
+                                data-open-modal="login">
+                            Đăng nhập
+                        </button>
+                        <button type="button"
+                                class="px-3 py-1.5 text-sm font-medium text-white bg-sky-500 rounded-full hover:bg-sky-600 shadow-sm transition-colors"
+                                data-open-modal="register">
+                            Đăng ký
+                        </button>
+                    }
                 </div>
             </div>
         </div>
@@ -300,16 +492,112 @@
         </div>
     </main>
 
-        @Html.Partial("~/Views/Account65130650/Login.cshtml", new Project_65130650.Models.Forms.LoginForm())
-        @Html.Partial("~/Views/Account65130650/Register.cshtml", new Project_65130650.Models.Forms.RegisterForm())
+        @Html.Partial("~/Views/Account65130650/Login.cshtml", new Project_65130650.Models.Forms.LoginForm65130650())
+        @Html.Partial("~/Views/Account65130650/Register.cshtml", new Project_65130650.Models.Forms.RegisterForm65130650())
     </main>
 
-    <footer class="bg-white/80 border-t border-slate-200">
-        <div class="w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8 py-4 text-xs text-slate-500 flex items-center justify-between">
-            <p>&copy; @DateTime.Now.Year - Shearaton Hotel Nha Trang. All rights reserved.</p>
-            <span></span>
+    <footer class="landing-footer bg-slate-300 text-slate-600 reveal mt-16 relative overflow-hidden border-t border-slate-200 w-screen left-1/2 -translate-x-1/2">
+    <!-- Subtle accent line -->
+    <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-sky-500/30 to-transparent"></div>
+    
+    <div class="max-w-[85%] mx-auto px-4 pt-16 pb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <!-- Brand Section -->
+            <div class="space-y-6">
+                <a href="#top" class="inline-block group transition-transform duration-300 hover:scale-105">
+                    <img src="@Url.Content("~/Images/logo.png")" alt="Shearaton" class="h-10 w-auto" />
+                </a>
+                <p class="text-sm leading-relaxed text-slate-500">
+                    Trải nghiệm tinh hoa nghỉ dưỡng tại tâm điểm vịnh biển Nha Trang. 
+                    Chúng tôi cam kết mang đến những dịch vụ đẳng cấp quốc tế và sự tận tâm trong từng khoảnh khắc.
+                </p>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/Sheraton" 
+                       class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#1877F2] hover:border-[#1877F2] hover:bg-blue-50 transition-all duration-300 shadow-sm active:scale-90"
+                       title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://www.instagram.com/sheratonhotels/" 
+                       class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#E4405F] hover:border-[#E4405F] hover:bg-pink-50 transition-all duration-300 shadow-sm active:scale-90"
+                       title="Instagram">
+                        <i class="fab fa-instagram text-lg"></i>
+                    </a>
+                    <a href="https://twitter.com/sheratonhotels" 
+                       class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#1DA1F2] hover:border-[#1DA1F2] hover:bg-blue-50 transition-all duration-300 shadow-sm active:scale-90"
+                       title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.youtube.com/user/SheratonHotels" 
+                       class="w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-600 hover:text-[#FF0000] hover:border-[#FF0000] hover:bg-red-50 transition-all duration-300 shadow-sm active:scale-90"
+                       title="Youtube">
+                        <i class="fab fa-youtube text-lg"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="lg:ml-8">
+                <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-8">Khám phá</h4>
+                <ul class="space-y-4 text-sm font-medium">
+                    <li><a href="#hotel" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#hotel">Về khách sạn</a></li>
+                    <li><a href="#rooms" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#rooms">Hạng phòng & Suite</a></li>
+                    <li><a href="#services" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#services">Dịch vụ & Tiện ích</a></li>
+                    <li><a href="#dining" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#dining">Nhà hàng & Quầy Bar</a></li>
+                    <li><a href="#events" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#events">Sự kiện & Hội nghị</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact info -->
+            <div>
+                <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-8">Liên hệ</h4>
+                <ul class="space-y-4 text-sm font-medium">
+                    <li class="flex items-start gap-4">
+                        <i class="fas fa-map-marker-alt text-sky-500 mt-1"></i>
+                        <span class="text-slate-500">26-28 Trần Phú, Lộc Thọ, <br />Nha Trang, Khánh Hòa</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i class="fas fa-phone-alt text-sky-500"></i>
+                        <span class="text-slate-500">+84 258 388 0000</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i class="fas fa-envelope text-sky-500"></i>
+                        <span class="text-slate-500">reservations.nhatrang@sheraton.com</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Opening Hours -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md">
+                <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-6">Thời gian hoạt động</h4>
+                <ul class="space-y-4 text-xs font-medium">
+                    <li class="flex justify-between items-center py-2 border-b border-slate-50">
+                        <span class="text-slate-500">Nhà hàng</span>
+                        <span class="text-slate-900">06:00 - 22:00</span>
+                    </li>
+                    <li class="flex justify-between items-center py-2 border-b border-slate-50">
+                        <span class="text-slate-500">Spa & Wellness</span>
+                        <span class="text-slate-900">08:00 - 21:00</span>
+                    </li>
+                    <li class="flex justify-between items-center py-2 border-b border-slate-50">
+                        <span class="text-slate-500">Hồ bơi</span>
+                        <span class="text-slate-900">06:00 - 19:00</span>
+                    </li>
+                    <li class="flex justify-between items-center py-2">
+                        <span class="text-slate-500">Quầy Bar</span>
+                        <span class="text-slate-900">10:00 - 24:00</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </footer>
+
+        <!-- Bottom section -->
+        <div class="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
+            <p>&copy; @DateTime.Now.Year Shearaton Hotel Nha Trang. All rights reserved.</p>
+            <div class="flex gap-8">
+            </div>
+        </div>
+    </div>
+</footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

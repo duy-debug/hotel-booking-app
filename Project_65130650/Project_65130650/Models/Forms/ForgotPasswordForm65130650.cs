@@ -6,7 +6,7 @@ namespace Project_65130650.Models.Forms
     /// Model đại diện cho form "Quên mật khẩu"
     /// Được dùng để nhận và validate Email người dùng muốn khôi phục
     /// </summary>
-    public class ForgotPasswordForm
+    public class ForgotPasswordForm65130650
     {
         [Required(ErrorMessage = "Vui lòng nhập địa chỉ email")]
         [EmailAddress(ErrorMessage = "Định dạng email không hợp lệ (VD: example@gmail.com)")]
@@ -18,7 +18,7 @@ namespace Project_65130650.Models.Forms
     /// Model đại diện cho form "Đặt lại mật khẩu"
     /// Chứa các thông tin cần thiết để xác thực mã và đổi mật khẩu mới
     /// </summary>
-    public class ResetPasswordForm
+    public class ResetPasswordForm65130650
     {
         // Email của người dùng (thường được truyền ẩn từ bước trước)
         [Required]

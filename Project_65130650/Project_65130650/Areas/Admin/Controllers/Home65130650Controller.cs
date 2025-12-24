@@ -76,7 +76,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                 .OrderByDescending(dp => dp.ngayDat)
                 .Take(10)
                 .ToList()
-                .Select(dp => new RecentBookingViewModel
+                .Select(dp => new RecentBookingViewModel65130650
                 {
                     MaDatPhong = dp.maDatPhong,
                     MaKhachHang = dp.maKhachHang,

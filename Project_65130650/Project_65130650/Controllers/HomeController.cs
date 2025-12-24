@@ -32,7 +32,7 @@ namespace Project_65130650.Controllers
         }
 
         // Hàm lấy 4 phòng tốt nhất (cao cấp nhất) cho trang chủ
-        private List<RoomCardViewModel> GetFeaturedRooms()
+        private List<RoomCardViewModel65130650> GetFeaturedRooms()
         {
             // Query lấy tất cả phòng CÒN TRỐNG đang hoạt động từ database
             var query = from p in _db.Phongs
@@ -40,7 +40,7 @@ namespace Project_65130650.Controllers
                         where (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null)
                               && (lp.trangThaiHoatDong == true || lp.trangThaiHoatDong == null)
                               && p.trangThai == "Còn trống"  // Chỉ lấy phòng còn trống
-                        select new RoomCardViewModel
+                        select new RoomCardViewModel65130650
                         {
                             MaPhong = p.maPhong,
                             SoPhong = p.soPhong,
@@ -70,13 +70,13 @@ namespace Project_65130650.Controllers
         }
 
         // Hàm logic lọc dữ liệu dùng chung (cho trang danh sách phòng)
-        private List<RoomCardViewModel> GetRoomsData(string search, string maLoaiPhong, string trangThai)
+        private List<RoomCardViewModel65130650> GetRoomsData(string search, string maLoaiPhong, string trangThai)
         {
             var query = from p in _db.Phongs
                         join lp in _db.LoaiPhongs on p.maLoaiPhong equals lp.maLoaiPhong
                         where (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null)
                               && (lp.trangThaiHoatDong == true || lp.trangThaiHoatDong == null)
-                        select new RoomCardViewModel
+                        select new RoomCardViewModel65130650
                         {
                             MaPhong = p.maPhong,
                             SoPhong = p.soPhong,
@@ -147,7 +147,7 @@ namespace Project_65130650.Controllers
                 (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null));
 
             // Tạo ViewModel
-            var viewModel = new RoomDetailViewModel
+            var viewModel = new RoomDetailViewModel65130650
             {
                 MaLoaiPhong = loaiPhong.maLoaiPhong,
                 TenLoaiPhong = loaiPhong.tenLoaiPhong,

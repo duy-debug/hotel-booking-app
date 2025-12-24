@@ -38,9 +38,9 @@ namespace Project_65130650.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginForm model, string returnUrl)
+        public ActionResult Login(LoginForm65130650 model, string returnUrl)
         {
-            // Kiểm tra dữ liệu đầu vào theo định nghĩa trong LoginForm
+            // Kiểm tra dữ liệu đầu vào theo định nghĩa trong LoginForm65130650
             if (!ModelState.IsValid) return View(model);
 
             // Kiểm tra thông tin người dùng trong cơ sở dữ liệu
@@ -73,7 +73,7 @@ namespace Project_65130650.Controllers
         /// </summary>
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult LoginAjax(LoginForm model)
+        public ActionResult LoginAjax(LoginForm65130650 model)
         {
             if (!ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace Project_65130650.Controllers
             // Xác định URL chuyển hướng dựa trên vai trò người dùng
             string redirectUrl = user.vaiTro == "Quản trị"
                 ? Url.Action("Index", "Home65130650", new { area = "Admin" })
-                : Url.Action("Index", "Home65130650", new { area = "Customer" });
+                : Url.Action("Index", "Home", new { area = "" });
 
             return Json(new { success = true, redirectUrl = redirectUrl });
         }
@@ -147,7 +147,7 @@ namespace Project_65130650.Controllers
             if (role == "Quản trị")
                 return RedirectToAction("Index", "Home65130650", new { area = "Admin" });
             
-            return RedirectToAction("Index", "Home65130650", new { area = "Customer" });
+            return RedirectToAction("Index", "Home", new { area = "" });
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Project_65130650.Controllers
         /// </summary>
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult RegisterAjax(RegisterForm model)
+        public ActionResult RegisterAjax(RegisterForm65130650 model)
         {
             if (!ModelState.IsValid)
             {
@@ -184,7 +184,7 @@ namespace Project_65130650.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Register(RegisterForm model)
+        public ActionResult Register(RegisterForm65130650 model)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -213,7 +213,7 @@ namespace Project_65130650.Controllers
         /// <summary>
         /// Kiểm tra xem thông tin đăng ký có hợp lệ và duy nhất không (Email, SĐT)
         /// </summary>
-        private bool IsRegistrationValid(RegisterForm model, out string errorMessage)
+        private bool IsRegistrationValid(RegisterForm65130650 model, out string errorMessage)
         {
             errorMessage = "";
             if (db.NguoiDungs.Any(u => u.email == model.Email))
@@ -232,7 +232,7 @@ namespace Project_65130650.Controllers
         /// <summary>
         /// Lưu người dùng mới vào database
         /// </summary>
-        private void CreateNewUser(RegisterForm model)
+        private void CreateNewUser(RegisterForm65130650 model)
         {
             var newUser = new NguoiDung
             {
@@ -257,7 +257,6 @@ namespace Project_65130650.Controllers
         /// <summary>
         /// GET: Logout - Đăng xuất người dùng khỏi hệ thống
         /// </summary>
-        [Authorize]
         public ActionResult Logout()
         {
             // Xóa Authentication Ticket
@@ -306,7 +305,7 @@ namespace Project_65130650.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordForm model)
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordForm65130650 model)
         {
             if (ModelState.IsValid)
             {
@@ -320,7 +319,7 @@ namespace Project_65130650.Controllers
                     // Lưu mã xác nhận và thời gian hết hạn vào Session
                     Session["ResetEmail"] = model.Email;
                     Session["ResetCode"] = verificationCode;
-                    Session["ResetCodeExpiry"] = DateTime.Now.AddMinutes(5); // Hết hạn sau 5 phút
+                    Session["ResetCodeExpiry"] = DateTime.Now.AddMinutes(1); // Hết hạn sau 5 phút
 
                     // Soạn nội dung email (Sử dụng HTML để định dạng đẹp)
                     string subject = "Mã xác nhận khôi phục mật khẩu";
@@ -332,7 +331,7 @@ namespace Project_65130650.Controllers
                             <div style='background-color: #f4f4f4; padding: 15px; text-align: center; font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #d9534f; border-radius: 5px;'>
                                 {verificationCode}
                             </div>
-                            <p style='margin-top: 20px;'>Mã này sẽ hết hạn sau 5 phút.</p>
+                            <p style='margin-top: 20px;'>Mã này sẽ hết hạn sau 1 phút.</p>
                             <p>Nếu bạn không yêu cầu thay đổi này, vui lòng bỏ qua email này.</p>
                             <hr style='border: 0; border-top: 1px solid #eee; margin: 20px 0;'>
                             <p style='font-size: 12px; color: #777;'>Đây là email tự động, vui lòng không phản hồi.</p>
@@ -366,7 +365,7 @@ namespace Project_65130650.Controllers
         public ActionResult ResetPassword(string email)
         {
             if (string.IsNullOrEmpty(email)) return RedirectToAction("ForgotPassword");
-            return View(new ResetPasswordForm { Email = email });
+            return View(new ResetPasswordForm65130650 { Email = email });
         }
 
         /// <summary>
@@ -375,7 +374,7 @@ namespace Project_65130650.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult ResetPassword(ResetPasswordForm model)
+        public ActionResult ResetPassword(ResetPasswordForm65130650 model)
         {
             if (ModelState.IsValid)
             {

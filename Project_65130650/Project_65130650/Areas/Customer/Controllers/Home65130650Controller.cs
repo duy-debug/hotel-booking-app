@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Project_65130650.Helpers;
 
 namespace Project_65130650.Areas.Customer.Controllers
 {
@@ -10,7 +11,7 @@ namespace Project_65130650.Areas.Customer.Controllers
     /// Controller chính cho khu vực Khách hàng (Customer Area)
     /// Sử dụng Attribute [Authorize] để đảm bảo chỉ những người dùng có vai trò "Khách hàng" mới có thể truy cập
     /// </summary>
-    [Authorize(Roles = "Khách hàng")]
+    [RoleAuthorize(Roles = "Khách hàng")]
     public class Home65130650Controller : Controller
     {
         /// <summary>

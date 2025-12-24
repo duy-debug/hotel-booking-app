@@ -1,0 +1,14 @@
+# ASP.NET / Visual Studio junk
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Sensitive files
+Project_65130650/Project_65130650/AppSettings.config
+
+# Do NOT ignore the example file
+!Project_65130650/Project_65130650/AppSettings.config.example
