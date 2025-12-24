@@ -247,6 +247,10 @@
     <Content Include="Areas\Admin\Views\Home65130650\Invoice.cshtml" />
     <Content Include="AppSettings.config" />
     <Content Include="AppSettings.config.example" />
+    <Content Include="Areas\Customer\Views\Home65130650\MyBookings.cshtml" />
+    <Content Include="Areas\Customer\Views\Home65130650\Payment.cshtml" />
+    <Content Include="Areas\Customer\Views\Home65130650\Support.cshtml" />
+    <Content Include="Areas\Customer\Views\Home65130650\AccountManagement.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

@@ -1,8 +1,130 @@
-﻿
+﻿@model Project_65130650.Models.NguoiDung
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Tổng quan tài khoản";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Welcome Header -->
+    <div class="bg-gradient-to-r from-sky-600 to-blue-700 rounded-3xl p-8 sm:p-12 text-white shadow-xl mb-10 relative overflow-hidden">
+        <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl"></div>
+        
+        <div class="relative z-10 flex flex-col sm:flex-row items-center sm:items-start gap-6">
+            <div class="w-24 h-24 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-4xl font-bold border-2 border-white/30 shadow-lg">
+                @if (Model != null && !string.IsNullOrEmpty(Model.hoTen))
+                {
+                    @(Model.hoTen.Substring(0, 1).ToUpper())
+                }
+                else
+                {
+                    <i class="fas fa-user"></i>
+                }
+            </div>
+            <div class="text-center sm:text-left">
+                <h1 class="text-3xl sm:text-4xl font-bold mb-2">Xin chào, @(Model?.hoTen ?? "Quý khách")!</h1>
+                <p class="text-blue-100 text-lg opacity-90 max-w-2xl">Chào mừng bạn trở lại với Shearaton Hotel Nha Trang. Chúc bạn có những trải nghiệm nghỉ dưỡng tuyệt vời.</p>
+                <div class="mt-6 flex flex-wrap justify-center sm:justify-start gap-3">
+                    <span class="px-4 py-1.5 bg-white/10 rounded-full text-sm font-medium border border-white/20 backdrop-blur-md">
+                        <i class="fas fa-crown text-yellow-300 mr-2"></i>Thành viên @(Model?.vaiTro ?? "Khách hàng")
+                    </span>
+                    <span class="px-4 py-1.5 bg-white/10 rounded-full text-sm font-medium border border-white/20 backdrop-blur-md">
+                        <i class="fas fa-envelope text-sky-200 mr-2"></i>@(Model?.email)
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Dashboard Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Account Management Card -->
+        <a href="@Url.Action("AccountManagement", "Home65130650", new { area = "Customer" })" 
+           class="group bg-white rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_40px_rgba(13,78,166,0.08)] hover:-translate-y-1 transition-all duration-300">
+            <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform duration-300 group-hover:bg-blue-600 group-hover:text-white">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-blue-700">Thông tin cá nhân</h3>
+            <p class="text-slate-500 text-sm leading-relaxed mb-4">Cập nhật hồ sơ, thay đổi mật khẩu và quản lý thông tin liên hệ của bạn.</p>
+            <div class="flex items-center text-blue-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                <span>Quản lý ngay</span>
+                <i class="fas fa-arrow-right ml-1 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"></i>
+            </div>
+        </a>
+
+        <!-- My Bookings Card -->
+        <a href="@Url.Action("MyBookings", "Home65130650", new { area = "Customer" })" 
+           class="group bg-white rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_40px_rgba(13,78,166,0.08)] hover:-translate-y-1 transition-all duration-300">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform duration-300 group-hover:bg-emerald-600 group-hover:text-white">
+                <i class="fas fa-calendar-check"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-emerald-700">Đơn đặt phòng</h3>
+            <p class="text-slate-500 text-sm leading-relaxed mb-4">Xem lại lịch sử đặt phòng, quản lý các chuyến đi sắp tới và trạng thái phòng.</p>
+            <div class="flex items-center text-emerald-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                <span>Xem lịch sử</span>
+                <i class="fas fa-arrow-right ml-1 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"></i>
+            </div>
+        </a>
+
+        <!-- Payment Card -->
+        <a href="@Url.Action("Payment", "Home65130650", new { area = "Customer" })" 
+           class="group bg-white rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_40px_rgba(13,78,166,0.08)] hover:-translate-y-1 transition-all duration-300">
+            <div class="w-14 h-14 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform duration-300 group-hover:bg-purple-600 group-hover:text-white">
+                <i class="fas fa-credit-card"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-purple-700">Thanh toán & Ví</h3>
+            <p class="text-slate-500 text-sm leading-relaxed mb-4">Quản lý phương thức thanh toán, xem lịch sử giao dịch và hóa đơn điện tử.</p>
+            <div class="flex items-center text-purple-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                <span>Chi tiết ví</span>
+                <i class="fas fa-arrow-right ml-1 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"></i>
+            </div>
+        </a>
+
+        <!-- Support Card -->
+        <a href="@Url.Action("Support", "Home65130650", new { area = "Customer" })" 
+           class="group bg-white rounded-2xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.04)] border border-slate-100 hover:shadow-[0_20px_40px_rgba(13,78,166,0.08)] hover:-translate-y-1 transition-all duration-300">
+            <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform duration-300 group-hover:bg-amber-500 group-hover:text-white">
+                <i class="fas fa-headset"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-amber-600">Hỗ trợ khách hàng</h3>
+            <p class="text-slate-500 text-sm leading-relaxed mb-4">Gửi yêu cầu hỗ trợ, phản hồi dịch vụ hoặc liên hệ trực tiếp với lễ tân.</p>
+            <div class="flex items-center text-amber-600 font-semibold text-sm group-hover:gap-2 transition-all">
+                <span>Liên hệ ngay</span>
+                <i class="fas fa-arrow-right ml-1 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all"></i>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- Quick Actions / Promotions Placeholder -->
+    <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-gradient-to-br from-slate-50 to-white rounded-3xl p-8 border border-slate-100 shadow-sm relative overflow-hidden">
+             <!-- Decor -->
+             <div class="absolute right-0 top-0 w-48 h-48 bg-sky-100 rounded-full -mr-16 -mt-16 opacity-50 blur-2xl"></div>
+
+            <h3 class="text-xl font-bold text-slate-800 mb-4 relative z-10">Khám phá ưu đãi dành riêng cho bạn</h3>
+            <p class="text-slate-500 mb-6 max-w-lg relative z-10">Nâng hạng phòng với mức giá ưu đãi lên đến 20%, hoặc tận hưởng gói Spa miễn phí khi đặt phòng trong tuần này.</p>
+            
+            <a href="@Url.Action("Index", "Room65130650", new { area = "" })" class="inline-flex items-center gap-2 px-6 py-3 bg-sky-600 text-white rounded-xl font-semibold hover:bg-sky-700 transition-colors shadow-lg shadow-sky-200 relative z-10">
+                <i class="fas fa-search"></i> Tìm phòng ngay
+            </a>
+        </div>
+
+        <div class="bg-slate-900 rounded-3xl p-8 text-white relative overflow-hidden flex flex-col justify-center items-center text-center">
+            <div class="absolute inset-0 bg-cover bg-center opacity-40" style="background-image: url(@Url.Content("~/Images/khachsan.jpg"))"></div>
+            <div class="relative z-10">
+                <div class="flex gap-1 mb-4 justify-center">
+                    <i class="fas fa-star text-2xl text-yellow-400"></i>
+                    <i class="fas fa-star text-2xl text-yellow-400"></i>
+                    <i class="fas fa-star text-2xl text-yellow-400"></i>
+                    <i class="fas fa-star text-2xl text-yellow-400"></i>
+                    <i class="fas fa-star text-2xl text-yellow-400"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Đánh giá kỳ nghỉ</h3>
+                <p class="text-slate-300 text-sm mb-4">Chia sẻ trải nghiệm của bạn để giúp chúng tôi phục vụ tốt hơn.</p>
+                <button class="px-5 py-2 bg-white/20 backdrop-blur-md border border-white/30 rounded-lg text-sm font-semibold hover:bg-white hover:text-slate-900 transition-all">Viết đánh giá</button>
+            </div>
+        </div>
+    </div>
+</div>

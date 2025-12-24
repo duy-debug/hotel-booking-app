@@ -444,22 +444,26 @@
                                 else
                                 {
                                     <a href="@Url.Action("Index", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
-                                        <i class="fas fa-user-circle"></i>
-                                        <span>Quản lý tài khoản</span>
+                                        <i class="fas fa-chart-line"></i>
+                                        <span>Trang chủ</span>
                                     </a>
-                                    <a href="@Url.Action("Index", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
+                                    <a href="@Url.Action("AccountManagement", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
+                                        <i class="fas fa-user-circle"></i>
+                                        <span>Thông tin cá nhân</span>
+                                    </a>
+                                    <a href="@Url.Action("MyBookings", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
                                         <i class="fas fa-calendar-alt"></i>
-                                        <span>Đơn đặt phòng của tôi</span>
+                                        <span>Đơn đặt phòng</span>
+                                    </a>
+                                    <a href="@Url.Action("Payment", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
+                                        <i class="fas fa-credit-card"></i>
+                                        <span>Thanh toán</span>
+                                    </a>
+                                    <a href="@Url.Action("Support", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
+                                        <i class="fas fa-headset"></i>
+                                        <span>Liên hệ hỗ trợ</span>
                                     </a>
                                 }
-                                <a href="@Url.Action("Index", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
-                                    <i class="fas fa-credit-card"></i>
-                                    <span>Thanh toán</span>
-                                </a>
-                                <a href="@Url.Action("Index", "Home65130650", new { area = "Customer" })" class="user-dropdown-item">
-                                    <i class="fas fa-headset"></i>
-                                    <span>Liên hệ hỗ trợ</span>
-                                </a>
                                 <div class="user-dropdown-divider"></div>
                                 <a href="@Url.Action("Logout", "Account65130650", new { area = "" })" class="user-dropdown-item user-dropdown-logout font-bold">
                                     <i class="fas fa-sign-out-alt"></i>
@@ -539,11 +543,11 @@
             <div class="lg:ml-8">
                 <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-8">Khám phá</h4>
                 <ul class="space-y-4 text-sm font-medium">
-                    <li><a href="#hotel" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#hotel">Về khách sạn</a></li>
-                    <li><a href="#rooms" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#rooms">Hạng phòng & Suite</a></li>
-                    <li><a href="#services" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#services">Dịch vụ & Tiện ích</a></li>
-                    <li><a href="#dining" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#dining">Nhà hàng & Quầy Bar</a></li>
-                    <li><a href="#events" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#events">Sự kiện & Hội nghị</a></li>
+                    <li><a href="~/Home/Index#hotel" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#hotel">Về khách sạn</a></li>
+                    <li><a href="~/Home/Index#rooms" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#rooms">Hạng phòng & Suite</a></li>
+                    <li><a href="~/Home/Index#services" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#services">Dịch vụ & Tiện ích</a></li>
+                    <li><a href="~/Home/Index#dining" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#dining">Nhà hàng & Quầy Bar</a></li>
+                    <li><a href="~/Home/Index#events" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#events">Sự kiện & Hội nghị</a></li>
                 </ul>
             </div>
 
@@ -788,6 +792,12 @@
         // Handle booking button clicks - check authentication
         (function () {
             document.addEventListener('click', function (e) {
+                // 1. If it's a scroll button (like the Banner button), ignore authentication check
+                // This allows the scroll script (above) to handle it
+                if (e.target.closest('[data-scroll-target]')) {
+                    return;
+                }
+
                 // Check if clicked element is a booking button
                 var bookingBtn = e.target.closest('.btn-book, .btn-book-now');
                 
@@ -801,8 +811,15 @@
                 
                 if (bookingBtn && !bookingBtn.disabled) {
                     e.preventDefault();
-                    // Always show login modal on booking button click as requested
-                    openModal('login');
+                    
+                    if (typeof isUserLoggedIn !== 'undefined' && isUserLoggedIn) {
+                         // Logic cho người đã đăng nhập (sẽ cập nhật sau khi bạn chốt phương án Modal hay Chuyển hướng)
+                         // Hiện tại tạm để console log
+                         console.log("Logged in user clicked booking");
+                         // window.location.href = '@Url.Action("Index", "Home65130650", new { area = "Customer" })';
+                    } else {
+                        openModal('login');
+                    }
                 }
             });
         })();
