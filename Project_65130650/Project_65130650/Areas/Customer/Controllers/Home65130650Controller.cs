@@ -153,10 +153,45 @@ namespace Project_65130650.Areas.Customer.Controllers
         /// GET: Customer/Home65130650/Payment
         /// Trang thanh toán: Quản lý phương thức thanh toán, lịch sử giao dịch
         /// </summary>
-        public ActionResult Payment()
+        public ActionResult Payment(int? page)
         {
+            var userId = Session["UserId"] as string;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account65130650", new { area = "" });
+            }
+
+            // Cấu hình phân trang
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+
+            // Lấy danh sách lịch sử thanh toán của khách hàng
+            var allPayments = db.ThanhToans
+                .Where(t => t.DatPhong.maKhachHang == userId)
+                .OrderByDescending(t => t.ngayThanhToan);
+
+            int totalItems = allPayments.Count();
+            var paymentHistory = allPayments
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Tính toán thống kê chi tiêu (tổng hợp trên toàn bộ dữ liệu, không chỉ trang hiện tại)
+            ViewBag.TotalSpent = allPayments
+                .Where(p => p.trangThaiThanhToan != null && 
+                           (p.trangThaiThanhToan.ToLower().Contains("thành công") || 
+                            p.trangThaiThanhToan.ToLower().Contains("đã thanh toán")))
+                .Sum(p => (decimal?)p.soTien) ?? 0;
+            
+            ViewBag.TransactionCount = totalItems;
             ViewBag.UserName = Session["UserName"];
-            return View();
+            
+            // Thông tin phân trang
+            ViewBag.CurrentPage = pageNumber;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            ViewBag.PageSize = pageSize;
+
+            return View(paymentHistory);
         }
 
         /// <summary>

@@ -1,8 +1,376 @@
 ﻿
 @{
-    ViewBag.Title = "Support";
+    ViewBag.Title = "Liên Hệ Hỗ Trợ";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Support</h2>
+@section Styles {
+    <style>
+        .support-hero {
+            background: linear-gradient(135deg, #0d4ea6 0%, #3da9fc 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .support-hero::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+        }
+
+        .contact-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.08);
+            border-color: #bae6fd;
+        }
+
+        .contact-icon {
+            width: 56px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            font-size: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover .contact-icon {
+            transform: scale(1.1) rotate(8deg);
+        }
+
+        .form-glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .input-focus-effect:focus {
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+        }
+
+        .social-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        .btn-facebook:hover { background: #1877F2; }
+        .btn-instagram:hover { background: #E4405F; }
+        .btn-twitter:hover { background: #1DA1F2; }
+        .btn-youtube:hover { background: #FF0000; }
+
+        @@keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* FAQ Accordion Styles */
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-trigger {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .faq-question {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1e293b;
+            transition: color 0.3s ease;
+        }
+
+        .faq-trigger:hover .faq-question {
+            color: #0d4ea6;
+        }
+
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #f1f5f9;
+            color: #64748b;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+            background: #0d4ea6;
+            color: white;
+        }
+
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+        }
+
+        .faq-item.active .faq-content {
+            max-height: 500px;
+            opacity: 1;
+            padding-bottom: 24px;
+        }
+
+        .faq-answer {
+            color: #64748b;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+    </style>
+}
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-12">
+    <!-- Hero Section -->
+    <div class="support-hero rounded-[2rem] py-16 px-8 text-center text-white mb-16 mt-8 reveal-up">
+        <h1 class="text-4xl md:text-5xl font-bold font-outfit mb-4">Chào @ViewBag.UserName, chúng tôi có thể giúp gì?</h1>
+        <p class="text-sky-100 text-lg max-w-2xl mx-auto">
+            Đội ngũ chăm sóc khách hàng của Shearaton Nha Trang luôn sẵn sàng hỗ trợ bạn 24/7. 
+            Đừng ngần ngại liên hệ với chúng tôi bất cứ lúc nào.
+        </p>
+    </div>
+
+    <!-- Quick Contact Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <!-- Phone Support -->
+        <div class="contact-card bg-white p-8 rounded-3xl reveal-up" style="animation-delay: 0.1s">
+            <div class="contact-icon bg-sky-50 text-sky-600 mb-6">
+                <i class="fas fa-phone-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Gọi trực tiếp</h3>
+            <p class="text-slate-500 mb-6 text-sm">Hỗ trợ nhanh chóng qua hotline 24/7 của chúng tôi.</p>
+            <a href="tel:+842583880000" class="text-sky-600 font-bold text-lg hover:underline transition-all">
+                +84 258 388 0000
+            </a>
+        </div>
+
+        <!-- Email Support -->
+        <div class="contact-card bg-white p-8 rounded-3xl reveal-up" style="animation-delay: 0.2s">
+            <div class="contact-icon bg-indigo-50 text-indigo-600 mb-6">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Gửi Email</h3>
+            <p class="text-slate-500 mb-6 text-sm">Gửi yêu cầu chi tiết, chúng tôi sẽ phản hồi trong 24h.</p>
+            <a href="mailto:support.nhatrang@sheraton.com" class="text-indigo-600 font-bold text-lg hover:underline transition-all truncate block">
+                support.nhatrang@sheraton.com
+            </a>
+        </div>
+
+        <!-- Office Support -->
+        <div class="contact-card bg-white p-8 rounded-3xl reveal-up" style="animation-delay: 0.3s">
+            <div class="contact-icon bg-emerald-50 text-emerald-600 mb-6">
+                <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900 mb-2">Vị trí</h3>
+            <p class="text-slate-500 mb-6 text-sm">Ghé thăm trực tiếp quầy lễ tân tại khách sạn.</p>
+            <a href="https://www.google.com/maps/search/?api=1&query=Sheraton+Nha+Trang+Hotel+26-28+Trần+Phú+Nha+Trang" target="_blank" class="text-emerald-600 font-bold text-lg hover:underline transition-all block">
+                26-28 Trần Phú, Lộc Thọ,<br />Nha Trang, Khánh Hòa
+            </a>
+        </div>
+    </div>
+
+    <!-- Contact Form Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-start">
+        <!-- Left: FAQ Section -->
+        <div class="lg:col-span-3 bg-white border border-slate-200 p-8 md:p-12 rounded-[2.5rem] reveal-up shadow-sm" style="animation-delay: 0.4s">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-12 h-12 rounded-2xl bg-sky-100 text-sky-600 flex items-center justify-center text-xl">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900">Câu hỏi thường gặp</h2>
+                    <p class="text-slate-500">Tìm câu trả lời nhanh cho các thắc mắc phổ biến nhất.</p>
+                </div>
+            </div>
+
+            <div class="faq-container">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span class="faq-question">Tôi có thể nhận phòng sớm hoặc trả phòng muộn không?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down text-xs"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p class="faq-answer">
+                            Thời gian nhận phòng tiêu chuẩn là 14:00 và trả phòng là 12:00. Yêu cầu nhận phòng sớm hoặc trả phòng muộn tùy thuộc vào tình trạng phòng trống và có thể tính thêm phí. Vui lòng liên hệ lễ tân để được hỗ trợ tốt nhất.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span class="faq-question">Thủ tục hủy phòng và hoàn tiền như thế nào?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down text-xs"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p class="faq-answer">
+                            Chính sách hủy phòng áp dụng tùy theo loại giá bạn đã đặt. Thông thường, bạn có thể hủy miễn phí trước 48 giờ đối với các yêu cầu đặt phòng thông thường. Các đơn phòng khuyến mãi "Không hoàn lại" sẽ không được áp dụng hoàn tiền khi hủy.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span class="faq-question">Khách sạn có cung cấp dịch vụ đưa đón sân bay không?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down text-xs"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p class="faq-answer">
+                            Có, Shearaton Nha Trang cung cấp dịch vụ đưa đón sân bay Cam Ranh (CXR) bằng xe riêng sang trọng. Để đảm bảo dịch vụ, vui lòng thông báo chi tiết chuyến bay của bạn cho chúng tôi ít nhất 24 giờ trước khi đến.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span class="faq-question">Tôi có thể thanh toán bằng những phương thức nào?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down text-xs"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p class="faq-answer">
+                            Chúng tôi chấp nhận nhiều phương thức thanh toán linh hoạt: Thẻ tín dụng/ghi nợ (Visa, Mastercard, JCB, Amex), Chuyển khoản ngân hàng, Tiền mặt và các loại Ví điện tử phổ biến tại Việt Nam.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="faq-item">
+                    <button class="faq-trigger">
+                        <span class="faq-question">Trẻ em có được lưu trú miễn phí không?</span>
+                        <span class="faq-icon"><i class="fas fa-chevron-down text-xs"></i></span>
+                    </button>
+                    <div class="faq-content">
+                        <p class="faq-answer">
+                            Trẻ em dưới 6 tuổi được lưu trú miễn phí khi sử dụng giường có sẵn với bố mẹ. Trẻ từ 6-12 tuổi có thể tính thêm phụ phí ăn sáng hoặc giường phụ tùy thuộc vào chính sách của từng hạng phòng.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-300 flex items-center justify-between gap-4">
+                <p class="text-slate-600 text-sm">Không tìm thấy câu trả lời bạn cần?</p>
+                <a href="tel:+842583880000" class="px-6 py-2.5 bg-sky-600 text-white text-sm font-bold rounded-xl hover:bg-sky-700 transition-all shadow-md shadow-sky-100 flex items-center gap-2">
+                    <i class="fas fa-headset"></i>
+                    Gặp nhân viên hỗ trợ
+                </a>
+            </div>
+        </div>
+
+        <!-- Right: FAQ & Socials -->
+        <div class="lg:col-span-2 space-y-8 reveal-up" style="animation-delay: 0.5s">
+            <!-- Social Media -->
+            <div class="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                <h4 class="text-xl font-bold text-slate-900 mb-6">Kết nối với chúng tôi</h4>
+                <p class="text-slate-500 text-sm mb-6">Theo dõi các kênh mạng xã hội để cập nhật khuyến mãi và sự kiện mới nhất.</p>
+                <div class="flex gap-4">
+                    <a href="https://www.facebook.com/Sheraton" class="social-btn btn-facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/sheratonhotels/" class="social-btn btn-instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com/sheratonhotels" class="social-btn btn-twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.youtube.com/user/SheratonHotels" class="social-btn btn-youtube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Operating Hours -->
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 p-8 rounded-[2rem] text-white shadow-xl">
+                <h4 class="text-xl font-bold mb-6">Thời gian làm việc</h4>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center py-2 border-b border-white/10">
+                        <span class="text-slate-400 text-sm">Hỗ trợ Online</span>
+                        <span class="font-semibold">24/7</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-white/10">
+                        <span class="text-slate-400 text-sm">Tư vấn trực tiếp</span>
+                        <span class="font-semibold">06:00 - 22:00</span>
+                    </div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-white/10 flex items-start gap-4">
+                    <div class="w-10 h-10 rounded-full bg-sky-500/20 flex items-center justify-center text-sky-400 shrink-0">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Các phản hồi qua Email thường được xử lý nhanh nhất trong giờ hành chính từ Thứ 2 đến Thứ 7.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Help Image -->
+            <div class="relative rounded-[2rem] overflow-hidden group">
+                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80" 
+                     alt="Support team" class="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent flex items-end p-6">
+                    <span class="text-white font-medium text-sm">Luôn đồng hành cùng trải nghiệm của bạn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Handle FAQ Accordion
+        document.querySelectorAll('.faq-trigger').forEach(trigger => {
+            trigger.addEventListener('click', () => {
+                const item = trigger.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                // Close all other items
+                document.querySelectorAll('.faq-item').forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                });
+                
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+}
 

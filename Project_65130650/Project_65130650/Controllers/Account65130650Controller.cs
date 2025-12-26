@@ -120,7 +120,7 @@ namespace Project_65130650.Controllers
                 1,
                 user.email,
                 DateTime.Now,
-                DateTime.Now.AddMinutes(30), // Thời gian hết hạn login
+                DateTime.Now.AddMinutes(5), // Thời gian hết hạn login
                 rememberMe,
                 user.vaiTro, // Lưu vai trò vào userdata của ticket
                 FormsAuthentication.FormsCookiePath
@@ -319,7 +319,7 @@ namespace Project_65130650.Controllers
                     // Lưu mã xác nhận và thời gian hết hạn vào Session
                     Session["ResetEmail"] = model.Email;
                     Session["ResetCode"] = verificationCode;
-                    Session["ResetCodeExpiry"] = DateTime.Now.AddMinutes(1); // Hết hạn sau 5 phút
+                    Session["ResetCodeExpiry"] = DateTime.Now.AddMinutes(5); // Hết hạn sau 5 phút
 
                     // Soạn nội dung email (Sử dụng HTML để định dạng đẹp)
                     string subject = "Mã xác nhận khôi phục mật khẩu";
