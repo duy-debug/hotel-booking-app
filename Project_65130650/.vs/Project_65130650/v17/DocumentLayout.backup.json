@@ -70,7 +70,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -79,19 +79,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\Views\\Home65130650\\Index.cshtml",
-              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Customer\\Views\\Home65130650\\Index.cshtml",
-              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\Views\\Home65130650\\Index.cshtml",
-              "RelativeToolTip": "Project_65130650\\Areas\\Customer\\Views\\Home65130650\\Index.cshtml",
-              "ViewState": "AgIAAD8AAAAAAAAAAAAuwFkAAABvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-24T07:14:25.318Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Bookmark",
@@ -104,6 +91,19 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\Views\\Home65130650\\Index.cshtml",
+              "RelativeDocumentMoniker": "Project_65130650\\Areas\\Customer\\Views\\Home65130650\\Index.cshtml",
+              "ToolTip": "D:\\NTU\\AcademicYear_2025_2026\\Semester1\\Hotel_booking_management\\Project_65130650\\Project_65130650\\Areas\\Customer\\Views\\Home65130650\\Index.cshtml",
+              "RelativeToolTip": "Project_65130650\\Areas\\Customer\\Views\\Home65130650\\Index.cshtml",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAuwFAAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-12-24T07:14:25.318Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

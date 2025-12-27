@@ -141,12 +141,180 @@ namespace Project_65130650.Areas.Customer.Controllers
         /// GET: Customer/Home65130650/MyBookings
         /// Quản lý đơn đặt phòng của tôi: Xem lịch sử, trạng thái đơn hàng
         /// </summary>
-        public ActionResult MyBookings()
+        /// <param name="page">Số trang hiện tại</param>
+        /// <param name="status">Lọc theo trạng thái đơn đặt phòng</param>
+        public ActionResult MyBookings(int? page, string status)
         {
+            var userId = Session["UserId"] as string;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account65130650", new { area = "" });
+            }
+
+            // Cấu hình phân trang
+            int pageSize = 5;
+            int pageNumber = page ?? 1;
+
+            // Lấy tất cả đơn đặt phòng của khách hàng
+            var allBookings = db.DatPhongs
+                .Where(b => b.maKhachHang == userId)
+                .OrderByDescending(b => b.ngayDat);
+
+            // Thống kê theo trạng thái (dùng toàn bộ dữ liệu)
+            var allBookingsList = allBookings.ToList();
+            ViewBag.TotalBookings = allBookingsList.Count;
+            ViewBag.PendingCount = allBookingsList.Count(b => b.trangThaiDatPhong == "Chờ xác nhận");
+            ViewBag.ConfirmedCount = allBookingsList.Count(b => b.trangThaiDatPhong == "Đã xác nhận");
+            ViewBag.CheckedInCount = allBookingsList.Count(b => b.trangThaiDatPhong == "Đã nhận phòng");
+            ViewBag.CheckedOutCount = allBookingsList.Count(b => b.trangThaiDatPhong == "Đã trả phòng");
+            ViewBag.CancelledCount = allBookingsList.Count(b => b.trangThaiDatPhong == "Đã hủy");
+
+            // Tính tổng tiền đã chi tiêu (các đơn đã hoàn thành)
+            ViewBag.TotalSpent = allBookingsList
+                .Where(b => b.trangThaiDatPhong == "Đã trả phòng")
+                .Sum(b => (decimal?)b.tienPhong) ?? 0;
+
+            // Lọc theo trạng thái nếu có
+            IQueryable<DatPhong> filteredBookings = allBookings;
+            if (!string.IsNullOrEmpty(status) && status != "all")
+            {
+                filteredBookings = filteredBookings.Where(b => b.trangThaiDatPhong == status);
+            }
+
+            // Tính toán phân trang
+            int totalItems = filteredBookings.Count();
+            var bookings = filteredBookings
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Thông tin phân trang
+            ViewBag.CurrentPage = pageNumber;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+            ViewBag.PageSize = pageSize;
+            ViewBag.CurrentStatus = status ?? "all";
             ViewBag.UserName = Session["UserName"];
-            ViewBag.UserId = Session["UserId"];
-            // TODO: Truy vấn danh sách booking từ DB theo UserId
-            return View();
+
+            return View(bookings);
+        }
+
+        /// <summary>
+        /// GET: Customer/Home65130650/GetBookingDetails
+        /// Lấy chi tiết đơn đặt phòng dưới dạng JSON (cho modal popup)
+        /// </summary>
+        [HttpGet]
+        public ActionResult GetBookingDetails(string id)
+        {
+            var userId = Session["UserId"] as string;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Json(new { success = false, message = "Vui lòng đăng nhập." }, JsonRequestBehavior.AllowGet);
+            }
+
+            var booking = db.DatPhongs
+                .Where(b => b.maDatPhong == id && b.maKhachHang == userId)
+                .Select(b => new
+                {
+                    b.maDatPhong,
+                    b.ngayNhanPhong,
+                    b.ngayTraPhong,
+                    b.soKhach,
+                    b.tienPhong,
+                    b.tienDatCoc,
+                    b.trangThaiDatPhong,
+                    b.yeuCauDacBiet,
+                    b.ngayDat,
+                    b.lyDoHuy,
+                    b.ngayHuy,
+                    Phong = new
+                    {
+                        b.Phong.soPhong,
+                        b.Phong.tang,
+                        LoaiPhong = new
+                        {
+                            b.Phong.LoaiPhong.tenLoaiPhong,
+                            b.Phong.LoaiPhong.giaCoBan,
+                            b.Phong.LoaiPhong.soNguoiToiDa,
+                            b.Phong.LoaiPhong.dienTichPhong,
+                            b.Phong.LoaiPhong.tienNghi,
+                            b.Phong.LoaiPhong.hinhAnh
+                        }
+                    },
+                    DichVuDatPhongs = b.DichVuDatPhongs.Select(dv => new
+                    {
+                        dv.DichVu.tenDichVu,
+                        dv.soLuong,
+                        dv.donGia,
+                        dv.thanhTien,
+                        dv.ngaySuDung,
+                        dv.ghiChu
+                    }),
+                    ThanhToans = b.ThanhToans.Select(tt => new
+                    {
+                        tt.maThanhToan,
+                        tt.ngayThanhToan,
+                        tt.soTien,
+                        tt.phuongThucThanhToan,
+                        tt.trangThaiThanhToan,
+                        tt.ghiChu
+                    }),
+                    TongTienDichVu = b.DichVuDatPhongs.Sum(dv => (decimal?)dv.thanhTien) ?? 0,
+                    TongDaThanhToan = b.ThanhToans
+                        .Where(tt => tt.trangThaiThanhToan == "Thành công")
+                        .Sum(tt => (decimal?)tt.soTien) ?? 0
+                })
+                .FirstOrDefault();
+
+            if (booking == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy đơn đặt phòng." }, JsonRequestBehavior.AllowGet);
+            }
+
+            return Json(new { success = true, data = booking }, JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// POST: Customer/Home65130650/CancelBooking
+        /// Hủy đơn đặt phòng (chỉ được hủy khi đơn ở trạng thái "Chờ xác nhận")
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CancelBooking(string id, string lyDoHuy)
+        {
+            var userId = Session["UserId"] as string;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Json(new { success = false, message = "Vui lòng đăng nhập." });
+            }
+
+            var booking = db.DatPhongs.FirstOrDefault(b => b.maDatPhong == id && b.maKhachHang == userId);
+            if (booking == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy đơn đặt phòng." });
+            }
+
+            // Chỉ cho phép hủy khi đơn ở trạng thái "Chờ xác nhận"
+            if (booking.trangThaiDatPhong != "Chờ xác nhận")
+            {
+                return Json(new { success = false, message = "Chỉ có thể hủy đơn ở trạng thái 'Chờ xác nhận'. Vui lòng liên hệ lễ tân để được hỗ trợ." });
+            }
+
+            try
+            {
+                booking.trangThaiDatPhong = "Đã hủy";
+                booking.lyDoHuy = lyDoHuy ?? "Khách hàng tự hủy";
+                booking.ngayHuy = DateTime.Now;
+                booking.ngayCapNhat = DateTime.Now;
+
+                db.Entry(booking).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+
+                return Json(new { success = true, message = "Đã hủy đơn đặt phòng thành công." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Lỗi hệ thống: " + ex.Message });
+            }
         }
 
         /// <summary>
