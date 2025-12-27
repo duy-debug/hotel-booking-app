@@ -118,11 +118,13 @@ namespace Project_65130650.Controllers
         // --- HÀM DÙNG CHUNG ĐỂ TỐI ƯU CODE ---
 
         /// <summary>
-        /// Truy vấn thông tin người dùng từ Email và Mật khẩu
+        /// Truy vấn thông tin người dùng từ Email và Mật khẩu (đã băm SHA256)
         /// </summary>
         private NguoiDung GetAuthenticatedUser(string email, string password)
         {
-            return db.NguoiDungs.FirstOrDefault(u => u.email == email && u.matKhau == password);
+            // Băm mật khẩu nhập vào trước khi so sánh với mật khẩu trong database
+            string hashedPassword = PasswordHelper.HashPassword(password);
+            return db.NguoiDungs.FirstOrDefault(u => u.email == email && u.matKhau == hashedPassword);
         }
 
         /// <summary>
@@ -256,7 +258,7 @@ namespace Project_65130650.Controllers
         }
 
         /// <summary>
-        /// Lưu người dùng mới vào database
+        /// Lưu người dùng mới vào database (mật khẩu được băm SHA256)
         /// </summary>
         private void CreateNewUser(RegisterForm65130650 model)
         {
@@ -266,7 +268,7 @@ namespace Project_65130650.Controllers
                 hoTen = model.HoTen,
                 email = model.Email,
                 soDienThoai = model.SoDienThoai,
-                matKhau = model.MatKhau, // Lưu ý: Trong thực tế nên hash mật khẩu
+                matKhau = PasswordHelper.HashPassword(model.MatKhau), // Băm mật khẩu SHA256 trước khi lưu
                 vaiTro = "Khách hàng",
                 diaChi = model.DiaChi,
                 ngaySinh = model.NgaySinh,
@@ -415,8 +417,8 @@ namespace Project_65130650.Controllers
                     var user = db.NguoiDungs.FirstOrDefault(u => u.email == model.Email);
                     if (user != null)
                     {
-                        // Cập nhật mật khẩu mới
-                        user.matKhau = model.NewPassword; 
+                        // Cập nhật mật khẩu mới (băm SHA256 trước khi lưu)
+                        user.matKhau = PasswordHelper.HashPassword(model.NewPassword); 
                         user.ngayCapNhat = DateTime.Now;
                         db.SaveChanges();
 

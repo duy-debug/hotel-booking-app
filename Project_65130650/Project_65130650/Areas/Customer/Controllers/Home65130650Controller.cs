@@ -115,8 +115,8 @@ namespace Project_65130650.Areas.Customer.Controllers
                          TempData["ErrorMessage"] = "Mật khẩu xác nhận không khớp.";
                          return View(user);
                     }
-                    // Cập nhật mật khẩu mới
-                    user.matKhau = NewPassword; 
+                    // Cập nhật mật khẩu mới (băm SHA256 trước khi lưu)
+                    user.matKhau = PasswordHelper.HashPassword(NewPassword); 
                 }
 
                 // Lưu thay đổi vào Database

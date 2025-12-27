@@ -248,6 +248,104 @@
             border-bottom-color: #0ea5e9 !important;
         }
 
+        /* Transparent Header Styles */
+        .header-transparent {
+            background: transparent !important;
+            border-bottom-color: transparent !important;
+            backdrop-filter: none !important;
+        }
+
+        .header-transparent .nav-item {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+
+        .header-transparent .nav-item:hover {
+            color: #38bdf8 !important;
+            border-bottom-color: #38bdf8 !important;
+        }
+
+        .header-transparent .nav-link-active {
+            color: #38bdf8 !important;
+            border-bottom-color: #38bdf8 !important;
+        }
+
+        .header-transparent .user-profile-container {
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .header-transparent .user-profile-container:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .header-transparent .user-profile-name {
+            color: #ffffff;
+        }
+
+        .header-transparent .user-profile-role {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .header-transparent .user-profile-chevron {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .header-transparent .text-sky-600 {
+            color: #38bdf8 !important;
+        }
+
+        .header-transparent button[data-open-modal] {
+            color: rgba(255, 255, 255, 0.9) !important;
+            border-color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        .header-transparent .navbar-logo-container {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-20px);
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-scrolled .navbar-logo-container {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+            pointer-events: auto;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-transparent button[data-open-modal]:hover {
+            background: rgba(255, 255, 255, 0.15) !important;
+        }
+
+        .header-transparent button.bg-sky-500 {
+            background: rgba(56, 189, 248, 0.9) !important;
+        }
+
+        /* Header transition */
+        header {
+            transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        /* Scrolled state with background */
+        .header-scrolled {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-bottom-color: #e2e8f0 !important;
+            backdrop-filter: blur(20px) !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .header-scrolled .nav-item {
+            color: #475569 !important;
+        }
+
+        .header-scrolled .nav-item:hover {
+            color: #0ea5e9 !important;
+            border-bottom-color: #0ea5e9 !important;
+        }
+
         .user-dropdown-logout:hover {
             background-color: #fef2f2;
         }
@@ -399,7 +497,7 @@
         <div class="w-[85%] max-w-none mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center py-3">
                 <!-- Logo + title (trái) -->
-                <div class="flex items-center gap-3">
+                <div class="flex items-center gap-3 navbar-logo-container">
                     <a href="@Url.Action("Index", "Home", new { area = "" })" class="inline-flex items-center">
                         <img src="~/Images/logo.png"
                              alt="Shearaton"
@@ -410,7 +508,7 @@
 
                 <!-- Menu giữa -->
                 <nav class="hidden md:flex flex-1 justify-center items-center gap-6 text-sm font-medium text-slate-600">
-                    <a href="~/Home/Index#hotel" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#hotel">Khách Sạn</a>
+                    <a href="~/Home/Index#top" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#top">Khách Sạn</a>
                     <a href="~/Home/Index#rooms" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#rooms">Phòng, Suite & Penthouse</a>
                     <a href="~/Home/Index#services" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#services">Dịch Vụ</a>
                     <a href="~/Home/Index#location" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#location">Vị Trí</a>
@@ -542,7 +640,7 @@
             <div class="lg:ml-8">
                 <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-8">Khám phá</h4>
                 <ul class="space-y-4 text-sm font-medium">
-                    <li><a href="~/Home/Index#hotel" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#hotel">Về khách sạn</a></li>
+                    <li><a href="~/Home/Index#top" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#top">Về khách sạn</a></li>
                     <li><a href="~/Home/Index#rooms" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#rooms">Hạng phòng & Suite</a></li>
                     <li><a href="~/Home/Index#services" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#services">Dịch vụ & Tiện ích</a></li>
                     <li><a href="~/Home/Index#dining" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#dining">Nhà hàng & Quầy Bar</a></li>
@@ -605,6 +703,40 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script>
+        // ========== TRANSPARENT HEADER ==========
+        (function () {
+            var header = document.querySelector('header');
+            if (!header) return;
+
+            // Kiểm tra xem đang ở trang chủ không
+            function isHomePage() {
+                var path = window.location.pathname.toLowerCase();
+                return path === '/' || path === '/home' || path === '/home/index' || path.endsWith('/');
+            }
+
+            // Chỉ áp dụng transparent header ở trang chủ
+            if (!isHomePage()) return;
+
+            function updateHeaderState() {
+                var scrollY = window.scrollY || window.pageYOffset;
+                var threshold = 100; // Scroll bao nhiêu pixel thì đổi màu
+
+                if (scrollY > threshold) {
+                    header.classList.remove('header-transparent');
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.add('header-transparent');
+                    header.classList.remove('header-scrolled');
+                }
+            }
+
+            // Khởi tạo
+            updateHeaderState();
+
+            // Lắng nghe scroll
+            window.addEventListener('scroll', updateHeaderState, { passive: true });
+        })();
+
         (function () {
             var body = document.body;
 

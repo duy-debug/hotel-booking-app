@@ -6,41 +6,131 @@
 }
 
 <section class="landing-hero" id="top">
-    <div class="landing-hero__content">
-        <p class="eyebrow" >Shearaton Hotel Nha Trang</p>
-        <h1>Trải nghiệm lưu trú 5 sao giữa lòng thành phố</h1>
-        <p class="lead">
-            Khám phá hệ thống phòng sang trọng, ẩm thực tinh tế và các sự kiện sôi động
-            được thiết kế riêng cho từng khoảnh khắc của bạn.
-        </p>
-        <div class="landing-hero__cta">
-            <button class="btn-primary" data-scroll-target="#rooms">Đặt phòng ngay</button>
-            <button class="btn-ghost" data-scroll-target="#hotel">Khám phá khách sạn</button>
+    <!-- Hero Slider Container -->
+    <div class="hero-slider">
+        <!-- Slide 1 -->
+        <div class="hero-slide active" data-slide="0">
+            <div class="hero-slide__background">
+                <img src="~/Images/sheratonnhatrang.jpg" alt="Khách sạn Shearaton" />
+                <div class="hero-slide__overlay"></div>
+            </div>
+            <div class="hero-slide__content">
+                <p class="eyebrow">Shearaton Hotel Nha Trang</p>
+                <h1>Trải nghiệm lưu trú 5 sao giữa lòng thành phố</h1>
+                <p class="lead">
+                    Khám phá hệ thống phòng sang trọng, ẩm thực tinh tế và các sự kiện sôi động
+                    được thiết kế riêng cho từng khoảnh khắc của bạn.
+                </p>
+                <div class="hero-slide__cta">
+                    <button class="btn-primary" data-scroll-target="#rooms">Đặt phòng ngay</button>
+                    <button class="btn-ghost" data-scroll-target="#hotel">Khám phá khách sạn</button>
+                </div>
+            </div>
+            <div class="hero-stats-bar">
+                <div class="hero-stat">
+                    <strong>150K+</strong>
+                    <span>Khách lưu trú</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>98%</strong>
+                    <span>Hài lòng dịch vụ</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>24/7</strong>
+                    <span>Hỗ trợ khách hàng</span>
+                </div>
+            </div>
         </div>
-        <div class="landing-hero__stats">
-            <div>
-                <strong>150K+</strong>
-                <span>Khách lưu trú</span>
+
+        <!-- Slide 2 -->
+        <div class="hero-slide" data-slide="1">
+            <div class="hero-slide__background">
+                <img src="~/Images/sanh.jpg" alt="Sảnh khách sạn" />
+                <div class="hero-slide__overlay"></div>
             </div>
-            <div>
-                <strong>98%</strong>
-                <span>Hài lòng dịch vụ</span>
+            <div class="hero-slide__content">
+                <p class="eyebrow">SHERATON NHA TRANG HOTEL</p>
+                <h1>Sảnh đón tiếp đẳng cấp</h1>
+                <p class="lead">
+                    Ấn tượng đầu tiên hoàn hảo với không gian sảnh rộng lớn, thiết kế hiện đại
+                    kết hợp nét đẹp truyền thống Việt Nam.
+                </p>
+                <div class="hero-slide__cta">
+                    <button class="btn-primary" data-scroll-target="#services">Đặt phòng ngay</button>
+                    <button class="btn-ghost" data-scroll-target="#dining">Nhà hàng & quầy bar</button>
+                </div>
             </div>
-            <div>
-                <strong>24/7</strong>
-                <span>Hỗ trợ khách hàng</span>
+            <div class="hero-stats-bar">
+                <div class="hero-stat">
+                    <strong>150K+</strong>
+                    <span>Khách lưu trú</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>98%</strong>
+                    <span>Hài lòng dịch vụ</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>24/7</strong>
+                    <span>Hỗ trợ khách hàng</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="hero-slide" data-slide="2">
+            <div class="hero-slide__background">
+                <img src="~/Images/sukien.jpg" alt="Sự kiện" />
+                <div class="hero-slide__overlay"></div>
+            </div>
+            <div class="hero-slide__content">
+                <p class="eyebrow">SHERATON HOTEL NHA TRANG</p>
+                <h1>Không gian sự kiện đẳng cấp</h1>
+                <p class="lead">
+                    Tận hưởng khoảnh khắc thư giãn tại sự kiện đẳng cấp, ngắm nhìn toàn cảnh
+                    vịnh Nha Trang tuyệt đẹp từ tầng cao.
+                </p>
+                <div class="hero-slide__cta">
+                    <button class="btn-primary" data-scroll-target="#rooms">Đặt phòng ngay</button>
+                    <button class="btn-ghost" data-scroll-target="#services">Dịch vụ</button>
+                </div>
+            </div>
+            <div class="hero-stats-bar">
+                <div class="hero-stat">
+                    <strong>150K+</strong>
+                    <span>Khách lưu trú</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>98%</strong>
+                    <span>Hài lòng dịch vụ</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>24/7</strong>
+                    <span>Hỗ trợ khách hàng</span>
+                </div>
             </div>
         </div>
     </div>
-    <div class="landing-hero__media">
-        <div class="landing-hero__image-main reveal">
-            <img src="~/Images/khachsan.jpg" alt="Khách sạn Shearaton" />
-        </div>
-        <div class="landing-hero__image-grid">
-            <img src="~/Images/sanhkhachsan.jpg" alt="Sảnh khách sạn" class="reveal" />
-            <img src="~/Images/hoboi.jpg" alt="Hồ bơi ngoài trời" class="reveal" />
-        </div>
+
+    <!-- Slide Navigation Dots với Progress Bar -->
+    <div class="hero-slider__nav">
+        <button class="hero-slider__dot active" data-goto="0">
+            <span class="hero-slider__progress"></span>
+        </button>
+        <button class="hero-slider__dot" data-goto="1">
+            <span class="hero-slider__progress"></span>
+        </button>
+        <button class="hero-slider__dot" data-goto="2">
+            <span class="hero-slider__progress"></span>
+        </button>
     </div>
+
+    <!-- Arrow Controls -->
+    <button class="hero-slider__arrow hero-slider__arrow--prev" aria-label="Previous slide">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="hero-slider__arrow hero-slider__arrow--next" aria-label="Next slide">
+        <i class="fas fa-chevron-right"></i>
+    </button>
 </section>
 
 <section id="hotel" class="section section--alt reveal">
@@ -283,87 +373,317 @@
         }
 
         .landing-hero {
-            display: grid;
-            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-            gap: 40px;
-            align-items: center;
-            padding: 40px 0 32px;
-        }
-
-        .landing-hero__content {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .landing-hero__cta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 8px;
-        }
-
-        .landing-hero__stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 16px;
-            margin-top: 16px;
-        }
-
-        .landing-hero__stats strong {
-            display: block;
-            font-size: 28px;
-            color: #0d4ea6;
-        }
-
-        .landing-hero__stats span {
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .landing-hero__media {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .landing-hero__image-main {
-            border-radius: 24px;
+            position: relative;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            margin-top: -70px; /* Đẩy lên trên để đè header */
+            min-height: 100vh;
             overflow: hidden;
-            box-shadow: 0 30px 80px rgba(15, 23, 42, 0.25);
         }
 
-        .landing-hero__image-main img,
-        .landing-hero__image-grid img {
+        /* Hero Slider */
+        .hero-slider {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hero-slide__background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-slide__background img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
+            transform: scale(1.05);
+            transition: transform 8s ease-out;
         }
 
-        .landing-hero__image-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+        .hero-slide.active .hero-slide__background img {
+            transform: scale(1);
+        }
+
+        .hero-slide__overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(15, 23, 42, 0.35) 50%, rgba(15, 23, 42, 0.55) 100%);
+        }
+
+        .hero-slide__content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 40px 180px;
+            text-align: center;
+            height: 100%;
+            /* Khôi phục hiệu ứng trượt từ dưới lên */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .hero-slide.active .hero-slide__content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-slide h1 {
+            font-size: 56px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.1;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            margin: 0;
+        }
+
+        .hero-slide__cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 24px;
+            justify-content: center;
+        }
+
+        /* Navigation Dots với Progress Bar */
+        .hero-slider__nav {
+            position: absolute;
+            bottom: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
             gap: 12px;
+            z-index: 10;
         }
 
-        .landing-hero__image-grid img {
-            border-radius: 18px;
-            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+        .hero-slider__dot {
+            width: 60px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+            padding: 0;
+        }
+
+        .hero-slider__dot:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-slider__progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .hero-slider__dot.active .hero-slider__progress {
+            animation: progressBar 6s linear forwards;
+        }
+
+        @@keyframes progressBar {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Arrow Controls */
+        .hero-slider__arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .hero-slider__arrow:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .hero-slider__arrow--prev {
+            left: 30px;
+        }
+
+        .hero-slider__arrow--next {
+            right: 30px;
+        }
+
+        /* Stats Bar cố định ở dưới */
+        .hero-stats-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 32px 40px;
+            /* Hoàn toàn trong suốt để ảnh nền hiện lên thực tế nhất */
+            background: transparent;
+            backdrop-filter: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat strong {
+            display: block;
+            font-size: 32px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .hero-stat span {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         .eyebrow {
             text-transform: uppercase;
-            letter-spacing: 0.18em;
-            font-size: 26px;
-            font-weight: 700;
-            color: #0d4ea6;
+            letter-spacing: 0.25em;
+            font-size: 22px;
+            font-weight: 600;
+            color: #bebcbcff !important;
+            margin-bottom: 12px;
+            letter-spacing: 0.15em;
         }
 
         .lead {
-            font-size: 17px;
-            color: #475569;
-            max-width: 520px;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .hero-slide .btn-primary {
+            background: #0B3F84 !important;
+            color: #ffffff;
+            padding: 16px 36px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .hero-slide .btn-primary:hover {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(14, 165, 233, 0.5);
+        }
+
+        .hero-slide .btn-ghost {
+            background: rgba(255, 255, 255, 0.2); /* Nền đục hơn một chút */
+            backdrop-filter: blur(15px); /* Tăng độ nhòe để hiệu ứng mờ rõ rệt hơn */
+            -webkit-backdrop-filter: blur(15px);
+            color: #1c1b1bc2 !important;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 14px 34px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .hero-slide .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        .lead {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .landing-hero .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: #ffffff;
+            padding: 14px 32px;
+            font-size: 16px;
+            box-shadow: 0 8px 24px rgba(14, 165, 233, 0.4);
+        }
+
+        .landing-hero .btn-primary:hover {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(14, 165, 233, 0.5);
+        }
+
+        .landing-hero .btn-ghost {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 14px 32px;
+            font-size: 16px;
+        }
+
+        .landing-hero .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
         .btn-primary,
@@ -726,8 +1046,39 @@
         /* Media Queries */
 
         @@media (max-width: 1024px) {
+            .hero-slider,
             .landing-hero {
-                grid-template-columns: minmax(0, 1fr);
+                min-height: 80vh;
+            }
+
+            .hero-slide h1 {
+                font-size: 40px;
+            }
+
+            .hero-slide__content {
+                padding: 100px 30px 160px;
+            }
+
+            .hero-stats-bar {
+                gap: 40px;
+                padding: 20px 30px;
+            }
+
+            .hero-stat strong {
+                font-size: 26px;
+            }
+
+            .hero-slider__arrow {
+                width: 44px;
+                height: 44px;
+            }
+
+            .hero-slider__arrow--prev {
+                left: 15px;
+            }
+
+            .hero-slider__arrow--next {
+                right: 15px;
             }
 
             .section,
@@ -741,8 +1092,67 @@
         }
 
         @@media (max-width: 640px) {
+            .hero-slider,
             .landing-hero {
-                padding-top: 24px;
+                min-height: 100vh;
+            }
+
+            .hero-slide__content {
+                padding: 80px 20px 180px;
+            }
+
+            .hero-slide h1 {
+                font-size: 28px;
+            }
+            .lead {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .hero-slide__cta {
+                flex-direction: column;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .hero-slide .btn-primary,
+            .hero-slide .btn-ghost {
+                width: 100%;
+                max-width: 260px;
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+
+            .hero-slider__arrow {
+                display: none;
+            }
+
+            .hero-slider__nav {
+                bottom: 130px;
+            }
+
+            .hero-slider__dot {
+                width: 40px;
+            }
+
+            .hero-stats-bar {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 20px;
+                padding: 16px 20px;
+            }
+
+            .hero-stat {
+                flex: 1;
+                min-width: 80px;
+            }
+
+            .hero-stat strong {
+                font-size: 22px;
+            }
+
+            .hero-stat span {
+                font-size: 10px;
             }
 
             .section {
@@ -815,6 +1225,86 @@
             document.querySelectorAll('.reveal').forEach(function (el) {
                 observer.observe(el);
             });
+
+            // ========== HERO SLIDER ==========
+            var slides = document.querySelectorAll('.hero-slide');
+            var dots = document.querySelectorAll('.hero-slider__dot');
+            var prevBtn = document.querySelector('.hero-slider__arrow--prev');
+            var nextBtn = document.querySelector('.hero-slider__arrow--next');
+            var currentSlide = 0;
+            var slideInterval;
+            var slideDuration = 6000; // 6 giây mỗi slide
+
+            function goToSlide(index) {
+                // Xóa active từ tất cả slides và dots
+                slides.forEach(function(slide) {
+                    slide.classList.remove('active');
+                });
+                dots.forEach(function(dot) {
+                    dot.classList.remove('active');
+                    // Reset progress bar animation
+                    var progress = dot.querySelector('.hero-slider__progress');
+                    if (progress) {
+                        progress.style.animation = 'none';
+                        progress.offsetHeight; // Force reflow
+                        progress.style.animation = '';
+                    }
+                });
+
+                // Thêm active cho slide và dot hiện tại
+                currentSlide = index;
+                if (currentSlide >= slides.length) currentSlide = 0;
+                if (currentSlide < 0) currentSlide = slides.length - 1;
+
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+
+            function nextSlide() {
+                goToSlide(currentSlide + 1);
+            }
+
+            function prevSlide() {
+                goToSlide(currentSlide - 1);
+            }
+
+            function startAutoPlay() {
+                stopAutoPlay();
+                slideInterval = setInterval(nextSlide, slideDuration);
+            }
+
+            function stopAutoPlay() {
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                }
+            }
+
+            // Event listeners cho dots
+            dots.forEach(function(dot, index) {
+                dot.addEventListener('click', function() {
+                    goToSlide(index);
+                    startAutoPlay(); // Reset timer khi click
+                });
+            });
+
+            // Event listeners cho arrows
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    prevSlide();
+                    startAutoPlay();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    nextSlide();
+                    startAutoPlay();
+                });
+            }
+
+            // Khởi động slider
+            goToSlide(0);
+            startAutoPlay();
 
             var diningSlider = document.getElementById('diningSlider');
             if (diningSlider) {

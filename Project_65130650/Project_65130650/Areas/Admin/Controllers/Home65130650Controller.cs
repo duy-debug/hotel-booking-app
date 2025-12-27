@@ -8,6 +8,7 @@ using System.Data.Entity.Infrastructure;
 using Project_65130650.Models;
 using System.Net;
 using Project_65130650.Models.ViewModel;
+using Project_65130650.Helpers;
 
 namespace Project_65130650.Areas.Admin.Controllers
 {
@@ -400,7 +401,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                         hoTen = hoTen,
                         soDienThoai = sdt,
                         email = newCustomerId + "sheraton@gmail.com", // Giờ đã có giá trị
-                        matKhau = "Customer@123", // Default password
+                        matKhau = PasswordHelper.HashPassword("Customer@123"), // Default password (băm SHA256)
                         vaiTro = "Khách hàng",
                         trangThaiHoatDong = true,
                         ngayTao = DateTime.Now,
@@ -900,7 +901,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                     hoTen = hoTen,
                     email = email,
                     soDienThoai = soDienThoai,
-                    matKhau = matKhau, // Plain text (nên hash trong thực tế)
+                    matKhau = PasswordHelper.HashPassword(matKhau), // Băm SHA256 trước khi lưu
                     diaChi = diaChi,
                     gioiTinh = !string.IsNullOrEmpty(gioiTinh) ? gioiTinh.Trim() : null,
                     ngaySinh = ngaySinh,
@@ -1045,7 +1046,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                 if (string.IsNullOrEmpty(newPassword) || newPassword.Length < 8)
                     return Json(new { success = false, error = "Mật khẩu mới phải có ít nhất 8 ký tự" });
 
-                user.matKhau = newPassword; // Plain text (nên hash trong thực tế)
+                user.matKhau = PasswordHelper.HashPassword(newPassword); // Băm SHA256 trước khi lưu
                 user.ngayCapNhat = DateTime.Now;
 
                 _db.SaveChanges();
@@ -2152,8 +2153,8 @@ namespace Project_65130650.Areas.Admin.Controllers
                 // Xử lý đổi mật khẩu nếu có
                 if (!string.IsNullOrEmpty(currentPassword) || !string.IsNullOrEmpty(newPassword))
                 {
-                    // Kiểm tra mật khẩu hiện tại (so sánh plain text)
-                    if (user.matKhau != currentPassword)
+                    // Kiểm tra mật khẩu hiện tại (sử dụng PasswordHelper để so sánh hash)
+                    if (!PasswordHelper.VerifyPassword(currentPassword, user.matKhau))
                     {
                         return Json(new { success = false, passwordError = "Mật khẩu hiện tại không đúng" });
                     }
@@ -2165,8 +2166,8 @@ namespace Project_65130650.Areas.Admin.Controllers
                         return Json(new { success = false, passwordError = passwordValidation.ErrorMessage });
                     }
 
-                    // Cập nhật mật khẩu mới (lưu plain text)
-                    user.matKhau = newPassword;
+                    // Cập nhật mật khẩu mới (băm SHA256 trước khi lưu)
+                    user.matKhau = PasswordHelper.HashPassword(newPassword);
                 }
 
                 // Cập nhật thông tin cơ bản
