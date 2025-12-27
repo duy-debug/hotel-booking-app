@@ -112,6 +112,21 @@
                     </div>
                 </div>
 
+                @* Hộp CAPTCHA *@
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label>Mã xác nhận <span style="color: red;">*</span></label>
+                    <div style="display: flex; gap: 10px; align-items: stretch;">
+                        <div class="input-wrapper" style="flex: 1; margin-bottom: 0;">
+                            @Html.TextBoxFor(m => m.Captcha, new { @class = "form-control", placeholder = "Nhập mã", id = "regCaptcha" })
+                            <i class="fas fa-shield-alt input-icon"></i>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; height: 45px; cursor: pointer;" title="Làm mới mã">
+                            <img src="@Url.Action("GetCaptchaImage", "Account65130650")" id="regCaptchaImage" style="height: 100%; display: block;" onclick="refreshCaptcha('regCaptchaImage')" />
+                        </div>
+                    </div>
+                    <span class="field-validation-error" id="regCaptchaError"></span>
+                </div>
+
                 <div style="background: #f8fafc; padding: 12px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #e2e8f0;">
                     <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 13px; cursor: pointer; margin: 0; line-height: 1.4;">
                         @Html.CheckBoxFor(m => m.DongYDieuKhoan, new { id = "agreeTerms", style = "margin-top: 3px;" })
@@ -143,6 +158,12 @@
         var successMessage = document.getElementById('registerSuccessMessage');
         var submitBtn = document.getElementById('registerSubmitBtn');
 
+        // Hàm làm mới CAPTCHA
+        window.refreshCaptcha = function(imgId) {
+            var img = document.getElementById(imgId);
+            img.src = '@Url.Action("GetCaptchaImage", "Account65130650")?' + new Date().getTime();
+        };
+
         function clearErrors() {
             errorContainer.style.display = 'none';
             errorList.innerHTML = '';
@@ -165,6 +186,7 @@
                 var ngaySinh = document.getElementById('regNgaySinh').value;
                 var gioiTinh = document.getElementById('regGioiTinh').value;
                 var dongYDieuKhoan = document.getElementById('agreeTerms').checked;
+                var captcha = document.getElementById('regCaptcha').value.trim();
 
                 var hasError = false;
                 if (!hoTen) { document.getElementById('regHoTenError').textContent = 'Họ tên không được để trống'; hasError = true; }
@@ -179,6 +201,9 @@
                 }
                 if (!xacNhanMatKhau) { document.getElementById('regXacNhanMatKhauError').textContent = 'Vui lòng xác nhận'; hasError = true; }
                 else if (matKhau !== xacNhanMatKhau) { document.getElementById('regXacNhanMatKhauError').textContent = 'Mật khẩu không khớp'; hasError = true; }
+                
+                if (!captcha) { document.getElementById('regCaptchaError').textContent = 'Vui lòng nhập CAPTCHA'; hasError = true; }
+                
                 if (!dongYDieuKhoan) { document.getElementById('regDongYDieuKhoanError').textContent = 'Bạn phải đồng ý với điều khoản'; hasError = true; }
                 if (hasError) return;
 
@@ -214,10 +239,13 @@
                                         response.errors.forEach(function (err) {
                                             var li = document.createElement('li');
                                             li.textContent = err;
-                                            errorList.appendChild(li);
-                                        });
-                                    }
-                                }
+                                             errorList.appendChild(li);
+                                         });
+                                     }
+                                     // Làm mới CAPTCHA khi sai
+                                     refreshCaptcha('regCaptchaImage');
+                                     document.getElementById('regCaptcha').value = '';
+                                 }
                             } catch (ex) {
                                 errorContainer.style.display = 'block';
                                 var li = document.createElement('li');
@@ -242,7 +270,8 @@
                     '&DiaChi=' + encodeURIComponent(diaChi) +
                     '&NgaySinh=' + encodeURIComponent(ngaySinh) +
                     '&GioiTinh=' + encodeURIComponent(gioiTinh) +
-                    '&DongYDieuKhoan=' + dongYDieuKhoan;
+                    '&DongYDieuKhoan=' + dongYDieuKhoan +
+                    '&Captcha=' + encodeURIComponent(captcha);
 
                 xhr.send(data);
             });

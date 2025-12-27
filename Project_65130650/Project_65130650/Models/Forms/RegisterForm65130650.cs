@@ -57,5 +57,9 @@ namespace Project_65130650.Models.Forms
         [Display(Name = "Tôi đồng ý với điều khoản và điều kiện")]
         [Range(typeof(bool), "true", "true", ErrorMessage = "Bạn phải đồng ý với thỏa thuận này")]
         public bool DongYDieuKhoan { get; set; }
+
+        [Required(ErrorMessage = "Vui lòng nhập mã CAPTCHA")]
+        [Display(Name = "Mã xác nhận")]
+        public string Captcha { get; set; }
     }
 }

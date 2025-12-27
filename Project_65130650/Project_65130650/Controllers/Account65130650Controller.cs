@@ -7,6 +7,10 @@ using Project_65130650.Models;
 using Project_65130650.Models.Forms;
 using Project_65130650.Helpers;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Drawing.Drawing2D;
+using System.IO;
 
 namespace Project_65130650.Controllers
 {
@@ -42,6 +46,13 @@ namespace Project_65130650.Controllers
         {
             // Kiểm tra dữ liệu đầu vào theo định nghĩa trong LoginForm65130650
             if (!ModelState.IsValid) return View(model);
+
+            // Kiểm tra CAPTCHA
+            if (Session["CaptchaCode"] == null || model.Captcha != Session["CaptchaCode"].ToString())
+            {
+                ModelState.AddModelError("Captcha", "Mã CAPTCHA không chính xác");
+                return View(model);
+            }
 
             // Kiểm tra thông tin người dùng trong cơ sở dữ liệu
             var user = GetAuthenticatedUser(model.Email, model.MatKhau);
@@ -81,6 +92,10 @@ namespace Project_65130650.Controllers
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Json(new { success = false, errors = errors });
             }
+
+            // Kiểm tra CAPTCHA
+            if (Session["CaptchaCode"] == null || model.Captcha != Session["CaptchaCode"].ToString())
+                return Json(new { success = false, errors = new[] { "Mã CAPTCHA không chính xác" } });
 
             var user = GetAuthenticatedUser(model.Email, model.MatKhau);
             if (user == null)
@@ -163,6 +178,10 @@ namespace Project_65130650.Controllers
                 return Json(new { success = false, errors = errors });
             }
 
+            // Kiểm tra CAPTCHA
+            if (Session["CaptchaCode"] == null || model.Captcha != Session["CaptchaCode"].ToString())
+                return Json(new { success = false, errors = new[] { "Mã CAPTCHA không chính xác" } });
+
             string errorMessage;
             if (!IsRegistrationValid(model, out errorMessage))
                 return Json(new { success = false, errors = new[] { errorMessage } });
@@ -187,6 +206,13 @@ namespace Project_65130650.Controllers
         public ActionResult Register(RegisterForm65130650 model)
         {
             if (!ModelState.IsValid) return View(model);
+
+            // Kiểm tra CAPTCHA
+            if (Session["CaptchaCode"] == null || model.Captcha != Session["CaptchaCode"].ToString())
+            {
+                ModelState.AddModelError("Captcha", "Mã CAPTCHA không chính xác");
+                return View(model);
+            }
 
             string errorMessage;
             if (!IsRegistrationValid(model, out errorMessage))
@@ -422,6 +448,61 @@ namespace Project_65130650.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// Action để tạo hình ảnh CAPTCHA ngẫu nhiên
+        /// </summary>
+        [AllowAnonymous]
+        public ActionResult GetCaptchaImage()
+        {
+            int width = 130;
+            int height = 45;
+            var random = new Random();
+            
+            // Tạo chuỗi ngẫu nhiên (chỉ lấy số để dễ nhập cho người dùng)
+            string captchaCode = random.Next(1000, 9999).ToString();
+            Session["CaptchaCode"] = captchaCode;
+
+            using (Bitmap bitmap = new Bitmap(width, height))
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                // Background
+                g.Clear(Color.White);
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // Vẽ các đường nhiễu (noise)
+                for (int i = 0; i < 15; i++)
+                {
+                    Pen pen = new Pen(Color.FromArgb(random.Next(200, 255), random.Next(150, 220), random.Next(150, 220)), 1);
+                    g.DrawLine(pen, random.Next(width), random.Next(height), random.Next(width), random.Next(height));
+                }
+
+                // Vẽ các chấm nhiễu
+                for (int i = 0; i < 100; i++)
+                {
+                    bitmap.SetPixel(random.Next(width), random.Next(height), Color.FromArgb(random.Next(255), random.Next(255), random.Next(255)));
+                }
+
+                // Vẽ chữ CAPTCHA
+                using (Font font = new Font("Andalus", 24, FontStyle.Bold | FontStyle.Italic))
+                {
+                    Rectangle rect = new Rectangle(0, 0, width, height);
+                    LinearGradientBrush brush = new LinearGradientBrush(rect, Color.FromArgb(random.Next(100), random.Next(100), random.Next(100)), Color.DarkBlue, 1.2f, true);
+                    
+                    // Vẽ từng ký tự để nó hơi nghiêng ngửa
+                    for (int i = 0; i < captchaCode.Length; i++)
+                    {
+                        g.DrawString(captchaCode[i].ToString(), font, brush, 15 + (i * 25), 5 + random.Next(-5, 5));
+                    }
+                }
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    bitmap.Save(ms, ImageFormat.Png);
+                    return File(ms.ToArray(), "image/png");
+                }
+            }
         }
     }
 }

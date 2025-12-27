@@ -67,6 +67,21 @@
                     <a href="@Url.Action("ForgotPassword", "Account65130650")" style="color: #0d4ea6; text-decoration: none; font-weight: 500;">Quên mật khẩu?</a>
                 </div>
 
+                @* Hộp CAPTCHA *@
+                <div class="form-group">
+                    <label>Mã xác nhận <span style="color: red;">*</span></label>
+                    <div style="display: flex; gap: 10px; align-items: stretch;">
+                        <div class="input-wrapper" style="flex: 1; margin-bottom: 0;">
+                            @Html.TextBoxFor(m => m.Captcha, new { @class = "form-control", placeholder = "Nhập mã", id = "loginCaptcha" })
+                            <i class="fas fa-shield-alt input-icon"></i>
+                        </div>
+                        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; height: 45px; cursor: pointer;" title="Làm mới mã">
+                            <img src="@Url.Action("GetCaptchaImage", "Account65130650")" id="loginCaptchaImage" style="height: 100%; display: block;" onclick="refreshCaptcha('loginCaptchaImage')" />
+                        </div>
+                    </div>
+                    <span class="field-validation-error" id="loginCaptchaError"></span>
+                </div>
+
                 <button type="submit" class="btn-primary" id="loginSubmitBtn" style="width: 100%;">
                     <i class="fas fa-sign-in-alt"></i> Đăng Nhập
                 </button>
@@ -92,6 +107,13 @@
         var emailInput = document.getElementById('loginEmail');
         var passwordInput = document.getElementById('loginPassword');
         var rememberCheckbox = document.getElementById('rememberMe');
+        var captchaInput = document.getElementById('loginCaptcha');
+
+        // Hàm làm mới CAPTCHA
+        window.refreshCaptcha = function(imgId) {
+            var img = document.getElementById(imgId);
+            img.src = '@Url.Action("GetCaptchaImage", "Account65130650")?' + new Date().getTime();
+        };
 
         /**
          * TỰ ĐỘNG ĐIỀN THÔNG TIN NẾU ĐÃ CHỌN GHI NHỚ TRƯỚC ĐÓ
@@ -119,11 +141,13 @@
                 errorList.innerHTML = '';
                 document.getElementById('loginEmailError').textContent = '';
                 document.getElementById('loginPasswordError').textContent = '';
+                document.getElementById('loginCaptchaError').textContent = '';
 
                 // Lấy dữ liệu từ các input
                 var email = emailInput.value.trim();
                 var password = passwordInput.value;
                 var rememberMe = rememberCheckbox.checked;
+                var captcha = captchaInput.value.trim();
 
                 // Validate dữ liệu tại Client (Client-side validation)
                 var hasError = false;
@@ -133,6 +157,10 @@
                 }
                 if (!password) {
                     document.getElementById('loginPasswordError').textContent = 'Vui lòng nhập Mật khẩu';
+                    hasError = true;
+                }
+                if (!captcha) {
+                    document.getElementById('loginCaptchaError').textContent = 'Vui lòng nhập mã CAPTCHA';
                     hasError = true;
                 }
                 if (hasError) return;
@@ -185,10 +213,13 @@
                                             var li = document.createElement('li');
                                             li.textContent = err;
                                             errorList.appendChild(li);
-                                        });
-                                    }
-                                }
-                            } catch (ex) {
+                                         });
+                                     }
+                                     // Làm mới CAPTCHA khi sai
+                                     refreshCaptcha('loginCaptchaImage');
+                                     captchaInput.value = '';
+                                 }
+                             } catch (ex) {
                                 errorContainer.style.display = 'block';
                                 var li = document.createElement('li');
                                 li.textContent = 'Lỗi hệ thống khi xử lý dữ liệu';
@@ -207,7 +238,8 @@
                 var data = '__RequestVerificationToken=' + encodeURIComponent(token) +
                     '&Email=' + encodeURIComponent(email) +
                     '&MatKhau=' + encodeURIComponent(password) +
-                    '&RememberMe=' + rememberMe;
+                    '&RememberMe=' + rememberMe +
+                    '&Captcha=' + encodeURIComponent(captcha);
 
                 xhr.send(data);
             });
