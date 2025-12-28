@@ -22,6 +22,8 @@ namespace Project_65130650.Models.ViewModels
         public int? MinCapacity { get; set; }
         public string SortOrder { get; set; } // "price_asc", "price_desc"
         public string Status { get; set; } // "available", "soldout"
+        public DateTime? CheckIn { get; set; }
+        public DateTime? CheckOut { get; set; }
 
         // Danh sách loại phòng cho dropdown filter
         public List<LoaiPhongFilterItem65130650> LoaiPhongs { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 using Project_65130650.Models;
 using Project_65130650.Models.ViewModels;
 
@@ -13,21 +14,58 @@ namespace Project_65130650.Controllers
         private readonly Model65130650DbContext _db = new Model65130650DbContext();
 
         // GET: Room
-        public ActionResult Index(string search, string loaiPhong, decimal? minPrice, decimal? maxPrice, int? minCapacity, string sortOrder, string status, int page = 1)
+        public ActionResult Index(string search, string loaiPhong, decimal? minPrice, decimal? maxPrice, int? minCapacity, string sortOrder, string status, string checkIn, string checkOut, int page = 1)
         {
-            int pageSize = 9; // Số phòng mỗi trang
+            int pageSize = 9; 
 
-            // Query lấy tất cả loại phòng đang hoạt động
+            // Chuyển đổi ngày tháng một cách an toàn
+            DateTime? dIn = null;
+            DateTime? dOut = null;
+
+            if (!string.IsNullOrEmpty(checkIn) && DateTime.TryParse(checkIn, out DateTime parsedIn)) dIn = parsedIn.Date;
+            if (!string.IsNullOrEmpty(checkOut) && DateTime.TryParse(checkOut, out DateTime parsedOut)) dOut = parsedOut.Date;
+
+            // Đảm bảo logic ngày hợp lý
+            if (dIn.HasValue && dOut.HasValue && dIn >= dOut)
+            {
+                dOut = dIn.Value.AddDays(1);
+            }
+
+            // 1. Xác định danh sách mã phòng không khả dụng nếu có chọn ít nhất ngày nhận phòng
+            List<string> unavailableRoomIds = new List<string>();
+            if (dIn.HasValue)
+            {
+                // Nếu khách chỉ chọn ngày nhận, hệ thống giả định khách muốn ở ít nhất 1 đêm 
+                // để kiểm tra xem hôm đó phòng có trống hay không.
+                DateTime effectiveOut = dOut ?? dIn.Value.AddDays(1);
+
+                // Các trạng thái được coi là đang giữ phòng (Theo Database Project_65130650.sql)
+                var busyStatuses = new[] { "Đã xác nhận", "Đã nhận phòng", "Chờ xác nhận" };
+
+                // Logic Overlap: (Ngày nhận cũ < Ngày trả mới) AND (Ngày trả cũ > Ngày nhận mới)
+                unavailableRoomIds = _db.DatPhongs
+                    .Where(dp => busyStatuses.Contains(dp.trangThaiDatPhong))
+                    .Where(dp => DbFunctions.TruncateTime(dp.ngayNhanPhong) < effectiveOut && 
+                                 DbFunctions.TruncateTime(dp.ngayTraPhong) > dIn.Value)
+                    .Select(dp => dp.maPhong)
+                    .Distinct()
+                    .ToList();
+            }
+
+            // 2. Query lấy thông tin loại phòng và tính toán số lượng phòng trống theo điều kiện ngày
             var query = from lp in _db.LoaiPhongs
                         where lp.trangThaiHoatDong == true || lp.trangThaiHoatDong == null
                         select new
                         {
                             LoaiPhong = lp,
-                            // Đếm số phòng còn trống
+                            // Đếm số phòng còn trống (Kích hoạt khi có ít nhất ngày nhận phòng dIn)
                             SoPhongConTrong = _db.Phongs.Count(p =>
                                 p.maLoaiPhong == lp.maLoaiPhong &&
-                                p.trangThai == "Còn trống" &&
-                                (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null)),
+                                (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null) &&
+                                p.trangThai != "Bảo trì" && 
+                                (dIn.HasValue 
+                                    ? !unavailableRoomIds.Contains(p.maPhong) 
+                                    : p.trangThai == "Còn trống")),
                             
                             // Đếm số phòng bảo trì
                             SoPhongBaoTri = _db.Phongs.Count(p =>
@@ -41,7 +79,7 @@ namespace Project_65130650.Controllers
                                 (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null))
                         };
 
-            // Lọc theo trạng thái
+            // Lọc theo trạng thái "available/soldout" dựa trên số phòng trống đã tính ở trên
             if (!string.IsNullOrWhiteSpace(status))
             {
                 status = status.Trim();
@@ -105,7 +143,6 @@ namespace Project_65130650.Controllers
                     query = query.OrderByDescending(x => x.LoaiPhong.giaCoBan);
                     break;
                 default:
-                    // Mặc định: hiển thị theo thứ tự tự nhiên trong database
                     query = query.OrderBy(x => x.LoaiPhong.maLoaiPhong);
                     break;
             }
@@ -123,10 +160,6 @@ namespace Project_65130650.Controllers
                     }
                     else
                     {
-                        // Nếu không còn phòng trống
-                        // Kiểm tra xem có phải tất cả đều bảo trì không?
-                        // Nếu TongSoPhong > 0 và SoPhongBaoTri == TongSoPhong -> Bảo trì
-                        // Ngược lại (có phòng Đã đặt/Đang ở) -> Hết phòng
                         if (x.TongSoPhong > 0 && x.SoPhongBaoTri == x.TongSoPhong)
                         {
                             s = "Bảo trì";
@@ -154,13 +187,14 @@ namespace Project_65130650.Controllers
                 })
                 .ToList();
 
-            // Lấy danh sách loại phòng cho filter
+            // Lấy danh sách loại phòng cho filter (cũng áp dụng logic ngày nếu có)
             var loaiPhongs = (from lp in _db.LoaiPhongs
                               where lp.trangThaiHoatDong == true || lp.trangThaiHoatDong == null
                               let soPhongTrong = _db.Phongs.Count(p =>
                                   p.maLoaiPhong == lp.maLoaiPhong &&
-                                  p.trangThai == "Còn trống" &&
-                                  (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null))
+                                  (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null) &&
+                                  p.trangThai != "Bảo trì" &&
+                                  (dIn.HasValue ? !unavailableRoomIds.Contains(p.maPhong) : p.trangThai == "Còn trống"))
                               where soPhongTrong > 0
                               select new LoaiPhongFilterItem65130650
                               {
@@ -184,6 +218,8 @@ namespace Project_65130650.Controllers
                 MinCapacity = minCapacity,
                 SortOrder = sortOrder,
                 Status = status,
+                CheckIn = dIn,
+                CheckOut = dOut,
                 LoaiPhongs = loaiPhongs
             };
 

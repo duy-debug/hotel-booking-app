@@ -75,7 +75,6 @@ namespace Project_65130650.Controllers
             // Chuyển hướng về trang trước đó hoặc trang mặc định theo vai trò
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
-
             return RedirectToDefaultPage(user.vaiTro);
         }
 
