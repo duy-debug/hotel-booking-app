@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 using Project_65130650.Models;
 using Project_65130650.Models.ViewModels;
 
@@ -118,11 +119,24 @@ namespace Project_65130650.Controllers
         }
 
         // Action hiển thị chi tiết phòng theo mã loại phòng
-        public ActionResult RoomDetail(string id)
+        public ActionResult RoomDetail(string id, string checkIn = null, string checkOut = null)
         {
             if (string.IsNullOrEmpty(id))
             {
                 return RedirectToAction("Index");
+            }
+
+            // Chuyển đổi ngày tháng một cách an toàn
+            DateTime? dIn = null;
+            DateTime? dOut = null;
+
+            if (!string.IsNullOrEmpty(checkIn) && DateTime.TryParse(checkIn, out DateTime parsedIn)) dIn = parsedIn.Date;
+            if (!string.IsNullOrEmpty(checkOut) && DateTime.TryParse(checkOut, out DateTime parsedOut)) dOut = parsedOut.Date;
+
+            // Đảm bảo logic ngày hợp lý
+            if (dIn.HasValue && dOut.HasValue && dIn >= dOut)
+            {
+                dOut = dIn.Value.AddDays(1);
             }
 
             // Lấy thông tin loại phòng
@@ -135,11 +149,37 @@ namespace Project_65130650.Controllers
                 return HttpNotFound("Không tìm thấy loại phòng.");
             }
 
-            // Đếm số phòng còn trống của loại phòng này
-            var soPhongConTrong = _db.Phongs.Count(p => 
-                p.maLoaiPhong == id && 
-                p.trangThai == "Còn trống" &&
-                (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null));
+            // Tính toán số phòng trống đồng bộ với Room65130650Controller
+            int soPhongConTrong = 0;
+            if (dIn.HasValue)
+            {
+                DateTime effectiveOut = dOut ?? dIn.Value.AddDays(1);
+                var busyStatuses = new[] { "Đã xác nhận", "Đã nhận phòng", "Chờ xác nhận" };
+
+                // Lấy danh sách mã phòng đã bận trong khoảng thời gian này
+                var unavailableRoomIds = _db.DatPhongs
+                    .Where(dp => busyStatuses.Contains(dp.trangThaiDatPhong))
+                    .Where(dp => System.Data.Entity.DbFunctions.TruncateTime(dp.ngayNhanPhong) < effectiveOut && 
+                                 System.Data.Entity.DbFunctions.TruncateTime(dp.ngayTraPhong) > dIn.Value)
+                    .Select(dp => dp.maPhong)
+                    .Distinct()
+                    .ToList();
+
+                // Đếm số phòng thuộc loại này mà không nằm trong danh sách bận
+                soPhongConTrong = _db.Phongs.Count(p =>
+                    p.maLoaiPhong == id &&
+                    (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null) &&
+                    p.trangThai != "Bảo trì" &&
+                    !unavailableRoomIds.Contains(p.maPhong));
+            }
+            else
+            {
+                // Nếu không có ngày lọc, dùng trạng thái mặc định "Còn trống"
+                soPhongConTrong = _db.Phongs.Count(p => 
+                    p.maLoaiPhong == id && 
+                    p.trangThai == "Còn trống" &&
+                    (p.trangThaiHoatDong == true || p.trangThaiHoatDong == null));
+            }
 
             // Đếm tổng số phòng của loại phòng này
             var tongSoPhong = _db.Phongs.Count(p => 
@@ -159,7 +199,9 @@ namespace Project_65130650.Controllers
                 TienNghi = loaiPhong.tienNghi,
                 HinhAnh = loaiPhong.hinhAnh,
                 SoPhongConTrong = soPhongConTrong,
-                TongSoPhong = tongSoPhong
+                TongSoPhong = tongSoPhong,
+                CheckIn = dIn,
+                CheckOut = dOut
             };
 
             return View(viewModel);

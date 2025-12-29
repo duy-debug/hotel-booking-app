@@ -75,5 +75,9 @@ namespace Project_65130650.Models.ViewModels
 
         // Tổng số phòng của loại phòng này
         public int TongSoPhong { get; set; }
+
+        // Ngày nhận và ngày trả được chọn từ bộ lọc (nếu có)
+        public DateTime? CheckIn { get; set; }
+        public DateTime? CheckOut { get; set; }
     }
 }

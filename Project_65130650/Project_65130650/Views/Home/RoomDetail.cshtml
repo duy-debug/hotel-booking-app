@@ -21,12 +21,26 @@
                     @if (Model.SoPhongConTrong > 0)
                     {
                         <i class="fas fa-check-circle"></i>
-                        <span>Còn @Model.SoPhongConTrong phòng trống</span>
+                        if (Model.CheckIn.HasValue)
+                        {
+                            <span>Trống @Model.SoPhongConTrong phòng (@Model.CheckIn.Value.ToString("dd/MM/yyyy") - @(Model.CheckOut?.ToString("dd/MM/yyyy") ?? Model.CheckIn.Value.AddDays(1).ToString("dd/MM/yyyy")))</span>
+                        }
+                        else
+                        {
+                            <span>Còn @Model.SoPhongConTrong phòng trống</span>
+                        }
                     }
                     else
                     {
                         <i class="fas fa-times-circle"></i>
-                        <span>Hết phòng</span>
+                        if (Model.CheckIn.HasValue)
+                        {
+                            <span>Hết phòng (@Model.CheckIn.Value.ToString("dd/MM/yyyy") - @(Model.CheckOut?.ToString("dd/MM/yyyy") ?? Model.CheckIn.Value.AddDays(1).ToString("dd/MM/yyyy")))</span>
+                        }
+                        else
+                        {
+                            <span>Hết phòng</span>
+                        }
                     }
                 </div>
             </div>

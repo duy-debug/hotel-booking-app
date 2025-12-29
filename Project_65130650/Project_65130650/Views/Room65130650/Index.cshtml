@@ -272,7 +272,7 @@
                                             <i class="fas fa-ban"></i> @(room.TrangThaiHienThi == "Bảo trì" ? "Đặt phòng" : "Đặt phòng")
                                         </button>
                                     }
-                                    <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong })" class="btn-detail">
+                                    <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong, checkIn = Model.CheckIn?.ToString("yyyy-MM-dd"), checkOut = Model.CheckOut?.ToString("yyyy-MM-dd") })" class="btn-detail">
                                         <i class="fas fa-eye"></i> Chi tiết
                                     </a>
                                 </div>
