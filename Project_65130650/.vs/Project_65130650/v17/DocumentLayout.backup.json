@@ -7,7 +7,7 @@
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\views\\shared\\_bookingmodals.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|d:\\ntu\\academicyear_2025_2026\\semester1\\hotel-booking-app\\project_65130650\\project_65130650\\models\\viewmodel\\bookingrequestviewmodel65130650.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\hotel-booking-app\\Project_65130650\\project_65130650\\models\\viewmodel\\bookingrequestviewmodel65130650.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\models\\viewmodel\\bookingrequestviewmodel65130650.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -19,7 +19,7 @@
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|d:\\ntu\\academicyear_2025_2026\\semester1\\hotel-booking-app\\project_65130650\\project_65130650\\appsettings.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "AbsoluteMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|D:\\NTU\\AcademicYear_2025_2026\\Semester1\\hotel-booking-app\\Project_65130650\\project_65130650\\appsettings.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
       "RelativeMoniker": "D:0:0:{FCFFD701-943A-40F9-810B-9B42F072840B}|Project_65130650\\Project_65130650.csproj|solutionrelative:project_65130650\\appsettings.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
@@ -157,8 +157,7 @@
               "RelativeToolTip": "Project_65130650\\Models\\ViewModel\\BookingRequestViewModel65130650.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-30T07:21:18.786Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-30T07:21:18.786Z"
             },
             {
               "$type": "Document",
@@ -170,8 +169,7 @@
               "RelativeToolTip": "Project_65130650\\AppSettings.config",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-12-29T12:49:03.562Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-29T12:49:03.562Z"
             },
             {
               "$type": "Document",
@@ -206,8 +204,7 @@
               "RelativeToolTip": "Project_65130650\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4CAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-24T07:13:49.346Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T07:13:49.346Z"
             },
             {
               "$type": "Document",
@@ -219,8 +216,7 @@
               "RelativeToolTip": "Project_65130650\\Views\\Home\\Index.cshtml",
               "ViewState": "AgIAAAIAAAAAAAAAAAAAAC0AAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-12-24T03:13:49.396Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-24T03:13:49.396Z"
             },
             {
               "$type": "Document",

@@ -252,6 +252,17 @@ namespace Project_65130650.Areas.Admin.Controllers
                     {
                         return Json(new { success = false, error = $"Chưa đến ngày nhận phòng ({booking.ngayNhanPhong:dd/MM/yyyy}). Không thể nhận phòng sớm." });
                     }
+
+                    // Kiểm tra trạng thái phòng thực tế (Phải 'Còn trống' thì mới cho Nhận phòng)
+                    if (booking.Phong != null && booking.Phong.trangThai != "Còn trống")
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            error = $"Phòng {booking.Phong.soPhong} hiện đang '{booking.Phong.trangThai}'. " +
+                                    $"Vui lòng kiểm tra và đảm bảo phòng đã được trả hoặc hoàn tất bảo trì (trạng thái 'Còn trống') trước khi nhận phòng mới."
+                        });
+                    }
                 }
                 
                 // VALIDATE CHECK-OUT (MUST PAY FULLY)
@@ -1897,6 +1908,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                     data = new
                     {
                         payment.maThanhToan,
+                        payment.maGiaoDich,
                         payment.maDatPhong,
                         ngayThanhToan = payment.ngayThanhToan.HasValue ? payment.ngayThanhToan.Value.ToString("dd/MM/yyyy HH:mm") : "",
                         payment.soTien,
@@ -1925,7 +1937,7 @@ namespace Project_65130650.Areas.Admin.Controllers
         // POST: Admin/Home65130650/CreatePayment
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public JsonResult CreatePayment(string maDatPhong, decimal soTien, string phuongThucThanhToan, string ghiChu)
+        public JsonResult CreatePayment(string maDatPhong, decimal soTien, string phuongThucThanhToan, string ghiChu, string maGiaoDich)
         {
             try
             {
@@ -1941,6 +1953,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                 {
                     maThanhToan = GeneratePaymentId(),
                     maDatPhong = maDatPhong,
+                    maGiaoDich = maGiaoDich,
                     ngayThanhToan = DateTime.Now,
                     soTien = soTien,
                     phuongThucThanhToan = phuongThucThanhToan,

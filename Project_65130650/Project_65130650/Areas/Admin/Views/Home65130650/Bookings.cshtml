@@ -438,7 +438,7 @@
                 <textarea class="form-control" id="cancelReason" rows="3" placeholder="Nhập lý do khách hủy phòng..."></textarea>
             </div>
             <div class="text-right mt-3">
-                <button type="button" class="btn btn-secondary" onclick="closeCancelModal()">Quay lại</button>
+                <button type="button" class="btn btn-secondary" onclick="backToDetails()">Quay lại</button>
                 <button type="button" class="btn btn-danger" onclick="submitCancel()"><i class="fas fa-check"></i> Xác nhận hủy</button>
             </div>
         </div>
@@ -696,6 +696,7 @@
             $('#viewModal').appendTo('body');
             $('#createBookingModal').appendTo('body');
             $('#paymentModal').appendTo('body');
+            $('#cancelModal').appendTo('body');
             console.log('Modals moved to body root');
         });
 
@@ -1014,6 +1015,7 @@
         // --- 6. Status Update ---
         function updateStatus(id, status) {
             if (status === 'Đã hủy') {
+                closeViewModal();
                 $('#cancelMaDatPhong').val(id);
                 $('#cancelReason').val('');
                 openModal('#cancelModal');
@@ -1036,6 +1038,14 @@
         }
 
         function closeCancelModal() { closeModal('#cancelModal'); }
+        
+        function backToDetails() {
+            var id = $('#cancelMaDatPhong').val();
+            closeModal('#cancelModal');
+            if (id) {
+                viewBooking(id);
+            }
+        }
 
         function submitCancel() {
             var id = $('#cancelMaDatPhong').val();

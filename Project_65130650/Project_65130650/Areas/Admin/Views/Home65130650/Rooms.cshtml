@@ -129,6 +129,7 @@
                     <table class="data-table" id="roomsTable">
                         <thead>
                             <tr>
+                                <th>STT</th>
                                 <th>Số phòng</th>
                                 <th>Loại phòng</th>
                                 <th>Tầng</th>
@@ -141,9 +142,11 @@
                         <tbody>
                             @if (Model != null && Model.Any())
                             {
+                                int stt = 1;
                                 foreach (var room in Model)
                                 {
                                     <tr class="room-row" data-status="@room.trangThai" data-floor="@room.tang">
+                                        <td><strong>@stt</strong></td>
                                         <td><strong>@room.soPhong</strong></td>
                                         <td>@(room.LoaiPhong != null ? room.LoaiPhong.tenLoaiPhong : "N/A")</td>
                                         <td>@room.tang</td>
@@ -182,6 +185,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    stt++;
                                 }
                             }
                             else
