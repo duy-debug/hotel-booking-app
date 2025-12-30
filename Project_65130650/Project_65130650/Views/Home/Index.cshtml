@@ -248,12 +248,19 @@
                                     </p>
                                 </div>
                                 <p class="room-price">
-                                    @String.Format("{0:N0} VNĐ", room.GiaCoBan)<span class="price-unit">/đêm</span>
+                                    @String.Format("{0:N0} ₫", room.GiaCoBan)<span class="price-unit">/đêm</span>
                                 </p>
                                 <div class="room-actions">
-                                    <button class="btn-primary">
+                                    <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong, autoOpenBooking = true })" 
+                                       class="btn-primary btn-book-now-shared" 
+                                       data-id="@room.MaLoaiPhong" 
+                                       data-name="@room.TenLoaiPhong" 
+                                       data-price="@room.GiaCoBan" 
+                                       data-capacity="@room.SoNguoiToiDa"
+                                       data-checkin=""
+                                       data-checkout="">
                                         <i class="fas fa-calendar-check"></i> Đặt phòng
-                                    </button>
+                                    </a>
                                     <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong })" class="btn-ghost">
                                         <i class="fas fa-eye"></i> Chi tiết
                                     </a>

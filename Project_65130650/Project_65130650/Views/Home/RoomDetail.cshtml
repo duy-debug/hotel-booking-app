@@ -80,7 +80,7 @@
                     <i class="fas fa-users"></i>
                     <div>
                         <span class="label">Sức chứa</span>
-                        <span class="value">Tối đa @Model.SoNguoiToiDa người</span>
+                        <span class="value">Tối đa @Model.SoNguoiToiDa người đã bao gồm trẻ em</span>
                     </div>
                 </div>
                 <div class="info-item">
@@ -149,22 +149,28 @@
             <div class="room-booking-section">
                 <div class="price-display">
                     <span class="price-label">Giá phòng</span>
-                    <span class="price-value">@String.Format("{0:N0}", Model.GiaCoBan) VNĐ</span>
+                    <span class="price-value">@String.Format("{0:N0}", Model.GiaCoBan) ₫</span>
                     <span class="price-unit">/ đêm</span>
                 </div>
                 <div class="booking-actions">
                     @if (Model.SoPhongConTrong > 0)
                     {
-                        <button class="btn-book-now">
+                        <button class="btn-book-now-shared" 
+                                data-id="@Model.MaLoaiPhong" 
+                                data-name="@Model.TenLoaiPhong" 
+                                data-price="@Model.GiaCoBan" 
+                                data-capacity="@Model.SoNguoiToiDa"
+                                data-checkin="@(Model.CheckIn.HasValue ? Model.CheckIn.Value.ToString("yyyy-MM-dd") : "")"
+                                data-checkout="@(Model.CheckOut.HasValue ? Model.CheckOut.Value.ToString("yyyy-MM-dd") : "")">
                             <i class="fas fa-calendar-check"></i>
                             Đặt phòng ngay
                         </button>
                     }
                     else
                     {
-                        <button class="btn-book-now disabled" disabled>
-                            <i class="fas fa-ban"></i>    
-                            Đặt phòng
+                        <button class="btn-book-now-shared" disabled style="background: #94a3b8; color: white; cursor: not-allowed; opacity: 0.7;">
+                            <i class="fas fa-ban"></i>
+                            Hết phòng
                         </button>
                     }
                 </div>
@@ -515,31 +521,35 @@
             gap: 12px;
         }
 
-        .btn-book-now {
+        .btn-book-now, .btn-book-now-shared {
             flex: 1;
             padding: 14px 24px;
-            background: white;
-            color: #0d4ea6;
+            background: white !important;
+            color: #1e40af !important;
             border: none;
             border-radius: 12px;
             font-size: 15px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-            .btn-book-now:hover:not(.disabled) {
+            .btn-book-now:hover:not(.disabled), 
+            .btn-book-now-shared:hover:not(.disabled) {
+                background: #f8fafc !important;
                 transform: translateY(-2px);
                 box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
             }
 
-            .btn-book-now.disabled {
-                background: #94a3b8;
-                color: white;
+            .btn-book-now.disabled,
+            .btn-book-now-shared.disabled {
+                background: #94a3b8 !important;
+                color: white !important;
                 cursor: not-allowed;
             }
 
@@ -724,23 +734,40 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Thumbnail gallery click handling
+            // Thumbnail gallery
             var thumbnails = document.querySelectorAll('.thumbnail-gallery img');
             var mainImage = document.querySelector('.main-image img');
 
             thumbnails.forEach(function (thumb) {
                 thumb.addEventListener('click', function () {
-                    // Update main image
                     mainImage.src = this.src;
                     mainImage.alt = this.alt;
-
-                    // Update active state
-                    thumbnails.forEach(function (t) {
-                        t.classList.remove('active');
-                    });
+                    thumbnails.forEach(function (t) { t.classList.remove('active'); });
                     this.classList.add('active');
                 });
             });
+
+            // Check for auto-open parameter in URL (shared modal)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('autoOpenBooking') === 'true') {
+                const data = {
+                    maLoaiPhong: '@Model.MaLoaiPhong',
+                    tenLoaiPhong: '@Model.TenLoaiPhong',
+                    giaCoBan: @Model.GiaCoBan,
+                    soNguoiToiDa: @Model.SoNguoiToiDa,
+                    checkIn: '@Model.CheckIn?.ToString("yyyy-MM-dd")',
+                    checkOut: '@Model.CheckOut?.ToString("yyyy-MM-dd")'
+                };
+                if (window.isUserLoggedIn) {
+                    if (typeof window.openBookingModalShared === 'function') {
+                        window.openBookingModalShared(data);
+                    }
+                } else {
+                    if (typeof window.openModal === 'function') {
+                        window.openModal('login');
+                    }
+                }
+            }
         });
     </script>
 }

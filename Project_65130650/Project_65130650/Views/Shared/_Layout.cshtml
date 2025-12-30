@@ -596,6 +596,7 @@
 
     @Html.Partial("~/Views/Account65130650/Login.cshtml", new Project_65130650.Models.Forms.LoginForm65130650())
     @Html.Partial("~/Views/Account65130650/Register.cshtml", new Project_65130650.Models.Forms.RegisterForm65130650())
+    @Html.Partial("~/Views/Shared/_BookingModals.cshtml")
 
     <footer class="landing-footer bg-slate-300 text-slate-600 reveal mt-16 relative overflow-hidden border-t border-slate-200">
     <!-- Subtle accent line -->
@@ -703,6 +704,9 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script>
+        // Global User Login State
+        window.isUserLoggedIn = @(Session["UserId"] != null ? "true" : "false");
+
         // ========== TRANSPARENT HEADER ==========
         (function () {
             var header = document.querySelector('header');
@@ -924,32 +928,31 @@
         (function () {
             document.addEventListener('click', function (e) {
                 // 1. If it's a scroll button (like the Banner button), ignore authentication check
-                // This allows the scroll script (above) to handle it
                 if (e.target.closest('[data-scroll-target]')) {
                     return;
                 }
 
                 // Check if clicked element is a booking button
-                var bookingBtn = e.target.closest('.btn-book, .btn-book-now');
+                var bookingBtn = e.target.closest('.btn-book, .btn-book-now, .btn-book-room');
                 
-                // Also check for btn-primary buttons with "Đặt phòng" text
+                // Fallback for generic primary buttons with booking text
                 if (!bookingBtn) {
                     var primaryBtn = e.target.closest('.btn-primary');
-                    if (primaryBtn && primaryBtn.textContent.includes('Đặt phòng')) {
+                    if (primaryBtn && (primaryBtn.textContent.includes('Đặt phòng') || primaryBtn.textContent.includes('Đặt ngay'))) {
                         bookingBtn = primaryBtn;
                     }
                 }
                 
                 if (bookingBtn && !bookingBtn.disabled) {
-                    e.preventDefault();
-                    
-                    if (typeof isUserLoggedIn !== 'undefined' && isUserLoggedIn) {
-                         // Logic cho người đã đăng nhập (sẽ cập nhật sau khi bạn chốt phương án Modal hay Chuyển hướng)
-                         // Hiện tại tạm để console log
-                         console.log("Logged in user clicked booking");
-                         // window.location.href = '@Url.Action("Index", "Home65130650", new { area = "Customer" })';
+                    if (!window.isUserLoggedIn) {
+                        e.preventDefault();
+                        if (typeof openModal === 'function') {
+                            openModal('login');
+                        }
                     } else {
-                        openModal('login');
+                        // User is logged in
+                        // If it's an <a> tag, navigation will happen naturally (RoomDetail will handle autoOpenBooking)
+                        // If it's a <button> in RoomDetail, it has its own event listener to open booking modal
                     }
                 }
             });

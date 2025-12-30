@@ -99,15 +99,15 @@
                 <div class="custom-dropdown" data-name="minPrice">
                     <input type="hidden" name="minPrice" value="@Model.MinPrice" />
                     <div class="dropdown-selected">
-                        <span>@(Model.MinPrice.HasValue ? String.Format("{0:N0} VNĐ", Model.MinPrice) : "Không giới hạn")</span>
+                        <span>@(Model.MinPrice.HasValue ? String.Format("{0:N0} ₫", Model.MinPrice) : "Không giới hạn")</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="dropdown-options">
                         <div class="dropdown-option" data-value="">Không giới hạn</div>
-                        <div class="dropdown-option" data-value="500000">500,000 VNĐ</div>
-                        <div class="dropdown-option" data-value="1000000">1,000,000 VNĐ</div>
-                        <div class="dropdown-option" data-value="2000000">2,000,000 VNĐ</div>
-                        <div class="dropdown-option" data-value="3000000">3,000,000 VNĐ</div>
+                        <div class="dropdown-option" data-value="500000">500,000 ₫</div>
+                        <div class="dropdown-option" data-value="1000000">1,000,000 ₫</div>
+                        <div class="dropdown-option" data-value="2000000">2,000,000 ₫</div>
+                        <div class="dropdown-option" data-value="3000000">3,000,000 ₫</div>
                     </div>
                 </div>
             </div>
@@ -118,15 +118,15 @@
                 <div class="custom-dropdown" data-name="maxPrice">
                     <input type="hidden" name="maxPrice" value="@Model.MaxPrice" />
                     <div class="dropdown-selected">
-                        <span>@(Model.MaxPrice.HasValue ? String.Format("{0:N0} VNĐ", Model.MaxPrice) : "Không giới hạn")</span>
+                        <span>@(Model.MaxPrice.HasValue ? String.Format("{0:N0} ₫", Model.MaxPrice) : "Không giới hạn")</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="dropdown-options">
                         <div class="dropdown-option" data-value="">Không giới hạn</div>
-                        <div class="dropdown-option" data-value="1000000">1,000,000 VNĐ</div>
-                        <div class="dropdown-option" data-value="2000000">2,000,000 VNĐ</div>
-                        <div class="dropdown-option" data-value="5000000">5,000,000 VNĐ</div>
-                        <div class="dropdown-option" data-value="10000000">10,000,000 VNĐ</div>
+                        <div class="dropdown-option" data-value="1000000">1,000,000 ₫</div>
+                        <div class="dropdown-option" data-value="2000000">2,000,000 ₫</div>
+                        <div class="dropdown-option" data-value="5000000">5,000,000 ₫</div>
+                        <div class="dropdown-option" data-value="10000000">10,000,000 ₫</div>
                     </div>
                 </div>
             </div>
@@ -256,15 +256,22 @@
                             }
                             <div class="room-footer">
                                 <div class="room-price">
-                                    <span class="price">@String.Format("{0:N0}", room.GiaCoBan) VNĐ</span>
+                                    <span class="price">@String.Format("{0:N0}", room.GiaCoBan) ₫</span>
                                     <span class="per-night">/đêm</span>
                                 </div>
                                 <div class="room-actions">
                                     @if (room.TrangThaiHienThi == "Còn trống")
                                     {
-                                        <button class="btn-book">
+                                        <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong, checkIn = Model.CheckIn?.ToString("yyyy-MM-dd"), checkOut = Model.CheckOut?.ToString("yyyy-MM-dd"), autoOpenBooking = true })" 
+                                           class="btn-book btn-book-now-shared"
+                                           data-id="@room.MaLoaiPhong"
+                                           data-name="@room.TenLoaiPhong"
+                                           data-price="@room.GiaCoBan"
+                                           data-capacity="@room.SoNguoiToiDa"
+                                           data-checkin="@(Model.CheckIn.HasValue ? Model.CheckIn.Value.ToString("yyyy-MM-dd") : "")"
+                                           data-checkout="@(Model.CheckOut.HasValue ? Model.CheckOut.Value.ToString("yyyy-MM-dd") : "")">
                                             <i class="fas fa-calendar-check"></i> Đặt phòng
-                                        </button>
+                                        </a>
                                     }
                                     else
                                     {

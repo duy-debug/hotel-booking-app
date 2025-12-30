@@ -153,6 +153,7 @@
     <Compile Include="Models\Phong.cs" />
     <Compile Include="Models\ReportModel65130650.cs" />
     <Compile Include="Models\ThanhToan.cs" />
+    <Compile Include="Models\ViewModel\BookingRequestViewModel65130650.cs" />
     <Compile Include="Models\ViewModel\RoomCardViewModel65130650.cs" />
     <Compile Include="Models\ViewModel\RoomDetailViewModel65130650.cs" />
     <Compile Include="Models\ViewModel\RoomListViewModel65130650.cs" />
@@ -246,7 +247,6 @@
     <Content Include="Areas\Admin\Views\Home65130650\Profile.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Users.cshtml" />
     <Content Include="Areas\Admin\Views\Home65130650\Invoice.cshtml" />
-    <Content Include="AppSettings.config" />
     <Content Include="AppSettings.config.example" />
     <Content Include="Areas\Customer\Views\Home65130650\MyBookings.cshtml" />
     <Content Include="Areas\Customer\Views\Home65130650\Payment.cshtml" />
@@ -281,6 +281,8 @@
     <Content Include="Views\Room65130650\Index.cshtml" />
     <Content Include="Views\Account65130650\ForgotPassword.cshtml" />
     <Content Include="Views\Account65130650\ResetPassword.cshtml" />
+    <Content Include="AppSettings.config" />
+    <Content Include="Views\Shared\_BookingModals.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,479 @@
+﻿@* Shared Booking and Payment Modals *@
+
+<!-- Booking Modal -->
+<div id="bookingModal" class="auth-modal">
+    <div class="auth-modal_backdrop"></div>
+    <div class="auth-modal_panel" style="max-width: 750px; margin: 20px auto;">
+        <button id="closeBookingModal" class="auth-modal_close" style="top: 0; right: 0;"><i class="fas fa-times"></i></button>
+        <div class="auth-card" style="padding: 24px;">
+            <div class="auth-card_header" style="margin-bottom: 20px; gap: 12px;">
+                <div class="auth-card_logo" style="width: 44px; height: 44px; font-size: 20px;"><i class="fas fa-calendar-check"></i></div>
+                <div>
+                    <h1 style="font-size: 18px;">Xác nhận đặt phòng</h1>
+                    <p id="modalRoomName" style="font-size: 13px;">Tên loại phòng</p>
+                </div>
+            </div>
+
+            <div class="booking-modal-grid">
+                <div class="booking-form-side">
+                    <div class="modal-form-row">
+                        <div class="form-group">
+                            <label>Ngày nhận phòng</label>
+                            <input type="date" id="bookingCheckIn" class="form-control" style="padding-left: 12px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Ngày trả phòng</label>
+                            <input type="date" id="bookingCheckOut" class="form-control" style="padding-left: 12px;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Số lượng người</label>
+                        <input type="number" id="bookingGuests" class="form-control" value="1" min="1" style="padding-left: 12px;">
+                    </div>
+                    <div class="form-group">
+                        <label>Dịch vụ đi kèm</label>
+                        <div id="servicesList" class="services-selection-container">
+                            <p class="text-xs text-slate-400">Đang tải dịch vụ...</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Yêu cầu đặc biệt</label>
+                        <textarea id="bookingNote" class="form-control" placeholder="Ghi chú thêm..." style="padding-left: 12px; height: 80px;"></textarea>
+                    </div>
+                </div>
+
+                <div class="booking-summary-side">
+                    <div class="summary-card">
+                        <h3>Chi tiết thanh toán</h3>
+                        <div class="summary-row">
+                            <span>Tiền phòng:</span>
+                            <span id="modalRoomTotal">0 ₫</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Tiền dịch vụ:</span>
+                            <span id="modalServiceTotal">0 ₫</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-row grand-total">
+                            <span>Tổng tiền:</span>
+                            <span id="modalGrandTotal">0 ₫</span>
+                        </div>
+                        <div class="form-group mt-4">
+                            <label class="text-blue-600 font-bold">Tiền cọc bắt buộc (50%)</label>
+                            <input type="text" id="modalDeposit" class="form-control bg-slate-100 font-bold text-blue-700" readonly style="padding-left: 12px; border-color: #0d4ea6;">
+                        </div>
+                        <button class="btn-primary w-full mt-4" id="btnConfirmAndPay">
+                            Xác nhận & Thanh toán
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Modal -->
+<div id="paymentModal" class="auth-modal">
+    <div class="auth-modal_backdrop"></div>
+    <div class="auth-modal_panel" style="max-width: 400px; margin: 20px auto;">
+        <button id="closePaymentModal" class="auth-modal_close" style="top: 0; right: 0;"><i class="fas fa-times"></i></button>
+        <div class="auth-card text-center" style="padding: 20px;">
+            <h1 class="mb-1 text-lg">Thanh toán tiền cọc</h1>
+            <p class="mb-3 text-[11px] text-slate-500">Quét QR hoặc chuyển khoản thông tin bên dưới</p>
+            
+            <div class="qr-container-shared mb-4 flex flex-col items-center justify-center" style="min-height: 150px;">
+                <img id="qrCodeImg" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="QR Code" class="mx-auto border-2 border-white shadow-md rounded-lg" style="width: 150px; height: 150px; display: none;">
+                <div id="qrLoading" class="flex flex-col items-center gap-2">
+                    <i class="fas fa-spinner fa-spin text-blue-600 text-2xl"></i>
+                    <span class="text-[10px] text-slate-400">Đang tạo mã QR...</span>
+                </div>
+                <div id="qrHint" class="mt-1 text-[9px] text-slate-400" style="display: none;">VietQR - Quét để thanh toán</div>
+            </div>
+
+            <div class="bank-details-box mb-4 text-left p-3 bg-slate-50 rounded-lg border border-slate-200">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Thông tin chuyển khoản</span>
+                </div>
+                <div class="bank-row-shared mb-1">
+                    <div class="text-[10px] text-slate-500">Ngân hàng</div>
+                    <div class="font-bold text-slate-800 text-[13px]">VIETCOMBANK</div>
+                </div>
+                <div class="bank-row-shared mb-1">
+                    <div class="text-[10px] text-slate-500">Số tài khoản</div>
+                    <div class="flex justify-between items-center">
+                        <div class="font-bold text-blue-700 text-base">1036125066</div>
+                        <button class="text-[9px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded hover:bg-blue-200" onclick="copyToClipboard('1036125066')">Copy</button>
+                    </div>
+                </div>
+                <div class="bank-row-shared">
+                    <div class="text-[10px] text-slate-500">Chủ tài khoản</div>
+                    <div class="font-bold text-slate-800 uppercase text-[13px]">TRAN MAI NGOC DUY</div>
+                </div>
+            </div>
+
+            <div class="payment-info mb-4 p-3 bg-blue-600 rounded-lg shadow-inner">
+                <div class="text-[10px] text-blue-100 mb-0.5">Số tiền thanh toán (50%)</div>
+                <div class="text-xl font-bold text-white" id="paymentAmount">0 ₫</div>
+            </div>
+
+            <div class="flex flex-col gap-2">
+                <button class="btn-primary w-full py-2.5 text-base" id="btnSimulatePaid">
+                    <i class="fas fa-check-circle mr-2"></i>Tôi đã thanh toán
+                </button>
+                <button class="btn-secondary w-full py-2 text-sm text-slate-600" id="btnCancelPayment">
+                    Quay lại
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-card {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    .auth-card::-webkit-scrollbar { display: none; }
+    
+    .booking-modal-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 20px;
+    }
+    .modal-form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+    .services-selection-container {
+        max-height: 180px;
+        overflow-y: auto;
+        border: 1.5px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 8px;
+        background: #f8fafc;
+    }
+    .service-selection-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 6px 8px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .service-selection-item:last-child { border-bottom: none; }
+    .svc-info { display: flex; flex-direction: column; }
+    .svc-name { font-size: 13px; font-weight: 600; color: #1e293b; }
+    .svc-price { font-size: 11px; color: #64748b; }
+    .svc-action { display: flex; align-items: center; gap: 8px; }
+    .svc-qty { font-size: 13px; font-weight: 600; min-width: 20px; text-align: center; }
+    .btn-svc-minus, .btn-svc-plus {
+        width: 22px; height: 22px; border-radius: 6px; border: none;
+        background: #e2e8f0; color: #475569; cursor: pointer;
+        display: flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+    .btn-svc-plus { background: #0d4ea6; color: white; }
+    
+    .summary-card {
+        background: #f0f7ff;
+        padding: 16px;
+        border-radius: 16px;
+        border: 1px solid #cfe3ff;
+    }
+    .summary-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #1e40af; }
+    .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; color: #475569; }
+    .summary-divider { height: 1px; background: #cfe3ff; margin: 10px 0; }
+    .grand-total { font-weight: 700; font-size: 16px; color: #0d4ea6; }
+    
+    .bank-details-box {
+        border-style: dashed;
+        background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+        background-size: 10px 10px;
+    }
+    .bank-row-shared div:first-child {
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 2px;
+    }
+
+    @@media (max-width: 768px) {
+        .booking-modal-grid { grid-template-columns: 1fr; }
+    }
+</style>
+
+<script>
+    (function () {
+        let allServices = [];
+        let selectedServices = [];
+        let currentRoom = null;
+
+        const bookingModal = document.getElementById('bookingModal');
+        const paymentModal = document.getElementById('paymentModal');
+
+        // Close functions
+        const closeAllShared = () => {
+            bookingModal.classList.remove('is-active');
+            paymentModal.classList.remove('is-active');
+            document.body.classList.remove('modal-open');
+        };
+
+        document.getElementById('closeBookingModal').onclick = closeAllShared;
+        document.getElementById('closePaymentModal').onclick = closeAllShared;
+        document.getElementById('btnCancelPayment').onclick = () => {
+            paymentModal.classList.remove('is-active');
+            bookingModal.classList.add('is-active');
+        };
+
+        async function openBookingModal(roomData) {
+            if (!window.isUserLoggedIn) {
+                if (typeof window.openModal === 'function') window.openModal('login');
+                return;
+            }
+
+            currentRoom = roomData;
+            selectedServices = [];
+            
+            // Set basic info
+            document.getElementById('modalRoomName').textContent = roomData.tenLoaiPhong;
+            document.getElementById('bookingGuests').max = roomData.soNguoiToiDa;
+            
+            // Helpers for dates in YYYY-MM-DD format using local time
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+
+            const now = new Date();
+            const todayStr = formatDate(now);
+            const tomorrow = new Date(now);
+            tomorrow.setDate(now.getDate() + 1);
+            const tomorrowStr = formatDate(tomorrow);
+            
+            const isValidDate = (d) => d && d !== "" && !d.startsWith('0001') && d !== "null";
+
+            // Determine final dates
+            let finalCheckIn = isValidDate(roomData.checkIn) ? roomData.checkIn : todayStr;
+            let finalCheckOut = isValidDate(roomData.checkOut) ? roomData.checkOut : "";
+
+            // If checkOut is missing or before checkIn, make it checkIn + 1 day
+            if (!isValidDate(finalCheckOut)) {
+                const dIn = new Date(finalCheckIn);
+                const dOut = new Date(dIn);
+                dOut.setDate(dIn.getDate() + 1);
+                finalCheckOut = formatDate(dOut);
+            }
+
+            const checkInInput = document.getElementById('bookingCheckIn');
+            const checkOutInput = document.getElementById('bookingCheckOut');
+
+            if (checkInInput && checkOutInput) {
+                // Set values first to avoid conflicts with min
+                checkInInput.value = finalCheckIn;
+                checkOutInput.value = finalCheckOut;
+                
+                // Then set constraints
+                checkInInput.min = todayStr;
+                checkOutInput.min = tomorrowStr;
+            }
+
+            bookingModal.classList.add('is-active');
+            document.body.classList.add('modal-open');
+
+            if (allServices.length === 0) {
+                try {
+                    const response = await fetch('/Home/GetServices');
+                    allServices = await response.json();
+                    renderServices();
+                } catch (error) { console.error('Error fetching services:', error); }
+            } else {
+                renderServices(); // Reset quantities
+            }
+            calculateTotals();
+        }
+
+        function renderServices() {
+            const container = document.getElementById('servicesList');
+            container.innerHTML = allServices.map(svc => `
+                <div class="service-selection-item" data-id="${svc.maDichVu}">
+                    <div class="svc-info">
+                        <span class="svc-name">${svc.tenDichVu}</span>
+                        <span class="svc-price">${svc.giaDichVu.toLocaleString()} ₫</span>
+                    </div>
+                    <div class="svc-action">
+                        <button class="btn-svc-minus">-</button>
+                        <span class="svc-qty">0</span>
+                        <button class="btn-svc-plus">+</button>
+                    </div>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.service-selection-item').forEach(item => {
+                const minus = item.querySelector('.btn-svc-minus');
+                const plus = item.querySelector('.btn-svc-plus');
+                const qtySpan = item.querySelector('.svc-qty');
+                const maDichVu = item.dataset.id;
+
+                plus.onclick = () => {
+                    let qty = parseInt(qtySpan.textContent) + 1;
+                    qtySpan.textContent = qty;
+                    updateSelectedServices(maDichVu, qty);
+                };
+                minus.onclick = () => {
+                    let qty = Math.max(0, parseInt(qtySpan.textContent) - 1);
+                    qtySpan.textContent = qty;
+                    updateSelectedServices(maDichVu, qty);
+                };
+            });
+        }
+
+        function updateSelectedServices(id, qty) {
+            const index = selectedServices.findIndex(s => s.MaDichVu === id);
+            if (qty > 0) {
+                if (index > -1) selectedServices[index].SoLuong = qty;
+                else selectedServices.push({ MaDichVu: id, SoLuong: qty });
+            } else {
+                if (index > -1) selectedServices.splice(index, 1);
+            }
+            calculateTotals();
+        }
+
+        function calculateTotals() {
+            if (!currentRoom) return;
+            const checkInStr = document.getElementById('bookingCheckIn').value;
+            const checkOutStr = document.getElementById('bookingCheckOut').value;
+            
+            let nights = 1;
+            if (checkInStr && checkOutStr) {
+                const dIn = new Date(checkInStr);
+                const dOut = new Date(checkOutStr);
+                if (dOut > dIn) nights = Math.ceil((dOut - dIn) / 86400000);
+            }
+
+            const roomTotal = currentRoom.giaCoBan * nights;
+            let serviceTotal = 0;
+            selectedServices.forEach(s => {
+                const svc = allServices.find(as => as.maDichVu === s.MaDichVu);
+                if (svc) serviceTotal += svc.giaDichVu * s.SoLuong;
+            });
+
+            const grandTotal = roomTotal + serviceTotal;
+            const deposit = grandTotal * 0.5;
+
+            document.getElementById('modalRoomTotal').textContent = roomTotal.toLocaleString() + ' ₫';
+            document.getElementById('modalServiceTotal').textContent = serviceTotal.toLocaleString() + ' ₫';
+            document.getElementById('modalGrandTotal').textContent = grandTotal.toLocaleString() + ' ₫';
+            document.getElementById('modalDeposit').value = deposit.toLocaleString() + ' ₫';
+            
+            window.bookingData = {
+                MaLoaiPhong: currentRoom.maLoaiPhong,
+                NgayNhan: checkInStr,
+                NgayTra: checkOutStr,
+                SoKhach: document.getElementById('bookingGuests').value,
+                YeuCauDacBiet: document.getElementById('bookingNote').value,
+                TienPhong: roomTotal,
+                TienDatCoc: deposit,
+                SelectedServices: selectedServices
+            };
+        }
+
+        // Listeners
+        ['bookingCheckIn', 'bookingCheckOut', 'bookingNote'].forEach(id => {
+            document.getElementById(id).onchange = calculateTotals;
+        });
+
+        document.getElementById('bookingGuests').onchange = function() {
+            const max = parseInt(this.max) || 99;
+            const val = parseInt(this.value) || 1;
+            if (val > max) {
+                alert(`Loại phòng này chỉ chứa tối đa ${max} người.`);
+                this.value = max;
+            } else if (val < 1) {
+                this.value = 1;
+            }
+            calculateTotals();
+        };
+
+        document.getElementById('btnConfirmAndPay').onclick = () => {
+            const guestCount = parseInt(document.getElementById('bookingGuests').value) || 1;
+            const maxGuests = currentRoom ? currentRoom.soNguoiToiDa : 99;
+
+            if (guestCount > maxGuests) {
+                alert(`Số lượng khách vượt quá sức chứa tối đa của phòng (${maxGuests} người).`);
+                return;
+            }
+
+            if (!window.bookingData.NgayNhan || !window.bookingData.NgayTra) {
+                alert('Vui lòng chọn ngày nhận và trả phòng.'); return;
+            }
+            
+            const amount = window.bookingData.TienDatCoc;
+            const accountNo = "1036125066";
+            const bankId = "VCB";
+            const description = encodeURIComponent(`Coc phong ${window.bookingData.MaLoaiPhong}`);
+            const qrUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-compact.png?amount=${amount}&addInfo=${description}`;
+            
+            const qrImg = document.getElementById('qrCodeImg');
+            const qrLoading = document.getElementById('qrLoading');
+            const qrHint = document.getElementById('qrHint');
+
+            qrImg.style.display = 'none';
+            qrLoading.style.display = 'flex';
+            qrHint.style.display = 'none';
+            qrImg.onload = () => {
+                qrLoading.style.display = 'none';
+                qrImg.style.display = 'block';
+                qrHint.style.display = 'block';
+            };
+            qrImg.src = qrUrl;
+
+            bookingModal.classList.remove('is-active');
+            paymentModal.classList.add('is-active');
+            document.getElementById('paymentAmount').textContent = amount.toLocaleString() + ' ₫';
+        };
+
+        document.getElementById('btnSimulatePaid').onclick = async function() {
+            this.disabled = true;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
+            try {
+                const response = await fetch('/Home/ConfirmBooking', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(window.bookingData)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert(result.message);
+                    window.location.href = '/Customer/Home65130650/MyBookings';
+                } else {
+                    alert(result.message);
+                    this.disabled = false;
+                    this.textContent = 'Tôi đã thanh toán';
+                }
+            } catch (error) {
+                alert('Đã xảy ra lỗi hệ thống.');
+                this.disabled = false;
+                this.textContent = 'Tôi đã thanh toán';
+            }
+        };
+
+        window.openBookingModalShared = openBookingModal;
+
+        // Auto-hook global booking clicks to this shared modal
+        document.addEventListener('click', function(e) {
+            let btn = e.target.closest('.btn-book-now-shared');
+            if (btn) {
+                e.preventDefault();
+                const data = {
+                    maLoaiPhong: btn.dataset.id,
+                    tenLoaiPhong: btn.dataset.name,
+                    giaCoBan: parseFloat(btn.dataset.price),
+                    soNguoiToiDa: parseInt(btn.dataset.capacity),
+                    checkIn: btn.dataset.checkin,
+                    checkOut: btn.dataset.checkout
+                };
+                openBookingModal(data);
+            }
+        });
+    })();
+</script>
