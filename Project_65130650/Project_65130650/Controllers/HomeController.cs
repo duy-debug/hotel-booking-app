@@ -331,8 +331,8 @@ namespace Project_65130650.Controllers
                 {
                     transaction.Rollback();
                     var errorMessages = ex.EntityValidationErrors
-                        .SelectMany(x => x.ValidationErrors)
-                        .Select(x => $"{x.Entry.Entity.GetType().Name}.{x.PropertyName}: {x.ErrorMessage}");
+                        .SelectMany(result => result.ValidationErrors.Select(err => 
+                            $"{result.Entry.Entity.GetType().Name}.{err.PropertyName}: {err.ErrorMessage}"));
                     var fullErrorMessage = string.Join(" | ", errorMessages);
                     return Json(new { success = false, message = "Lỗi xác thực: " + fullErrorMessage });
                 }
