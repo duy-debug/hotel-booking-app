@@ -1,0 +1,523 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Admin Dashboard</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Style Admin Gọn gàng -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/admin-compact.css")">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0d4ea6 0%, #173b75 100%);
+            --secondary-gradient: linear-gradient(135deg, #fb7185 0%, #f97316 100%);
+            --success-gradient: linear-gradient(135deg, #22c55e 0%, #22c55e 100%);
+            --page-bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --sidebar-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --accent-blue: #0d4ea6;
+            --accent-pink: #fb7185;
+            --accent-cyan: #10b981;
+            --border-subtle: #e5e7eb;
+            --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--page-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Điểm nhấn nền tinh tế */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(13, 78, 166, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(23, 59, 117, 0.05) 0%, transparent 55%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @@keyframes backgroundShift {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Thanh bên */
+        .sidebar {
+            width: 240px;
+            background: var(--sidebar-bg);
+            backdrop-filter: blur(8px);
+            border-right: 1px solid var(--border-subtle);
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: var(--accent-blue);
+            border-radius: 10px;
+        }
+
+        .logo-section {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-subtle);
+            background: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-logo {
+            max-width: 140px;
+            height: auto;
+            display: block;
+        }
+
+        .nav-menu {
+            padding: 12px 0;
+        }
+
+        .nav-section {
+            margin-bottom: 16px;
+        }
+
+        .nav-section-title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-secondary);
+            padding: 0 18px 8px;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            margin: 3px 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .nav-item a i {
+            font-size: 16px;
+            width: 18px;
+            text-align: center;
+        }
+
+        .nav-item a:hover {
+            color: var(--accent-blue);
+            background: #f0f9ff;
+            transform: translateX(5px);
+        }
+
+        .nav-item.active a {
+            background: #f0f9ff;
+            color: var(--accent-blue);
+            box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.2);
+        }
+
+        /* Nội dung chính */
+        .main-content {
+            flex: 1;
+            margin-left: 240px;
+            transition: all 0.3s ease;
+        }
+
+        /* Thanh trên cùng */
+        .top-bar {
+            background: #ffffff;
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-bar-left h1 {
+            font-size: 20px;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            background: #f9fafb;
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            padding: 8px 16px 8px 36px;
+            color: var(--text-primary);
+            width: 220px;
+            font-size: 13px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.15);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .notification-icon {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .notification-icon i {
+            font-size: 20px;
+            color: var(--text-secondary);
+        }
+
+        .notification-icon:hover i {
+            color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--secondary-gradient);
+            color: white;
+            font-size: 10px;
+            padding: 3px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px 15px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .admin-profile:hover {
+            background: #f0f9ff;
+        }
+
+        .admin-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .admin-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .admin-name {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .admin-role {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .dropdown-arrow {
+            margin-left: 8px;
+            font-size: 12px;
+            transition: transform 0.3s ease;
+        }
+
+        /* Menu thả xuống */
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            min-width: 200px;
+            box-shadow: var(--shadow-soft);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .admin-profile:hover .profile-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .profile-dropdown a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .profile-dropdown a:first-child {
+            border-radius: 12px 12px 0 0;
+        }
+
+        .profile-dropdown a:last-child {
+            border-radius: 0 0 12px 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-dropdown a:hover {
+            background: #f0f9ff;
+            color: var(--accent-blue);
+            padding-left: 25px;
+        }
+
+        /* Khu vực nội dung */
+        .content-area {
+            padding: 20px 24px;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Thích ứng (Responsive) */
+        @@media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-240px);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+
+        /* Hiệu ứng hoạt hình */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content-area > * {
+            animation: fadeInUp 0.6s ease;
+        }
+    </style>
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Thanh bên -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <a href="@Url.Action("Index", "Home65130650", new { area = "Admin" })" style="text-decoration: none;">
+                    <img src="@Url.Content("~/Images/logo.png")" alt="Hotel Admin" class="admin-logo" />
+                </a>
+            </div>
+            
+            @{
+                var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+            }
+            <nav class="nav-menu">
+                <div class="nav-section">
+                    <div class="nav-section-title">Main Menu</div>
+                    <div class="nav-item @(currentAction == "Index" ? "active" : "")">
+                        <a href="@Url.Action("Index", "Home65130650", new { area = "Admin" })">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Trang chủ</span>
+                        </a>
+                    </div>
+                    <div class="nav-item @(currentAction == "Bookings" ? "active" : "")">
+                        <a href="@Url.Action("Bookings", "Home65130650", new { area = "Admin" })">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Đơn Đặt Phòng</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Quản Lý</div>
+                    <div class="nav-item @(currentAction == "Users" ? "active" : "")">
+                        <a href="@Url.Action("Users", "Home65130650", new { area = "Admin" })">
+                            <i class="fas fa-users"></i>
+                            <span>Người Dùng</span>
+                        </a>
+                    </div>
+                    <div class="nav-item @(currentAction == "RoomTypes" ? "active" : "")">
+                        <a href="@Url.Action("RoomTypes", "Home65130650", new { area = "Admin" })">
+                            <i class="fas fa-layer-group"></i>
+                            <span>Loại Phòng</span>
+                        </a>
+                    </div>
+                    <div class="nav-item @(currentAction == "Rooms" ? "active" : "")">
+                        <a href="@Url.Action("Rooms", "Home65130650", new { area = "Admin" })">
+                            <i class="fas fa-door-open"></i>
+                            <span>Phòng</span>
+                        </a>
+                    </div>
+                    <div class="nav-item @(currentAction == "Services" ? "active" : "")">
+                        <a href="@Url.Action("Services", "Home65130650", new { area = "Admin" })">
+                            <i class="fas fa-concierge-bell"></i>
+                            <span>Dịch Vụ</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-section-title">Tài Chính</div>
+                    <div class="nav-item @(currentAction == "Payments" ? "active" : "")">
+                        <a href="@Url.Action("Payments", "Home65130650", new { area = "Admin" })">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Thanh Toán</span>
+                        </a>
+                    </div>
+                    <div class="nav-item @(currentAction == "Reports" ? "active" : "")">
+                        <a href="@Url.Action("Reports", "Home65130650", new { area = "Admin" })">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Báo Cáo</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Nội dung chính -->
+        <main class="main-content">
+            <!-- Thanh trên cùng -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <h1>@ViewBag.Title</h1>
+                </div>
+                
+                <div class="top-bar-right">
+                    <div class="admin-profile">
+                        <div class="admin-avatar">
+                            @{
+                                var userName = Session["UserName"]?.ToString() ?? "Admin";
+                                var firstLetter = userName.Substring(0, 1).ToUpper();
+                            }
+                            @firstLetter
+                        </div>
+                        <div class="admin-info">
+                            <div class="admin-name">@userName</div>
+                            <div class="admin-role">Quản trị viên</div>
+                        </div>
+                        <i class="fas fa-chevron-down dropdown-arrow"></i>
+                        
+                        <div class="profile-dropdown">
+                            <a href="@Url.Action("Profile", "Home65130650", new { area = "Admin" })">
+                                <i class="fas fa-user"></i>
+                                Hồ sơ
+                            </a>
+                            <a href="@Url.Action("Logout", "Account65130650", new { area = "" })">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Đăng xuất
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Khu vực nội dung -->
+            <div class="content-area">
+                @RenderBody()
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Fallback nếu CDN bị chặn/offline
+        if (typeof window.jQuery === 'undefined') {
+            document.write('<script src="@Url.Content("~/Scripts/jquery-3.7.0.min.js")"><\/script>');
+        }
+    </script>
+    <script>
+        // Logic mục menu hoạt động đã chuyển sang phía máy chủ (Razor) để ngăn giao diện bị nhảy
+    </script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

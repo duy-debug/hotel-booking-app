@@ -1,0 +1,6 @@
+﻿<appSettings>
+  <!-- CẤU HÌNH GỬI EMAIL (Example template) -->
+  <add key="EmailUserName" value="your-email@gmail.com" />
+  <add key="EmailPassword" value="your-app-password" />
+  <add key="EmailFrom" value="your-email@gmail.com" />
+</appSettings>

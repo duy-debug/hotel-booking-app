@@ -1,0 +1,1924 @@
+﻿@using Project_65130650.Models.Forms
+@{
+    ViewBag.Title = "Hotel Booking";
+    var loginModel = new LoginForm65130650();
+    var registerModel = new RegisterForm65130650();
+}
+
+<section class="landing-hero" id="top">
+    <!-- Container Slider Chính -->
+    <div class="hero-slider">
+        <!-- Slide 1 -->
+        <div class="hero-slide active" data-slide="0">
+            <div class="hero-slide__background">
+                <img src="~/Images/sheratonnhatrang.jpg" alt="Khách sạn Shearaton" />
+                <div class="hero-slide__overlay"></div>
+            </div>
+            <div class="hero-slide__content">
+                <p class="eyebrow">Shearaton Nha Trang Hotel</p>
+                <h1>Trải nghiệm lưu trú 5 sao giữa lòng thành phố</h1>
+                <p class="lead">
+                    Khám phá hệ thống phòng sang trọng, ẩm thực tinh tế và các sự kiện sôi động
+                    được thiết kế riêng cho từng khoảnh khắc của bạn.
+                </p>
+                <div class="hero-slide__cta">
+                    <button class="btn-primary" data-scroll-target="#rooms">Đặt phòng ngay</button>
+                    <button class="btn-ghost" data-scroll-target="#hotel">Khám phá khách sạn</button>
+                </div>
+            </div>
+            <div class="hero-stats-bar">
+                <div class="hero-stat">
+                    <strong>150K+</strong>
+                    <span>Khách lưu trú</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>98%</strong>
+                    <span>Hài lòng dịch vụ</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>24/7</strong>
+                    <span>Hỗ trợ khách hàng</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="hero-slide" data-slide="1">
+            <div class="hero-slide__background">
+                <img src="~/Images/sanh.jpg" alt="Sảnh khách sạn" />
+                <div class="hero-slide__overlay"></div>
+            </div>
+            <div class="hero-slide__content">
+                <p class="eyebrow">SHERATON NHA TRANG HOTEL</p>
+                <h1>Sảnh đón tiếp đẳng cấp</h1>
+                <p class="lead">
+                    Ấn tượng đầu tiên hoàn hảo với không gian sảnh rộng lớn, thiết kế hiện đại
+                    kết hợp nét đẹp truyền thống Việt Nam.
+                </p>
+                <div class="hero-slide__cta">
+                    <button class="btn-primary" data-scroll-target="#services">Đặt phòng ngay</button>
+                    <button class="btn-ghost" data-scroll-target="#dining">Nhà hàng & quầy bar</button>
+                </div>
+            </div>
+            <div class="hero-stats-bar">
+                <div class="hero-stat">
+                    <strong>150K+</strong>
+                    <span>Khách lưu trú</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>98%</strong>
+                    <span>Hài lòng dịch vụ</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>24/7</strong>
+                    <span>Hỗ trợ khách hàng</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="hero-slide" data-slide="2">
+            <div class="hero-slide__background">
+                <img src="~/Images/sukien.jpg" alt="Sự kiện" />
+                <div class="hero-slide__overlay"></div>
+            </div>
+            <div class="hero-slide__content">
+                <p class="eyebrow">SHERATON NHA TRANG HOTEL</p>
+                <h1>Không gian sự kiện đẳng cấp</h1>
+                <p class="lead">
+                    Tận hưởng khoảnh khắc thư giãn tại sự kiện đẳng cấp, ngắm nhìn toàn cảnh
+                    vịnh Nha Trang tuyệt đẹp từ tầng cao.
+                </p>
+                <div class="hero-slide__cta">
+                    <button class="btn-primary" data-scroll-target="#rooms">Đặt phòng ngay</button>
+                    <button class="btn-ghost" data-scroll-target="#services">Dịch vụ</button>
+                </div>
+            </div>
+            <div class="hero-stats-bar">
+                <div class="hero-stat">
+                    <strong>150K+</strong>
+                    <span>Khách lưu trú</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>98%</strong>
+                    <span>Hài lòng dịch vụ</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>24/7</strong>
+                    <span>Hỗ trợ khách hàng</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nút điều hướng Slide với Thanh tiến trình -->
+    <div class="hero-slider__nav">
+        <button class="hero-slider__dot active" data-goto="0">
+            <span class="hero-slider__progress"></span>
+        </button>
+        <button class="hero-slider__dot" data-goto="1">
+            <span class="hero-slider__progress"></span>
+        </button>
+        <button class="hero-slider__dot" data-goto="2">
+            <span class="hero-slider__progress"></span>
+        </button>
+    </div>
+
+    <!-- Nút điều hướng mũi tên -->
+    <button class="hero-slider__arrow hero-slider__arrow--prev" aria-label="Previous slide">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="hero-slider__arrow hero-slider__arrow--next" aria-label="Next slide">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+</section>
+
+<section id="hotel" class="section reveal luxe-hotel-section">
+    <div class="section__media relative-wrapper">
+        <div class="image-container">
+            <img src="~/Images/khonggian.jpg" alt="Space & Architecture" class="main-image" />
+        </div>
+        <div class="experience-badge">
+            <span class="number">15+</span>
+            <div class="text-col">
+                <span class="badget-label">NĂM</span>
+                <span class="badget-label">KIẾN TẠO</span>
+            </div>
+        </div>
+    </div>
+    <div class="section__content pl-luxe">
+        <span class="luxe-eyebrow">DI SẢN & ĐẲNG CẤP</span>
+        <h2 class="luxe-heading">Kiến trúc vượt thời gian, <br>trải nghiệm xứng tầm</h2>
+        <div class="gold-divider"></div>
+        <p class="luxe-desc">
+            Tọa lạc tại vị trí vàng trên đại lộ biển Trần Phú, Shearaton không chỉ là một điểm dừng chân, 
+            mà là biểu tượng của sự sang trọng tinh tế, nơi nghệ thuật kiến trúc hiện đại giao thoa cùng sự nồng hậu của văn hóa bản địa.
+        </p>
+        
+        <div class="luxe-features">
+            <div class="feature-row">
+                <div class="icon-box"><i class="fas fa-hotel"></i></div>
+                <div class="feature-content">
+                    <h4>Hơn 300 Phòng & Suite</h4>
+                    <p>Tầm nhìn Panorama ôm trọn vẻ đẹp vịnh Nha Trang.</p>
+                </div>
+            </div>
+            <div class="feature-row">
+                <div class="icon-box"><i class="fas fa-swimmer"></i></div>
+                <div class="feature-content">
+                    <h4>Hồ Bơi Vô Cực</h4>
+                    <p>Thư giãn giữa làn nước xanh trong tầm nhìn triệu đô.</p>
+                </div>
+            </div>
+            <div class="feature-row">
+                <div class="icon-box"><i class="fas fa-concierge-bell"></i></div>
+                <div class="feature-content">
+                    <h4>Dịch Vụ Cá Nhân Hóa</h4>
+                    <p>Chuẩn mực 5 sao quốc tế, chăm chút từng chi tiết.</p>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-luxe-dark" data-scroll-target="#rooms">
+            Khám phá ngay <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+</section>
+
+<!-- Phần Phòng Nổi Bật -->
+<section id="rooms" class="section reveal">
+    <div class="section__content">
+        <span class="luxe-eyebrow">KHÔNG GIAN NGHỈ DƯỠNG</span>
+        <h2 class="luxe-heading">Tuyệt tác <br>Kiến trúc & Tiện nghi</h2>
+        <div class="gold-divider"></div>
+        <p class="luxe-desc">
+            Mỗi căn phòng tại Shearaton là một ốc đảo yên bình, nơi thiết kế đương đại giao hòa cùng không gian riêng tư tuyệt đối. 
+            Tận hưởng giấc ngủ trọn vẹn và dịch vụ đẳng cấp 5 sao.
+        </p>
+
+        <div class="featured-rooms-container">
+            @{
+                var featuredRooms = ViewBag.FeaturedRooms as IEnumerable<Project_65130650.Models.ViewModels.RoomCardViewModel65130650>;
+            }
+
+            <!-- Lưới phòng nổi bật -->
+            <div class="featured-rooms-grid">
+                @if (featuredRooms != null && featuredRooms.Any())
+                {
+                    foreach (var room in featuredRooms)
+                    {
+                        <article class="featured-room-card">
+                            <div class="featured-room-card__image">
+                                @{
+                                    var imagePath = "~/Images/phonghangsang.jpeg"; // default
+                                    if (!string.IsNullOrEmpty(room.HinhAnh))
+                                    {
+                                        var firstImage = room.HinhAnh.Split(',', ';')[0].Trim();
+                                        if (firstImage.StartsWith("~/"))
+                                        {
+                                            imagePath = firstImage;
+                                        }
+                                        else if (firstImage.StartsWith("Images/"))
+                                        {
+                                            imagePath = "~/" + firstImage;
+                                        }
+                                        else if (!firstImage.Contains("/"))
+                                        {
+                                            imagePath = "~/Images/" + firstImage;
+                                        }
+                                        else
+                                        {
+                                            imagePath = firstImage;
+                                        }
+                                    }
+                                }
+                                <img src="@Url.Content(imagePath)" alt="@room.TenLoaiPhong" />
+                                <span class="featured-badge">
+                                    <i class="fas fa-star"></i> Nổi bật
+                                </span>
+                            </div>
+                            <div class="featured-room-card__content">
+                                <h3>@room.TenLoaiPhong</h3>
+                                <div class="room-specs">
+                                    <p class="room-info">
+                                        <i class="fas fa-ruler-combined"></i> @room.DienTichPhong m²
+                                    </p>
+                                    <p class="room-info">
+                                        <i class="fas fa-users"></i> Tối đa @room.SoNguoiToiDa người
+                                    </p>
+                                </div>
+                                <p class="room-price">
+                                    @String.Format("{0:N0} ₫", room.GiaCoBan)<span class="price-unit">/đêm</span>
+                                </p>
+                                <div class="room-actions">
+                                    <a href="@Url.Action("RoomDetail", "Dashboard65130650", new { id = room.MaLoaiPhong, autoOpenBooking = true })" 
+                                       class="btn-primary btn-book-now-shared" 
+                                       data-id="@room.MaLoaiPhong" 
+                                       data-name="@room.TenLoaiPhong" 
+                                       data-price="@room.GiaCoBan" 
+                                       data-capacity="@room.SoNguoiToiDa"
+                                       data-checkin=""
+                                       data-checkout="">
+                                        <i class="fas fa-calendar-check"></i> Đặt phòng
+                                    </a>
+                                    <a href="@Url.Action("RoomDetail", "Dashboard65130650", new { id = room.MaLoaiPhong })" class="btn-ghost">
+                                        <i class="fas fa-eye"></i> Chi tiết
+                                    </a>
+                                </div>
+                            </div>
+                        </article>
+                    }
+                }
+                else
+                {
+                    <div class="no-rooms-message">
+                        <i class="fas fa-hotel"></i>
+                        <p>Hiện chưa có phòng nổi bật.</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Nút Xem Tất Cả Phòng - Căn giữa -->
+            <div class="view-all-container">
+                <a href="@Url.Action("Index", "Room65130650")" class="btn-view-all">
+                    <span>Xem tất cả phòng</span>
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="services" class="section reveal luxe-hotel-section luxe-service-section">
+    <div class="section__content pr-luxe">
+        <span class="luxe-eyebrow">DỊCH VỤ & TIỆN ÍCH</span>
+        <h2 class="luxe-heading">Trải nghiệm nghỉ dưỡng <br>đa giác quan</h2>
+        <div class="gold-divider"></div>
+        <p class="luxe-desc">
+            Không chỉ là nơi nghỉ ngơi, Shearaton mang đến một hệ sinh thái tiện ích đẳng cấp. 
+            Từ liệu trình Spa trị liệu chuyên sâu đến không gian thư giãn bên hồ bơi vô cực, mọi nhu cầu của bạn đều được đáp ứng với sự tận tâm cao nhất.
+        </p>
+        
+        <div class="custom-service-grid">
+            <div class="svc-item">
+                <div class="svc-icon-box"><i class="fas fa-spa"></i></div>
+                <div class="svc-text">
+                    <h5>Sen Wellness Spa</h5>
+                    <p>Liệu trình thảo mộc bản địa.</p>
+                </div>
+            </div>
+             <div class="svc-item">
+                <div class="svc-icon-box"><i class="fas fa-swimming-pool"></i></div>
+                <div class="svc-text">
+                    <h5>Hồ Bơi Vô Cực</h5>
+                    <p>Tầm nhìn 360 độ ôm trọn biển.</p>
+                </div>
+            </div>
+             <div class="svc-item">
+                <div class="svc-icon-box"><i class="fas fa-dumbbell"></i></div>
+                <div class="svc-text">
+                    <h5>Gym Center</h5>
+                    <p>Thiết bị Technogym hiện đại.</p>
+                </div>
+            </div>
+             <div class="svc-item">
+                <div class="svc-icon-box"><i class="fas fa-concierge-bell"></i></div>
+                <div class="svc-text">
+                    <h5>Phục Vụ 24/7</h5>
+                    <p>Đáp ứng mọi yêu cầu bất kể thời gian.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section__media relative-wrapper">
+        <div class="image-container">
+            <img src="~/Images/spa.png" alt="Luxury Services" class="main-image" />
+        </div>
+        <div class="floating-rate-badge">
+             <div class="stars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+            </div>
+            <span>Best Luxury Spa Award 2024</span>
+        </div>
+    </div>
+</section>
+
+<section id="location" class="section reveal">
+    <div class="section__content pr-luxe">
+        <span class="luxe-eyebrow">VỊ TRÍ ĐẮC ĐỊA</span>
+        <h2 class="luxe-heading">Tâm điểm kết nối <br>nhịp sống đô thị</h2>
+        <div class="gold-divider"></div>
+        <p class="luxe-desc">
+            Tọa lạc trên cung đường vàng Trần Phú, Shearaton là điểm khởi đầu hoàn hảo để khám phá vẻ đẹp của vịnh biển Nha Trang và nhịp sống sôi động của thành phố.
+        </p>
+        <div class="luxe-features">
+            <div class="feature-row">
+                <i class="fas fa-check-circle" style="color: #fbbf24;"></i>
+                <span>5 phút đến trung tâm thương mại Vincom & Tháp Trầm Hương</span>
+            </div>
+            <div class="feature-row">
+                <i class="fas fa-check-circle" style="color: #fbbf24;"></i>
+                <span>10 phút đến chợ đêm & khu phố ẩm thực quốc tế</span>
+            </div>
+            <div class="feature-row">
+                <i class="fas fa-check-circle" style="color: #fbbf24;"></i>
+                <span>35 phút di chuyển thuận tiện từ sân bay quốc tế Cam Ranh</span>
+            </div>
+        </div>
+    </div>
+    <div class="section__media">
+        <div class="location-map-embed">
+            <iframe
+                src="https://www.google.com/maps?q=Sheraton+Nha+Trang+Hotel+%26+Spa,+26-28+Tran+Phu,+Nha+Trang,+Vietnam&output=embed"
+                width="100%"
+                height="100%"
+                style="border:0;"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</section>
+
+<section id="dining" class="dining-fullscreen-section">
+    <!-- Wrapper Toàn màn hình Chính cho Slider và Lớp phủ -->
+    <div id="diningSlider" class="dining-slider-wrapper">
+        
+        <!-- Ray Slider (Nền) -->
+        <div class="dining-slider__track">
+            <div class="dining-slider__slide">
+                <div class="luxe-slide-bg">
+                    <img src="~/Images/nhahang.jpg" alt="Nhà hàng chính" />
+                    <div class="slide-specific-info">
+                        <h3>Ocean Signature</h3>
+                        <p>Tinh hoa hải sản tươi sống</p>
+                    </div>
+                </div>
+            </div>
+            <div class="dining-slider__slide">
+                <div class="luxe-slide-bg">
+                     <img src="~/Images/quaybar.png" alt="Sky Bar" />
+                     <div class="slide-specific-info">
+                        <h3>Skyline Lounge</h3>
+                        <p>Cocktail & Nhạc Jazz</p>
+                    </div>
+                </div>
+            </div>
+            <div class="dining-slider__slide">
+                <div class="luxe-slide-bg">
+                    <img src="~/Images/quaybar1.jpg" alt="Lounge Bar" />
+                     <div class="slide-specific-info">
+                         <h3>The Club Bar</h3>
+                        <p>Không gian sôi động</p>
+                    </div>
+                </div>
+            </div>
+            <div class="dining-slider__slide">
+                <div class="luxe-slide-bg">
+                     <img src="~/Images/nhahang1.jpg" alt="Buffet Á Âu" />
+                     <div class="slide-specific-info">
+                        <h3>International Buffet</h3>
+                        <p>Hương vị Á - Âu hội tụ</p>
+                    </div>
+                </div>
+            </div>
+            <div class="dining-slider__slide">
+                <div class="luxe-slide-bg">
+                     <img src="~/Images/nhahang3.jpg" alt="Fine Dining" />
+                     <div class="slide-specific-info">
+                        <h3>Private Dining</h3>
+                        <p>Không gian riêng tư sang trọng</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nội dung Lớp phủ Tĩnh (Nằm trên slider) -->
+        <div class="dining-overlay-container">
+            <div class="dining-static-info">
+                <span class="luxe-eyebrow">ẨM THỰC & QUẦY BAR</span>
+                <h2>Hành trình <br>hương vị tinh tế</h2>
+                <div class="gold-divider" style="background: #fbbf24;"></div>
+                <p class="luxe-desc">
+                    Từ những bữa tiệc buffet thịnh soạn đến trải nghiệm fine-dining riêng tư, mỗi món ăn là một tác phẩm nghệ thuật. 
+                    Tận hưởng không gian sang trọng và đẳng cấp 5 sao.
+                </p>
+                
+                <div class="dining-controls-overlay">
+                    <button type="button" class="dining-btn-overlay" data-direction="prev">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div class="control-divider-overlay"></div>
+                    <button type="button" class="dining-btn-overlay" data-direction="next">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+<section id="events" class="section section--alt reveal">
+    <div class="section__media">
+        <img src="~/Images/sukien.jpg" alt="Sự kiện tại khách sạn" />
+    </div>
+    <div class="section__content pr-luxe">
+        <span class="luxe-eyebrow">SỰ KIỆN & HỘI NGHỊ</span>
+        <h2 class="luxe-heading">Dấu ấn thành công <br>trong từng sự kiện</h2>
+        <div class="gold-divider"></div>
+        <p class="luxe-desc">
+            Từ những hội nghị cấp cao đến tiệc cưới lãng mạn bên bờ biển, hệ thống phòng tiệc đắng cấp cùng đội ngũ chuyên gia tận tâm sẽ biến mọi ý tưởng của bạn thành hiện thực.
+        </p>
+        <div class="luxe-features">
+            <div class="feature-row">
+                <i class="fas fa-gem" style="color: #fbbf24;"></i>
+                <span>Grand Ballroom sang trọng sức chứa 600 khách</span>
+            </div>
+            <div class="feature-row">
+                <i class="fas fa-laptop-house" style="color: #fbbf24;"></i>
+                <span>Hệ thống phòng họp linh hoạt, trang thiết bị tối tân</span>
+            </div>
+            <div class="feature-row">
+                <i class="fas fa-glass-cheers" style="color: #fbbf24;"></i>
+                <span>Dịch vụ tiệc trọn gói thiết kế riêng theo chủ đề</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f4f7fb;
+            color: #0f172a;
+            overflow-x: hidden; /* Fix horizontal scrollbar */
+            width: 100%;
+        }
+
+        .landing-hero {
+            position: relative;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            margin-top: -70px; /* Đẩy lên trên để đè header */
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Slider Chính */
+        .hero-slider {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+        }
+
+        .hero-slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hero-slide__background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-slide__background img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.05);
+            transition: transform 8s ease-out;
+        }
+
+        .hero-slide.active .hero-slide__background img {
+            transform: scale(1);
+        }
+
+        .hero-slide__overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.5) 45%, rgba(0,0,0,0) 100%);
+        }
+
+        .hero-slide__content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            gap: 20px;
+            max-width: 800px;
+            margin-left: 7.5%;
+            padding: 120px 0 180px;
+            text-align: left;
+            height: 100%;
+            /* Khôi phục hiệu ứng trượt từ dưới lên */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .hero-slide.active .hero-slide__content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-slide h1 {
+            font-size: 45px;
+            font-weight: 800;
+            color: #eaeaead2;
+            line-height: 1.1;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            margin: 0;
+        }
+
+        .hero-slide__cta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 24px;
+            justify-content: flex-start;
+        }
+
+        /* Nút điều hướng Dots với Thanh tiến trình */
+        .hero-slider__nav {
+            position: absolute;
+            bottom: 140px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .hero-slider__dot {
+            width: 60px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: background 0.3s ease;
+            padding: 0;
+        }
+
+        .hero-slider__dot:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .hero-slider__progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #38bdf8, #0ea5e9);
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .hero-slider__dot.active .hero-slider__progress {
+            animation: progressBar 6s linear forwards;
+        }
+
+        @@keyframes progressBar {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* Nút điều hướng mũi tên */
+        .hero-slider__arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            font-size: 18px;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .hero-slider__arrow:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .hero-slider__arrow--prev {
+            left: 30px;
+        }
+
+        .hero-slider__arrow--next {
+            right: 30px;
+        }
+
+        /* Stats Bar cố định ở dưới */
+        .hero-stats-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 32px 40px;
+            /* Hoàn toàn trong suốt để ảnh nền hiện lên thực tế nhất */
+            background: transparent;
+            backdrop-filter: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat strong {
+            display: block;
+            font-size: 32px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .hero-stat span {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            font-size: 18px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7) !important;
+            margin: 0 0 12px 0 !important;
+            letter-spacing: 0.15em;
+            text-align: left !important;
+        }
+
+        .lead {
+            font-size: 18px;
+            color: #edece3d7;
+            max-width: 650px;
+            margin: 0 !important;
+            line-height: 1.8;
+            text-align: left !important;
+            font-weight: 500 !important;
+        }
+
+        .hero-slide .btn-primary {
+            background: #0B3F84 !important;
+            color: #ffffff;
+            padding: 16px 36px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(14, 165, 233, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .hero-slide .btn-primary:hover {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(14, 165, 233, 0.5);
+        }
+
+        .hero-slide .btn-ghost {
+            background: rgba(255, 255, 255, 0.2); /* Nền đục hơn một chút */
+            backdrop-filter: blur(15px); /* Tăng độ nhòe để hiệu ứng mờ rõ rệt hơn */
+            -webkit-backdrop-filter: blur(15px);
+            color: #ffffffc2 !important;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            padding: 14px 34px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .hero-slide .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+
+        .landing-hero .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            color: #ffffff;
+            padding: 14px 32px;
+            font-size: 16px;
+            box-shadow: 0 8px 24px rgba(14, 165, 233, 0.4);
+        }
+
+        .landing-hero .btn-primary:hover {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(14, 165, 233, 0.5);
+        }
+
+        .landing-hero .btn-ghost {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 14px 32px;
+            font-size: 16px;
+        }
+
+        .landing-hero .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-primary,
+        .btn-ghost {
+            border-radius: 999px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: #0d4ea6;
+            color: #ffffff;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: #0b3f84;
+        }
+
+        .btn-ghost {
+            background: #ffffff;
+            color: #0d4ea6;
+            border-color: #bfdbfe;
+        }
+
+        .btn-ghost:hover {
+            background: #eff6ff;
+        }
+
+        .section {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+            gap: 40px;
+            align-items: center;
+            padding: 40px 0;
+        }
+
+        .section--alt {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+        }
+
+        #rooms.section {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        #dining.section {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .section__content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section__media img {
+            width: 100%;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 22px 60px rgba(15, 23, 42, 0.2);
+        }
+
+        #location .section__media {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .location-map-embed {
+            width: 100%;
+            height: 260px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 22px 60px rgba(15, 23, 42, 0.2);
+        }
+
+        .section__eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-size: 15px;
+            color: #0ea5e9;
+        }
+
+        .section h2 {
+            font-size: 30px;
+            margin: 0;
+        }
+
+        .section p {
+            color: #475569;
+        }
+
+        .section__list {
+            margin: 0;
+            padding-left: 18px;
+            color: #1e293b;
+        }
+
+        .section__list li + li {
+            margin-top: 4px;
+        }
+
+        /* --- LUXE HOTEL SECTION STYLES --- */
+        .luxe-hotel-section { padding: 100px 0; }
+        .relative-wrapper { position: relative; padding-right: 20px; }
+        
+        .image-container {
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px -10px rgba(0,0,0,0.2);
+        }
+        .main-image { width: 100%; display: block; transition: transform 0.5s ease; }
+        .luxe-hotel-section:hover .main-image { transform: scale(1.03); }
+
+        .experience-badge {
+            position: absolute;
+            bottom: -30px;
+            right: 0;
+            background: #ffffff;
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid rgba(0,0,0,0.04);
+            z-index: 2;
+        }
+        .experience-badge .number {
+            font-size: 42px;
+            font-weight: 800;
+            color: #b89150;
+            line-height: 1;
+        }
+        .experience-badge .text-col { display: flex; flex-direction: column; }
+        .experience-badge .badget-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            line-height: 1.3;
+        }
+
+        .pl-luxe { padding-left: 40px; }
+        .luxe-eyebrow {
+            color: #b89150;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 20px;
+        }
+        .luxe-heading {
+            font-family: 'Playfair Display', serif; /* Use serif if available, otherwise inherit sans */
+            font-size: 42px;
+            color: #0f172a;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            font-weight: 700;
+        }
+        .gold-divider {
+            width: 50px;
+            height: 3px;
+            background: #b89150;
+            margin-bottom: 24px;
+        }
+        .luxe-desc {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #475569;
+            margin-bottom: 40px;
+            max-width: 90%;
+        }
+
+        .luxe-features {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        .feature-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: #fdf8f0; /* Light gold tint */
+            color: #b89150;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .feature-row:hover .icon-box { background: #b89150; color: #fff; }
+        
+        .feature-content h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1e293b;
+            margin: 0 0 4px 0;
+        }
+        .feature-content p {
+            font-size: 14px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .btn-luxe-dark {
+            background: #FDFAF4;
+            color: #0f172a;
+            padding: 16px 32px;
+            border-radius: 999px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
+            width: fit-content;
+        }
+        .btn-luxe-dark:hover {
+            background: #b89150;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px -5px rgba(184, 145, 80, 0.4);
+        }
+
+        @@media (max-width: 1024px) {
+            .luxe-hotel-section { padding: 60px 0; }
+            .section__grid { grid-template-columns: 1fr; gap: 60px; }
+            .pl-luxe { padding-left: 0; }
+            .luxe-heading { font-size: 32px; }
+            .experience-badge { right: 20px; bottom: -20px; }
+        }
+
+
+        /* --- LUXE SERVICES STYLES --- */
+        .pr-luxe { padding-right: 60px; }
+        
+        .luxe-service-section {
+            display: grid;
+            grid-template-columns: 1fr 1.1fr; /* Content Left (1fr), Image Right (1.1fr) */
+            gap: 60px;
+            align-items: center;
+        }
+
+        .custom-service-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .svc-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 20px;
+            border-radius: 16px;
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            transition: all 0.3s ease;
+        }
+        
+        .svc-item:hover {
+            background: #ffffff;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
+            transform: translateY(-5px);
+            border-color: transparent;
+        }
+
+        .svc-icon-box {
+            width: 40px;
+            height: 40px;
+            background: #f8fafc;
+            color: #0d4ea6; 
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .svc-item:hover .svc-icon-box {
+            background: #0d4ea6;
+            color: #ffffff;
+        }
+
+        .svc-text h5 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0 0 6px 0;
+        }
+        
+        .svc-text p {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .floating-rate-badge {
+            position: absolute;
+            bottom: 40px;
+            left: -40px; /* Overlap left side */
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 5;
+            max-width: 220px;
+        }
+        
+        .floating-rate-badge .stars { color: #f59e0b; font-size: 14px; margin-bottom: 4px; }
+        .floating-rate-badge span {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+
+        @@media (max-width: 1024px) {
+            .luxe-service-section { grid-template-columns: 1fr; display: flex; flex-direction: column-reverse; gap: 40px; }
+            .pr-luxe { padding-right: 0; }
+            .floating-rate-badge { left: 20px; bottom: -30px; }
+        }
+
+        /* --- DINING FULLSCREEN LAYOUT (NEW) --- */
+        .dining-fullscreen-section {
+            width: 100%;
+            height: 100vh; /* Full viewport height */
+            position: relative;
+            overflow: hidden;
+            padding: 0; /* Remove default padding */
+        }
+
+        .dining-slider-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .dining-slider__track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
+
+        .dining-slider__slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .luxe-slide-bg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .luxe-slide-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures image covers screen */
+            transition: transform 10s ease; /* Subtle zoom effect */
+        }
+        
+        .dining-slider__slide.active .luxe-slide-bg img {
+             transform: scale(1.1);
+        }
+
+        /* Overlay Container for Static Content */
+        .dining-overlay-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0) 100%);
+            display: flex;
+            align-items: center;
+            padding-left: 10%; /* Left alignment */
+            pointer-events: none; /* Let clicks pass through to empty areas if needed */
+        }
+
+        .dining-static-info {
+            max-width: 600px;
+            pointer-events: auto;
+            color: #ffffff;
+        }
+
+        .dining-static-info .luxe-eyebrow {
+            color: #fbbf24; /* Gold */
+            font-weight: 700;
+        }
+
+        .dining-static-info h2 {
+            font-size: 56px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: #ffffff;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .dining-static-info .luxe-desc {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        /* Controls styling update for overlay */
+        .dining-controls-overlay {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .dining-btn-overlay {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.4);
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dining-btn-overlay:hover {
+            background: #ffffff;
+            color: #0f172a;
+            border-color: #ffffff;
+        }
+        
+        .control-divider-overlay {
+             width: 60px;
+             height: 1px;
+             background: rgba(255,255,255,0.3);
+        }
+
+        /* Slide specific info (Right bottom) */
+        .slide-specific-info {
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            z-index: 5;
+            text-align: right;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+            max-width: 300px;
+        }
+        
+        .slide-specific-info h3 {
+             font-family: 'Playfair Display', serif;
+             font-size: 32px;
+             margin-bottom: 8px;
+        }
+
+        /* Responsive */
+        @@media (max-width: 1024px) {
+            .dining-fullscreen-section { height: auto; min-height: 100vh; }
+            .dining-overlay-container {
+                position: relative;
+                padding: 60px 20px;
+                background: #0f172a; /* Solid background on mobile or gradient over image? User asked for image. Text might need background. */
+                background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.8) 100%);
+            }
+            .dining-slider-wrapper { height: 50vh; }
+             .dining-static-info h2 { font-size: 36px; }
+        }
+
+        /* Featured Rooms Styles */
+        .featured-rooms-container {
+            margin-top: 24px;
+        }
+
+        .featured-rooms-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+        }
+
+        .featured-room-card {
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(15, 23, 42, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .featured-room-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.15);
+        }
+
+        .featured-room-card__image {
+            position: relative;
+            height: 180px;
+            overflow: hidden;
+        }
+
+        .featured-room-card__image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .featured-room-card:hover .featured-room-card__image img {
+            transform: scale(1.08);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #ffffff;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .featured-badge i {
+            font-size: 10px;
+        }
+
+        .featured-room-card__content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .featured-room-card__content h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0;
+        }
+
+        .room-specs {
+            display: flex;
+            gap: 16px;
+            margin: 8px 0;
+        }
+
+        .room-info {
+            font-size: 13px;
+            color: #64748b;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .room-info i {
+            color: #0d4ea6;
+            width: 14px;
+        }
+
+        .room-price {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0d4ea6;
+            margin: 8px 0 4px;
+        }
+
+        .price-unit {
+            font-size: 13px;
+            font-weight: 400;
+            color: #64748b;
+        }
+
+        .room-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .room-actions .btn-primary,
+        .room-actions .btn-ghost {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 13px;
+        }
+
+        .no-rooms-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+        }
+
+        .no-rooms-message i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        /* View All Button */
+        .view-all-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .btn-view-all {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 40px;
+            background: linear-gradient(135deg, #0d4ea6 0%, #1e40af 100%);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 999px;
+            text-decoration: none;
+            box-shadow: 0 16px 40px rgba(13, 78, 166, 0.35);
+            transition: all 0.3s ease;
+        }
+
+        .btn-view-all:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(13, 78, 166, 0.45);
+            background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+        }
+
+        .btn-view-all i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-view-all:hover i {
+            transform: translateX(4px);
+        }
+
+        .icon-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-top: 8px;
+            padding: 10px 12px;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #0f172a;
+            font-size: 13px;
+        }
+
+        .icon-features i {
+            color: #0d4ea6;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal--visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dining-slider {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            margin-top: 12px;
+            width: 100%;
+        }
+
+        .dining-slider__track {
+            display: flex;
+            width: 100%;
+            transition: transform 0.7s ease-in-out;
+        }
+
+        .dining-slider__slide {
+            min-width: 100%;
+        }
+
+        .dining-slider__slide img {
+            width: 100%;
+            display: block;
+            border-radius: 20px;
+            object-fit: cover;
+        }
+
+        .dining-slider__control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(15, 23, 42, 0.7);
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .dining-slider__control--prev {
+            left: 10px;
+        }
+
+        .dining-slider__control--next {
+            right: 10px;
+        }
+
+        /* Media Queries */
+
+        @@media (max-width: 1024px) {
+            .hero-slider,
+            .landing-hero {
+                min-height: 80vh;
+            }
+
+            .hero-slide h1 {
+                font-size: 40px;
+            }
+
+            .hero-slide__content {
+                padding: 100px 30px 160px;
+            }
+
+            .hero-stats-bar {
+                gap: 40px;
+                padding: 20px 30px;
+            }
+
+            .hero-stat strong {
+                font-size: 26px;
+            }
+
+            .hero-slider__arrow {
+                width: 44px;
+                height: 44px;
+            }
+
+            .hero-slider__arrow--prev {
+                left: 15px;
+            }
+
+            .hero-slider__arrow--next {
+                right: 15px;
+            }
+
+            .section,
+            .section--alt {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .featured-rooms-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @@media (max-width: 640px) {
+            .hero-slider,
+            .landing-hero {
+                min-height: 100vh;
+            }
+
+            .hero-slide__content {
+                padding: 80px 20px 180px;
+            }
+
+            .hero-slide h1 {
+                font-size: 28px;
+            }
+            .lead {
+                font-size: 14px;
+                line-height: 1.6;
+                text-align: left !important;
+                margin: 0 !important;
+            }
+
+            .hero-slide__cta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .hero-slide .btn-primary,
+            .hero-slide .btn-ghost {
+                width: 100%;
+                max-width: 260px;
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+
+            .hero-slider__arrow {
+                display: none;
+            }
+
+            .hero-slider__nav {
+                bottom: 130px;
+            }
+
+            .hero-slider__dot {
+                width: 40px;
+            }
+
+            .hero-stats-bar {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 20px;
+                padding: 16px 20px;
+            }
+
+            .hero-stat {
+                flex: 1;
+                min-width: 80px;
+            }
+
+            .hero-stat strong {
+                font-size: 22px;
+            }
+
+            .hero-stat span {
+                font-size: 10px;
+            }
+
+            .section {
+                padding: 28px 0;
+            }
+
+            .featured-rooms-grid {
+                grid-column: 1 / -1;
+                grid-template-columns: 1fr;
+            }
+
+            .btn-view-all {
+                padding: 14px 30px;
+                font-size: 14px;
+            }
+
+            .room-specs {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Ẩn footer mặc định của layout trên trang chủ để không bị trùng lặp */
+        footer:not(.landing-footer):not(.bg-slate-950) {
+            display: none;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var header = document.querySelector('header');
+            var headerOffset = header ? header.offsetHeight + 8 : 80;
+
+            function scrollToTarget(selector) {
+                var target = document.querySelector(selector);
+                if (!target) return;
+
+                var rect = target.getBoundingClientRect();
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                var top = rect.top + scrollTop - headerOffset;
+
+                window.scrollTo({
+                    top: top,
+                    behavior: 'smooth'
+                });
+            }
+
+            document.querySelectorAll('[data-scroll-target]').forEach(function (el) {
+                el.addEventListener('click', function (e) {
+                    var selector = el.getAttribute('data-scroll-target');
+                    if (!selector) return;
+                    e.preventDefault();
+                    scrollToTarget(selector);
+                });
+            });
+
+            var observer = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal--visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.2
+            });
+
+            document.querySelectorAll('.reveal').forEach(function (el) {
+                observer.observe(el);
+            });
+
+            // ========== SLIDER CHÍNH ==========
+            var slides = document.querySelectorAll('.hero-slide');
+            var dots = document.querySelectorAll('.hero-slider__dot');
+            var prevBtn = document.querySelector('.hero-slider__arrow--prev');
+            var nextBtn = document.querySelector('.hero-slider__arrow--next');
+            var currentSlide = 0;
+            var slideInterval;
+            var slideDuration = 6000; // 6 giây mỗi slide
+
+            function goToSlide(index) {
+                // Xóa active từ tất cả slides và dots
+                slides.forEach(function(slide) {
+                    slide.classList.remove('active');
+                });
+                dots.forEach(function(dot) {
+                    dot.classList.remove('active');
+                    // Đặt lại hoạt ảnh thanh tiến trình
+                    var progress = dot.querySelector('.hero-slider__progress');
+                    if (progress) {
+                        progress.style.animation = 'none';
+                        progress.offsetHeight; // Buộc vẽ lại để trigger animation
+                        progress.style.animation = '';
+                    }
+                });
+
+                // Thêm active cho slide và dot hiện tại
+                currentSlide = index;
+                if (currentSlide >= slides.length) currentSlide = 0;
+                if (currentSlide < 0) currentSlide = slides.length - 1;
+
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+
+            function nextSlide() {
+                goToSlide(currentSlide + 1);
+            }
+
+            function prevSlide() {
+                goToSlide(currentSlide - 1);
+            }
+
+            function startAutoPlay() {
+                stopAutoPlay();
+                slideInterval = setInterval(nextSlide, slideDuration);
+            }
+
+            function stopAutoPlay() {
+                if (slideInterval) {
+                    clearInterval(slideInterval);
+                }
+            }
+
+            // Lắng nghe sự kiện click cho các điểm (dots)
+            dots.forEach(function(dot, index) {
+                dot.addEventListener('click', function() {
+                    goToSlide(index);
+                    startAutoPlay(); // Đặt lại bộ đếm thời gian khi click
+                });
+            });
+
+            // Lắng nghe sự kiện click cho các mũi tên
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    prevSlide();
+                    startAutoPlay();
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    nextSlide();
+                    startAutoPlay();
+                });
+            }
+
+            // Khởi động slider
+            goToSlide(0);
+            startAutoPlay();
+
+            /* --- SLIDER NHÀ HÀNG: LOGIC MỘT CHIỀU VÔ TẬN --- */
+            var diningSlider = document.getElementById('diningSlider');
+            if (diningSlider) {
+                var diningTrack = diningSlider.querySelector('.dining-slider__track');
+                var originalSlides = Array.prototype.slice.call(diningSlider.querySelectorAll('.dining-slider__slide'));
+                var diningInterval = null;
+                var diningDelay = 3500;
+                
+                // Nhân bản slide đầu và cuối để tạo vòng lặp vô tận
+                var firstClone = originalSlides[0].cloneNode(true);
+                var lastClone = originalSlides[originalSlides.length - 1].cloneNode(true);
+
+                // Thêm các slide nhân bản vào track
+                diningTrack.appendChild(firstClone);
+                diningTrack.insertBefore(lastClone, originalSlides[0]);
+
+                var allSlides = Array.prototype.slice.call(diningSlider.querySelectorAll('.dining-slider__slide'));
+                var diningIndex = 1; // Bắt đầu ở slide thực đầu tiên (chỉ mục 1 do có bản sao)
+
+                // Định vị ban đầu
+                diningTrack.style.transform = 'translateX(-100%)';
+
+                var isTransitioning = false;
+
+                function updateDiningTrack(transition) {
+                    diningTrack.style.transition = transition ? 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)' : 'none';
+                    diningTrack.style.transform = 'translateX(' + (-diningIndex * 100) + '%)';
+                }
+
+                function goToDiningSlide(index) {
+                    if (isTransitioning) return;
+                    isTransitioning = true;
+                    diningIndex = index;
+                    updateDiningTrack(true);
+                }
+
+                // Xử lý logic vòng lặp liên tục sau khi kết thúc chuyển cảnh
+                diningTrack.addEventListener('transitionend', function () {
+                    isTransitioning = false;
+                    if (diningIndex === allSlides.length - 1) { // Đã đến Bản sao của Slide đầu
+                        diningIndex = 1; // Nhảy về Slide đầu thực sự
+                        updateDiningTrack(false);
+                    } else if (diningIndex === 0) { // Đã đến Bản sao của Slide cuối
+                        diningIndex = allSlides.length - 2; // Nhảy về Slide cuối thực sự
+                        updateDiningTrack(false);
+                    }
+                });
+
+                function nextDiningSlide() {
+                    // Luôn cho phép next, vì đã có các bản sao
+                    goToDiningSlide(diningIndex + 1);
+                }
+
+                function prevDiningSlide() {
+                    // Luôn cho phép prev, vì đã có các bản sao
+                    goToDiningSlide(diningIndex - 1);
+                }
+
+                // Tự động chạy
+                function startDiningAutoPlay() {
+                    stopDiningAutoPlay();
+                    diningInterval = window.setInterval(function () {
+                        nextDiningSlide();
+                    }, diningDelay);
+                }
+
+                function stopDiningAutoPlay() {
+                    if (diningInterval) {
+                        window.clearInterval(diningInterval);
+                        diningInterval = null;
+                    }
+                }
+
+                // Các nút điều khiển
+                var diningPrev = diningSlider.querySelector('[data-direction="prev"]');
+                var diningNext = diningSlider.querySelector('[data-direction="next"]');
+
+                if (diningPrev) {
+                    diningPrev.addEventListener('click', function () {
+                        prevDiningSlide();
+                        startDiningAutoPlay();
+                    });
+                }
+
+                if (diningNext) {
+                    diningNext.addEventListener('click', function () {
+                        nextDiningSlide();
+                        startDiningAutoPlay();
+                    });
+                }
+
+                diningSlider.addEventListener('mouseenter', stopDiningAutoPlay);
+                diningSlider.addEventListener('mouseleave', startDiningAutoPlay);
+
+                startDiningAutoPlay();
+            }
+        });
+    </script>
+}

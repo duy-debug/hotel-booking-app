@@ -1,0 +1,397 @@
+/* Compact Admin Styles - Optimized for better space usage */
+
+/* Common Page Styles */
+.page-container {
+    padding: 16px !important;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px !important;
+}
+
+.header-content h1 {
+    font-size: 20px !important;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 4px 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 8px !important;
+}
+
+.header-content h1 i {
+    color: #4f46e5;
+    font-size: 18px !important;
+}
+
+.header-content p {
+    color: #6b7280;
+    margin: 0 !important;
+    font-size: 12px !important;
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px !important;
+}
+
+/* Buttons */
+.btn {
+    padding: 7px 14px !important;
+    border-radius: 6px !important;
+    font-size: 12px !important;
+    gap: 6px !important;
+}
+
+.btn i {
+    font-size: 12px !important;
+}
+
+/* Stats Row */
+.stats-row {
+    gap: 12px !important;
+    margin-bottom: 16px !important;
+}
+
+.stat-box {
+    padding: 14px !important;
+    border-radius: 8px !important;
+    gap: 10px !important;
+}
+
+.stat-box i {
+    font-size: 22px !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 8px !important;
+}
+
+.stat-number {
+    font-size: 20px !important;
+}
+
+.stat-label {
+    font-size: 11px !important;
+}
+
+/* Cards */
+.content-card {
+    border-radius: 10px !important;
+}
+
+.card-body {
+    padding: 16px !important;
+}
+
+.info-section {
+    margin-bottom: 24px !important;
+}
+
+.info-section h3 {
+    font-size: 16px !important;
+    margin-bottom: 16px !important;
+    padding-bottom: 12px !important;
+}
+
+/* Table Controls */
+.table-controls {
+    gap: 10px !important;
+    margin-bottom: 14px !important;
+    flex-wrap: wrap !important;
+}
+
+.search-box {
+    min-width: 180px !important;
+}
+
+.search-box i {
+    left: 10px !important;
+    font-size: 12px !important;
+}
+
+.search-box input {
+    padding: 7px 10px 7px 32px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+}
+
+.filter-group select {
+    padding: 7px 12px !important;
+    font-size: 12px !important;
+    min-width: 140px !important;
+    border-radius: 6px !important;
+}
+
+/* Tables */
+.data-table {
+    font-size: 12px !important;
+}
+
+.data-table th {
+    padding: 8px 10px !important;
+    font-size: 10px !important;
+}
+
+.data-table td {
+    padding: 10px !important;
+}
+
+.badge {
+    padding: 3px 8px !important;
+    font-size: 10px !important;
+    border-radius: 4px !important;
+}
+
+.customer-info strong {
+    font-size: 12px !important;
+}
+
+.customer-info small {
+    font-size: 10px !important;
+}
+
+.room-badge {
+    padding: 3px 8px !important;
+    font-size: 11px !important;
+}
+
+.action-buttons {
+    gap: 5px !important;
+}
+
+.btn-icon {
+    width: 26px !important;
+    height: 26px !important;
+    font-size: 11px !important;
+    border-radius: 5px !important;
+}
+
+/* Grid Layouts */
+.rooms-grid,
+.services-grid,
+.room-types-grid,
+.reports-grid {
+    gap: 14px !important;
+}
+
+.room-card,
+.service-card,
+.room-type-card,
+.report-card {
+    border-radius: 10px !important;
+}
+
+.room-header,
+.card-header-custom {
+    padding: 16px !important;
+}
+
+.room-body,
+.card-body-custom,
+.service-content {
+    padding: 14px !important;
+}
+
+.room-footer,
+.card-footer-custom,
+.service-actions {
+    padding: 12px 14px !important;
+}
+
+/* Room Cards */
+.room-number {
+    font-size: 20px !important;
+}
+
+.room-status {
+    font-size: 11px !important;
+    padding: 4px 10px !important;
+}
+
+.info-item {
+    gap: 8px !important;
+    margin-bottom: 8px !important;
+    font-size: 12px !important;
+}
+
+.info-item i {
+    width: 16px !important;
+    font-size: 12px !important;
+}
+
+/* Service Cards */
+.service-icon {
+    width: 50px !important;
+    height: 50px !important;
+    font-size: 20px !important;
+    margin-bottom: 12px !important;
+}
+
+.service-content h3 {
+    font-size: 16px !important;
+    margin-bottom: 6px !important;
+}
+
+.description {
+    font-size: 12px !important;
+    margin-bottom: 12px !important;
+}
+
+.price-tag {
+    padding: 6px 12px !important;
+    font-size: 14px !important;
+}
+
+/* Room Type Cards */
+.card-header-custom h3 {
+    font-size: 17px !important;
+    margin-bottom: 6px !important;
+}
+
+.price {
+    font-size: 15px !important;
+}
+
+/* Report Cards */
+.report-icon {
+    width: 64px !important;
+    height: 64px !important;
+    font-size: 26px !important;
+    margin-bottom: 14px !important;
+}
+
+.report-card h3 {
+    font-size: 17px !important;
+    margin-bottom: 8px !important;
+}
+
+.report-card p {
+    font-size: 12px !important;
+    margin-bottom: 18px !important;
+}
+
+/* Profile Page */
+.profile-container {
+    gap: 20px !important;
+}
+
+.profile-sidebar {
+    padding: 24px !important;
+}
+
+.profile-avatar {
+    width: 100px !important;
+    height: 100px !important;
+    font-size: 40px !important;
+    margin-bottom: 14px !important;
+}
+
+.profile-sidebar h2 {
+    font-size: 20px !important;
+    margin-bottom: 6px !important;
+}
+
+.role-badge {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    margin-bottom: 12px !important;
+}
+
+.status-badge {
+    padding: 10px !important;
+    font-size: 13px !important;
+}
+
+.profile-content {
+    padding: 24px !important;
+}
+
+.info-grid,
+.form-grid {
+    gap: 16px !important;
+}
+
+.info-item label,
+.form-group label {
+    font-size: 11px !important;
+}
+
+.info-item span {
+    font-size: 14px !important;
+}
+
+.form-control {
+    padding: 9px 12px !important;
+    font-size: 13px !important;
+}
+
+.form-text {
+    font-size: 11px !important;
+}
+
+.section-note {
+    font-size: 12px !important;
+    margin-bottom: 14px !important;
+}
+
+.password-requirements {
+    padding: 12px !important;
+    margin-top: 10px !important;
+}
+
+.req-title {
+    font-size: 11px !important;
+    margin-bottom: 10px !important;
+}
+
+.req-item {
+    font-size: 11px !important;
+    margin-bottom: 6px !important;
+}
+
+.error-message {
+    font-size: 11px !important;
+}
+
+/* Empty States */
+.empty-state {
+    padding: 40px 16px !important;
+}
+
+.empty-state i {
+    font-size: 36px !important;
+    margin-bottom: 10px !important;
+}
+
+.empty-state p {
+    font-size: 13px !important;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .data-table {
+        font-size: 11px !important;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 8px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-container {
+        padding: 12px !important;
+    }
+
+    .header-content h1 {
+        font-size: 18px !important;
+    }
+
+    .stats-row {
+        grid-template-columns: 1fr 1fr !important;
+    }
+}
