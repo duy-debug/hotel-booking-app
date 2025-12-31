@@ -133,7 +133,7 @@
     <Compile Include="Areas\Customer\Controllers\Home65130650Controller.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
     <Compile Include="Controllers\Account65130650Controller.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\Dashboard65130650Controller.cs" />
     <Compile Include="Controllers\Room65130650Controller.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -274,10 +274,10 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Dashboard65130650\Index.cshtml" />
     <Content Include="Views\Account65130650\Login.cshtml" />
     <Content Include="Views\Account65130650\Register.cshtml" />
-    <Content Include="Views\Home\RoomDetail.cshtml" />
+    <Content Include="Views\Dashboard65130650\RoomDetail.cshtml" />
     <Content Include="Views\Room65130650\Index.cshtml" />
     <Content Include="Views\Account65130650\ForgotPassword.cshtml" />
     <Content Include="Views\Account65130650\ResetPassword.cshtml" />

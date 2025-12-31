@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <!-- Stats Row -->
+    <!-- Hàng thống kê -->
     <div class="stats-row">
         <div class="stat-box stat-blue">
             <i class="fas fa-list"></i>
@@ -70,7 +70,7 @@
                     <input type="text" id="searchInput" value="@ViewBag.Search" placeholder="Tìm kiếm theo mã, khách hàng, phòng...">
                 </div>
                 <div class="filter-group">
-                    <!-- Status Custom Dropdown -->
+                    <!-- Dropdown tùy chỉnh trạng thái -->
                     <div class="custom-dropdown" id="statusDropdown">
                         <button class="dropdown-btn">
                             <span class="selected-text" id="statusText">@(string.IsNullOrEmpty(ViewBag.Status) ? "Tất cả trạng thái" : ViewBag.Status)</span>
@@ -190,7 +190,7 @@
                         </table>
                     </div>
 
-                    <!-- Pagination -->
+                    <!-- Phân trang -->
                     if (ViewBag.TotalPages > 1)
                     {
                         <div class="pagination-wrapper">
@@ -529,7 +529,7 @@
                 border-color: #3b82f6;
                 box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
             }
-            /* Custom Dropdown Styles - Copied from Rooms.cshtml */
+            /* Style Dropdown tùy chỉnh - Sao chép từ Rooms.cshtml */
             .custom-dropdown {
                 position: relative;
                 display: inline-block;
@@ -656,7 +656,7 @@
         .pagination-btn:hover:not(.current) { background: #f0f9ff; border-color: #0d4ea6; color: #0d4ea6; }
         .empty-state { text-align: center; padding: 40px; color: #9ca3af; }
 
-        /* Modal Custom - Đổi tên từ class .modal sang .custom-modal để tránh conflict Bootstrap */
+        /* Modal Tùy chỉnh - Đổi tên từ class .modal sang .custom-modal để tránh xung đột Bootstrap */
         .custom-modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); overflow: auto; }
         .modal-content { background-color: #fefefe; margin: 5% auto; padding: 0; border-radius: 12px; width: 90%; max-width: 600px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .modal-header { padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
@@ -682,8 +682,8 @@
 
 @section Scripts {
     <script>
-        // --- 1. Common & Init ---
-        // Init dates for Walk-in
+        // --- 1. Chung & Khởi tạo ---
+        // Khởi tạo ngày cho khách vãng lai
         var today = new Date().toISOString().split('T')[0];
         $('#newCheckIn').val(today);
         $('#newCheckOut').attr('min', today);
@@ -691,7 +691,7 @@
             $('#newCheckOut').attr('min', this.value);
         });
 
-        // Move Modals to Body to avoid CSS Transform/Animation conflicts with position:fixed
+        // Di chuyển Modal vào Body để tránh xung đột CSS Transform/Animation với position:fixed
         $(document).ready(function() {
             $('#viewModal').appendTo('body');
             $('#createBookingModal').appendTo('body');
@@ -700,7 +700,7 @@
             console.log('Modals moved to body root');
         });
 
-        // Modal Control Functions (Unified)
+        // Hàm điều khiển Modal (Thống nhất)
         function openModal(selector) {
             console.log('Opening modal:', selector);
             $(selector).show();
@@ -709,7 +709,7 @@
             $(selector).hide();
         }
 
-        // Close modal when clicking outside (Event Delegation)
+        // Đóng modal khi click ra ngoài (Ủy quyền sự kiện)
         $(window).on('click', function(event) {
             if ($(event.target).hasClass('custom-modal')) {
                 $(event.target).css('display', 'none');
@@ -717,7 +717,7 @@
         });
 
 
-        // --- 2. Search & Pagination ---
+        // --- 2. Tìm kiếm & Phân trang ---
         var searchTimer;
         $('#searchInput').on('input', function() {
             clearTimeout(searchTimer);
@@ -727,7 +727,7 @@
         function performSearch(page = 1) {
             var search = $('#searchInput').val();
             var status = $('#statusFilter').val();
-            // Note: fromDate/toDate inputs were not in your HTML above, but if added later, keep logic.
+            // Lưu ý: input fromDate/toDate không có trong HTML ở trên, nhưng nếu thêm sau, hãy giữ logic.
             
             var url = '@Url.Action("Bookings", "Home65130650", new { area = "Admin" })';
             
@@ -746,7 +746,7 @@
         function changePage(page) { performSearch(page); }
 
 
-        // --- 3. View Booking Details ---
+        // --- 3. Xem chi tiết đặt phòng ---
         function viewBooking(id) {
             console.log('viewBooking called for id:', id);
             
@@ -778,7 +778,7 @@
                             servicesHtml = '<div class="service-list"><small class="text-muted" style="font-style:italic;">Không sử dụng dịch vụ</small></div>';
                         }
 
-                        // Fix NaN issue
+                        // Sửa lỗi NaN
                         var tienPhong = parseFloat(d.tienPhong) || 0; // DB lưu Tiền phòng (Giá * Ngày)
                         var totalService = parseFloat(d.totalServiceAmount) || 0;
                         var daThanhToan = parseFloat(d.totalPaid) || 0;

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Project_65130650.Models.ViewModels
 {
+    /// <summary>
+    /// ViewModel dùng cho yêu cầu đặt phòng từ phía khách hàng
+    /// </summary>
     public class BookingRequestViewModel65130650
     {
         public string MaLoaiPhong { get; set; }
@@ -16,6 +19,9 @@ namespace Project_65130650.Models.ViewModels
         public List<ServiceSelectionViewModel65130650> SelectedServices { get; set; }
     }
 
+    /// <summary>
+    /// ViewModel cho dịch vụ được chọn kèm theo booking
+    /// </summary>
     public class ServiceSelectionViewModel65130650
     {
         public string MaDichVu { get; set; }

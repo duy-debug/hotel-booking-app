@@ -2,6 +2,9 @@
 
 namespace Project_65130650.Models.ViewModels
 {
+    /// <summary>
+    /// ViewModel cho việc hiển thị thẻ phòng (Card) trên giao diện danh sách
+    /// </summary>
     public class RoomCardViewModel65130650
     {
         public string MaPhong { get; set; }

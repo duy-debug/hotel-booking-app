@@ -1,6 +1,6 @@
-﻿@* Shared Booking and Payment Modals *@
+﻿@* Modal Đặt phòng và Thanh toán (Dùng chung) *@
 
-<!-- Booking Modal -->
+<!-- Modal Đặt phòng -->
 <div id="bookingModal" class="auth-modal">
     <div class="auth-modal_backdrop"></div>
     <div class="auth-modal_panel" style="max-width: 750px; margin: 20px auto;">
@@ -72,7 +72,7 @@
     </div>
 </div>
 
-<!-- Payment Modal -->
+<!-- Modal Thanh toán -->
 <div id="paymentModal" class="auth-modal">
     <div class="auth-modal_backdrop"></div>
     <div class="auth-modal_panel" style="max-width: 400px; margin: 20px auto;">
@@ -209,7 +209,7 @@
         const bookingModal = document.getElementById('bookingModal');
         const paymentModal = document.getElementById('paymentModal');
 
-        // Close functions
+        // Hàm đóng modal
         const closeAllShared = () => {
             bookingModal.classList.remove('is-active');
             paymentModal.classList.remove('is-active');
@@ -232,11 +232,11 @@
             currentRoom = roomData;
             selectedServices = [];
             
-            // Set basic info
+            // Thiết lập thông tin cơ bản
             document.getElementById('modalRoomName').textContent = roomData.tenLoaiPhong;
             document.getElementById('bookingGuests').max = roomData.soNguoiToiDa;
             
-            // Helpers for dates in YYYY-MM-DD format using local time
+            // Hàm hỗ trợ định dạng ngày YYYY-MM-DD theo giờ địa phương
             const formatDate = (date) => {
                 const year = date.getFullYear();
                 const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -252,11 +252,11 @@
             
             const isValidDate = (d) => d && d !== "" && !d.startsWith('0001') && d !== "null";
 
-            // Determine final dates
+            // Xác định ngày cuối cùng
             let finalCheckIn = isValidDate(roomData.checkIn) ? roomData.checkIn : todayStr;
             let finalCheckOut = isValidDate(roomData.checkOut) ? roomData.checkOut : "";
 
-            // If checkOut is missing or before checkIn, make it checkIn + 1 day
+            // Nếu ngày trả phòng thiếu hoặc trước ngày nhận, đặt thành ngày nhận + 1
             if (!isValidDate(finalCheckOut)) {
                 const dIn = new Date(finalCheckIn);
                 const dOut = new Date(dIn);
@@ -268,11 +268,11 @@
             const checkOutInput = document.getElementById('bookingCheckOut');
 
             if (checkInInput && checkOutInput) {
-                // Set values first to avoid conflicts with min
+                // Đặt giá trị trước để tránh xung đột với min
                 checkInInput.value = finalCheckIn;
                 checkOutInput.value = finalCheckOut;
                 
-                // Then set constraints
+                // Sau đó thiết lập ràng buộc
                 checkInInput.min = todayStr;
                 checkOutInput.min = tomorrowStr;
             }
@@ -282,12 +282,12 @@
 
             if (allServices.length === 0) {
                 try {
-                    const response = await fetch('/Home/GetServices');
+                    const response = await fetch('/Dashboard65130650/GetServices');
                     allServices = await response.json();
                     renderServices();
                 } catch (error) { console.error('Error fetching services:', error); }
             } else {
-                renderServices(); // Reset quantities
+                renderServices(); // Đặt lại số lượng
             }
             calculateTotals();
         }
@@ -377,7 +377,7 @@
             };
         }
 
-        // Listeners
+        // Lắng nghe sự kiện
         ['bookingCheckIn', 'bookingCheckOut', 'bookingNote'].forEach(id => {
             document.getElementById(id).onchange = calculateTotals;
         });
@@ -436,7 +436,7 @@
             this.disabled = true;
             this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xử lý...';
             try {
-                const response = await fetch('/Home/ConfirmBooking', {
+                const response = await fetch('/Dashboard65130650/ConfirmBooking', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(window.bookingData)
@@ -459,7 +459,7 @@
 
         window.openBookingModalShared = openBookingModal;
 
-        // Auto-hook global booking clicks to this shared modal
+        // Tự động gắn sự kiện click đặt phòng toàn cục vào modal này
         document.addEventListener('click', function(e) {
             let btn = e.target.closest('.btn-book-now-shared');
             if (btn) {

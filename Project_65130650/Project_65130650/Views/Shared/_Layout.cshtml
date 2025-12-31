@@ -17,7 +17,7 @@
             overflow: hidden;
         }
 
-        /* Modal shared styles */
+        /* Style chung cho Modal */
         .auth-modal {
             position: fixed;
             inset: 0;
@@ -242,13 +242,13 @@
             }
         }
 
-        /* Nav active state */
+        /* Trạng thái active của Nav */
         .nav-link-active {
             color: #0ea5e9 !important; /* sky-500 */
             border-bottom-color: #0ea5e9 !important;
         }
 
-        /* Transparent Header Styles */
+        /* Style Header Trong suốt */
         .header-transparent {
             background: transparent !important;
             border-bottom-color: transparent !important;
@@ -324,12 +324,12 @@
             background: rgba(56, 189, 248, 0.9) !important;
         }
 
-        /* Header transition */
+        /* Hiệu ứng chuyển đổi Header */
         header {
             transition: background 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
         }
 
-        /* Scrolled state with background */
+        /* Trạng thái cuộn có nền */
         .header-scrolled {
             background: rgba(255, 255, 255, 0.95) !important;
             border-bottom-color: #e2e8f0 !important;
@@ -354,7 +354,7 @@
             color: #ef4444 !important;
         }
 
-        /* Sync Profile Style with Admin */
+        /* Đồng bộ Style Profile với Admin */
         .user-profile-container {
             display: flex;
             align-items: center;
@@ -415,7 +415,7 @@
             color: #0d4ea6;
         }
 
-        /* Professional Dropdown Box */
+        /* Hộp Dropdown Chuyên nghiệp */
         .user-dropdown-menu {
             position: absolute;
             top: 100%;
@@ -440,7 +440,7 @@
             transform: translateY(0);
         }
 
-        /* Dropdown Items styling */
+        /* Style các mục Dropdown */
         .user-dropdown-item {
             display: flex;
             align-items: center;
@@ -490,7 +490,7 @@
  </head>
 <body class="bg-white min-h-screen flex flex-col">
     <script>
-        // Set user authentication status from server
+        // Trạng thái đăng nhập người dùng toàn cục
         var isUserLoggedIn = @(Request.IsAuthenticated ? "true" : "false");
     </script>
     <header class="bg-white/80 backdrop-blur border-b border-slate-200 sticky top-0 z-50">
@@ -498,7 +498,7 @@
             <div class="flex items-center py-3">
                 <!-- Logo + title (trái) -->
                 <div class="flex items-center gap-3 navbar-logo-container">
-                    <a href="@Url.Action("Index", "Home", new { area = "" })" class="inline-flex items-center">
+                    <a href="@Url.Action("Index", "Dashboard65130650", new { area = "" })" class="inline-flex items-center">
                         <img src="~/Images/logo.png"
                              alt="Shearaton"
                              class="block h-12 w-auto" />
@@ -508,12 +508,12 @@
 
                 <!-- Menu giữa -->
                 <nav class="hidden md:flex flex-1 justify-center items-center gap-6 text-sm font-medium text-slate-600">
-                    <a href="~/Home/Index#top" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#top">Khách Sạn</a>
-                    <a href="~/Home/Index#rooms" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#rooms">Phòng, Suite & Penthouse</a>
-                    <a href="~/Home/Index#services" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#services">Dịch Vụ</a>
-                    <a href="~/Home/Index#location" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#location">Vị Trí</a>
-                    <a href="~/Home/Index#dining" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#dining">Ẩm Thực & Quầy Bar</a>
-                    <a href="~/Home/Index#events" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#events">Sự Kiện & Sống Động</a>
+                    <a href="~/Dashboard65130650/Index#top" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#top">Khách Sạn</a>
+                    <a href="~/Dashboard65130650/Index#rooms" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#rooms">Phòng, Suite & Penthouse</a>
+                    <a href="~/Dashboard65130650/Index#services" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#services">Dịch Vụ</a>
+                    <a href="~/Dashboard65130650/Index#location" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#location">Vị Trí</a>
+                    <a href="~/Dashboard65130650/Index#dining" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#dining">Ẩm Thực & Quầy Bar</a>
+                    <a href="~/Dashboard65130650/Index#events" class="nav-item pb-1 border-b-2 border-transparent hover:border-sky-500 hover:text-sky-500 transition-colors" data-scroll-target="#events">Sự Kiện & Sống Động</a>
                 </nav>
                 <!-- Nút auth bên phải -->
                 <div class="hidden md:flex items-center gap-3 ml-4">
@@ -599,12 +599,12 @@
     @Html.Partial("~/Views/Shared/_BookingModals.cshtml")
 
     <footer class="landing-footer bg-slate-300 text-slate-600 reveal mt-16 relative overflow-hidden border-t border-slate-200">
-    <!-- Subtle accent line -->
+    <!-- Đường viền tinh tế -->
     <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-sky-500/30 to-transparent"></div>
     
     <div class="max-w-[85%] mx-auto px-4 pt-16 pb-8">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-            <!-- Brand Section -->
+            <!-- Phần Thương hiệu -->
             <div class="space-y-6">
                 <a href="#top" class="inline-block group transition-transform duration-300 hover:scale-105">
                     <img src="@Url.Content("~/Images/logo.png")" alt="Shearaton" class="h-10 w-auto" />
@@ -637,19 +637,19 @@
                 </div>
             </div>
 
-            <!-- Quick Links -->
+            <!-- Liên kết nhanh -->
             <div class="lg:ml-8">
                 <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-8">Khám phá</h4>
                 <ul class="space-y-4 text-sm font-medium">
-                    <li><a href="~/Home/Index#top" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#top">Về khách sạn</a></li>
-                    <li><a href="~/Home/Index#rooms" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#rooms">Hạng phòng & Suite</a></li>
-                    <li><a href="~/Home/Index#services" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#services">Dịch vụ & Tiện ích</a></li>
-                    <li><a href="~/Home/Index#dining" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#dining">Ẩm Thực & Quầy Bar</a></li>
-                    <li><a href="~/Home/Index#events" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#events">Sự kiện & Hội nghị</a></li>
+                    <li><a href="~/Dashboard65130650/Index#top" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#top">Về khách sạn</a></li>
+                    <li><a href="~/Dashboard65130650/Index#rooms" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#rooms">Hạng phòng & Suite</a></li>
+                    <li><a href="~/Dashboard65130650/Index#services" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#services">Dịch vụ & Tiện ích</a></li>
+                    <li><a href="~/Dashboard65130650/Index#dining" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#dining">Ẩm Thực & Quầy Bar</a></li>
+                    <li><a href="~/Dashboard65130650/Index#events" class="text-slate-500 hover:text-sky-600 transition-colors" data-scroll-target="#events">Sự kiện & Hội nghị</a></li>
                 </ul>
             </div>
 
-            <!-- Contact info -->
+            <!-- Thông tin liên hệ -->
             <div>
                 <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-8">Liên hệ</h4>
                 <ul class="space-y-4 text-sm font-medium">
@@ -668,7 +668,7 @@
                 </ul>
             </div>
 
-            <!-- Opening Hours -->
+            <!-- Giờ mở cửa -->
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm transition-all duration-300 hover:shadow-md">
                 <h4 class="text-slate-900 text-xs font-bold uppercase tracking-[0.2em] mb-6">Thời gian hoạt động</h4>
                 <ul class="space-y-4 text-xs font-medium">
@@ -692,7 +692,7 @@
             </div>
         </div>
 
-        <!-- Bottom section -->
+        <!-- Phần chân trang -->
         <div class="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] text-slate-400 uppercase tracking-[0.2em] font-bold">
             <p>&copy; @DateTime.Now.Year Shearaton Hotel Nha Trang. All rights reserved.</p>
             <div class="flex gap-8">
@@ -704,10 +704,10 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     <script>
-        // Global User Login State
+        // Trạng thái đăng nhập người dùng toàn cục
         window.isUserLoggedIn = @(Session["UserId"] != null ? "true" : "false");
 
-        // ========== TRANSPARENT HEADER ==========
+        // ========== HEADER TRONG SUỐT ==========
         (function () {
             var header = document.querySelector('header');
             if (!header) return;
@@ -715,7 +715,7 @@
             // Kiểm tra xem đang ở trang chủ không
             function isHomePage() {
                 var path = window.location.pathname.toLowerCase();
-                return path === '/' || path === '/home' || path === '/home/index' || path.endsWith('/');
+                return path === '/' || path === '/dashboard65130650' || path === '/dashboard65130650/index' || path.endsWith('/');
             }
 
             // Chỉ áp dụng transparent header ở trang chủ
@@ -774,7 +774,7 @@
                 }, 100);
             }
 
-            // Expose openModal to global scope for use in other scripts
+            // Công khai hàm openModal ra phạm vi toàn cục để sử dụng trong các script khác
             window.openModal = openModal;
 
             // Xử lý click
@@ -803,15 +803,15 @@
             });
         })();
 
-        // Smooth scroll for navbar links
+        // Cuộn mượt cho các liên kết thanh điều hướng
         (function () {
-            // Check if we're on the home page
+            // Kiểm tra xem có đang ở trang chủ không
             function isHomePage() {
                 var path = window.location.pathname.toLowerCase();
                 return path === '/' || path === '/home' || path === '/home/index' || path.endsWith('/');
             }
 
-            // Scroll to hash on page load (if on home page)
+            // Cuộn đến phần tử hash khi tải trang (nếu ở trang chủ)
             window.addEventListener('load', function() {
                 if (isHomePage() && window.location.hash) {
                     setTimeout(function() {
@@ -826,7 +826,7 @@
                 }
             });
 
-            // Handle navbar link clicks
+            // Xử lý sự kiện click liên kết thanh điều hướng
             document.addEventListener('click', function (e) {
                 var link = e.target.closest('[data-scroll-target]');
                 if (link) {
@@ -834,27 +834,27 @@
                     var targetSelector = link.getAttribute('data-scroll-target');
                     var href = link.getAttribute('href');
                     
-                    // Update active state
+                    // Cập nhật trạng thái active
                     document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('nav-link-active'));
                     if (link.classList.contains('nav-item')) {
                         link.classList.add('nav-link-active');
                     }
                     
                     if (isHomePage()) {
-                        // We're on home page, scroll directly
+                        // Đang ở trang chủ, cuộn trực tiếp
                         var targetElement = document.querySelector(targetSelector);
                         if (targetElement) {
                             targetElement.scrollIntoView({
                                 behavior: 'smooth',
                                 block: 'start'
                             });
-                            // Update URL hash without jumping
+                            // Cập nhật URL hash mà không bị giật
                             if (history.pushState) {
                                 history.pushState(null, null, targetSelector);
                             }
                         }
                     } else {
-                        // We're on another page, navigate to home with hash
+                        // Đang ở trang khác, chuyển hướng về trang chủ kèm hash
                         if (href) {
                             window.location.href = href;
                         }
@@ -862,22 +862,22 @@
                 }
             });
 
-            // Set initial active state based on URL/Hash
+            // Thiết lập trạng thái active ban đầu dựa trên URL/Hash
             function updateActiveLink() {
                 var path = window.location.pathname.toLowerCase();
                 var hash = window.location.hash;
                 
-                // Clear all active
+                // Xóa tất cả trạng thái active
                 document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('nav-link-active'));
 
-                // Handle Room list page specifically
+                // Xử lý riêng cho trang danh sách phòng
                 if (path.includes('/room65130650')) {
                     var roomLink = document.querySelector('.nav-item[data-scroll-target="#rooms"]');
                     if (roomLink) roomLink.classList.add('nav-link-active');
                     return;
                 }
 
-                // Handle sections on Home page via hash
+                // Xử lý các section trên trang chủ thông qua hash
                 if (hash) {
                     document.querySelectorAll('.nav-item').forEach(l => {
                         if (l.getAttribute('data-scroll-target') === hash) {
@@ -890,7 +890,7 @@
             window.addEventListener('hashchange', updateActiveLink);
             window.addEventListener('popstate', updateActiveLink);
 
-            // ScrollSpy with IntersectionObserver
+            // ScrollSpy sử dụng IntersectionObserver
             if (isHomePage()) {
                 const observerOptions = {
                     root: null,
@@ -900,7 +900,7 @@
 
                 const observer = new IntersectionObserver((entries) => {
                     entries.forEach(entry => {
-                        // Only update if we don't have a hash-triggered active link (optional)
+                        // Chỉ cập nhật nếu không có liên kết active do hash kích hoạt (tùy chọn)
                         if (entry.isIntersecting) {
                             const id = '#' + entry.target.id;
                             document.querySelectorAll('.nav-item').forEach(link => {
@@ -924,18 +924,18 @@
             }
         })();
 
-        // Handle booking button clicks - check authentication
+        // Xử lý click nút đặt phòng - kiểm tra xác thực
         (function () {
             document.addEventListener('click', function (e) {
-                // 1. If it's a scroll button (like the Banner button), ignore authentication check
+                // 1. Nếu là nút cuộn (như nút Banner), bỏ qua kiểm tra xác thực
                 if (e.target.closest('[data-scroll-target]')) {
                     return;
                 }
 
-                // Check if clicked element is a booking button
+                // Kiểm tra xem phần tử được click có phải là nút đặt phòng không
                 var bookingBtn = e.target.closest('.btn-book, .btn-book-now, .btn-book-room');
                 
-                // Fallback for generic primary buttons with booking text
+                // Fallback cho các nút chính chung chung có văn bản đặt phòng
                 if (!bookingBtn) {
                     var primaryBtn = e.target.closest('.btn-primary');
                     if (primaryBtn && (primaryBtn.textContent.includes('Đặt phòng') || primaryBtn.textContent.includes('Đặt ngay'))) {
@@ -950,9 +950,9 @@
                             openModal('login');
                         }
                     } else {
-                        // User is logged in
-                        // If it's an <a> tag, navigation will happen naturally (RoomDetail will handle autoOpenBooking)
-                        // If it's a <button> in RoomDetail, it has its own event listener to open booking modal
+                        // Người dùng đã đăng nhập
+                        // Nếu là thẻ <a>, điều hướng sẽ diễn ra tự nhiên (RoomDetail sẽ xử lý autoOpenBooking)
+                        // Nếu là thẻ <button> trong RoomDetail, nó có trình lắng nghe sự kiện riêng để mở modal đặt phòng
                     }
                 }
             });

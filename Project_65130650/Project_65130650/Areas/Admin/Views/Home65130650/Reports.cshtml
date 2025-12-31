@@ -12,7 +12,7 @@
     </div>
 
     <div class="reports-grid">
-        <!-- Revenue Report -->
+        <!-- Báo cáo Doanh thu -->
         <div class="report-card">
             <div class="report-icon" style="background: linear-gradient(135deg, #0d4ea6 0%, #173b75 100%);">
                 <i class="fas fa-chart-bar"></i>
@@ -22,7 +22,7 @@
             <button class="btn btn-outline" onclick="openModal('revenueModal')">Xem báo cáo</button>
         </div>
 
-        <!-- Occupancy Report -->
+        <!-- Báo cáo Tỷ lệ lấp đầy -->
         <div class="report-card">
             <div class="report-icon" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">
                 <i class="fas fa-calendar-check"></i>
@@ -32,7 +32,7 @@
             <button class="btn btn-outline" onclick="openModal('occupancyModal')">Xem báo cáo</button>
         </div>
 
-        <!-- Customer Report -->
+        <!-- Báo cáo Khách hàng -->
         <div class="report-card">
             <div class="report-icon" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);">
                 <i class="fas fa-users"></i>
@@ -42,7 +42,7 @@
             <button class="btn btn-outline" onclick="openModal('customerModal')">Xem báo cáo</button>
         </div>
 
-        <!-- Service Report -->
+        <!-- Báo cáo Dịch vụ -->
         <div class="report-card">
             <div class="report-icon" style="background: linear-gradient(135deg, #0ea5e9 0%, #0d4ea6 100%);">
                 <i class="fas fa-concierge-bell"></i>
@@ -52,7 +52,7 @@
             <button class="btn btn-outline" onclick="openModal('serviceModal')">Xem báo cáo</button>
         </div>
 
-        <!-- Room Report -->
+        <!-- Báo cáo Phòng -->
         <div class="report-card">
             <div class="report-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">
                 <i class="fas fa-door-open"></i>
@@ -62,7 +62,7 @@
             <button class="btn btn-outline" onclick="openModal('roomModal')">Xem báo cáo</button>
         </div>
 
-        <!-- Payment Report -->
+        <!-- Báo cáo Thanh toán -->
         <div class="report-card">
             <div class="report-icon" style="background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);">
                 <i class="fas fa-money-bill-wave"></i>
@@ -74,7 +74,7 @@
     </div>
 </div>
 
-<!-- Modal Template Structure -->
+<!-- Cấu trúc Template Modal -->
 <div id="revenueModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -265,16 +265,16 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Data from ViewBag
+        // Dữ liệu từ ViewBag
         var monthlyRevenueData = @Html.Raw(Json.Encode(ViewBag.MonthlyRevenue));
         var topServicesData = @Html.Raw(Json.Encode(ViewBag.TopServices));
         var topRoomTypesData = @Html.Raw(Json.Encode(ViewBag.TopRoomTypes));
         var paymentStatsData = @Html.Raw(Json.Encode(ViewBag.PaymentStats));
         var currentOccupancyRate = @ViewBag.CurrentOccupancyRate;
 
-        // --- Charts Initialization ---
+        // --- Khởi tạo Biểu đồ ---
 
-        // 1. Revenue Chart
+        // 1. Biểu đồ Doanh thu
         var revenueCtx = document.getElementById('revenueChart').getContext('2d');
         new Chart(revenueCtx, {
             type: 'line',
@@ -292,7 +292,7 @@
             options: { responsive: true }
         });
 
-        // 2. Occupancy Chart (Pie)
+        // 2. Biểu đồ Tỷ lệ lấp đầy (Tròn)
         var occupancyCtx = document.getElementById('occupancyChart').getContext('2d');
         new Chart(occupancyCtx, {
             type: 'doughnut',
@@ -306,7 +306,7 @@
             options: { responsive: true }
         });
 
-        // 3. Service Chart (Bar)
+        // 3. Biểu đồ Dịch vụ (Cột)
         var serviceCtx = document.getElementById('serviceChart').getContext('2d');
         new Chart(serviceCtx, {
             type: 'bar',
@@ -321,7 +321,7 @@
             options: { responsive: true }
         });
 
-         // 4. Room Chart (Bar)
+         // 4. Biểu đồ Phòng (Cột)
         var roomCtx = document.getElementById('roomChart').getContext('2d');
         new Chart(roomCtx, {
             type: 'bar',
@@ -336,7 +336,7 @@
             options: { responsive: true, indexAxis: 'y' } 
         });
 
-        // 5. Payment Chart (Pie)
+        // 5. Biểu đồ Thanh toán (Tròn)
         var paymentCtx = document.getElementById('paymentChart').getContext('2d');
         new Chart(paymentCtx, {
             type: 'pie',
@@ -351,7 +351,7 @@
         });
 
 
-        // --- Modal Handling ---
+        // --- Xử lý Modal ---
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'block';
         }
@@ -386,7 +386,7 @@
         .btn-outline { background: white; color: #0d4ea6; border: 2px solid #0d4ea6; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; width: 100%; display: block; }
         .btn-outline:hover { background: #0d4ea6; color: white; }
 
-        /* Modal Styles */
+        /* Style Modal */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow: auto; }
         .modal-content { background-color: #fefefe; margin: 5% auto; padding: 0; border-radius: 12px; width: 90%; max-width: 800px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
         .modal-header { padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; }
@@ -395,7 +395,7 @@
         .close { color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
         .close:hover { color: #000; }
 
-        /* Table inside modal */
+        /* Bảng bên trong modal */
         .table-responsive { overflow-x: auto; }
         .data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .data-table th, .data-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }

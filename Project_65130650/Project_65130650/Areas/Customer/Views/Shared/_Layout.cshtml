@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Hotel Booking</title>
     
-    <!-- Google Fonts -->
+    <!-- Phông chữ Google -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -46,7 +46,7 @@
             flex-direction: column;
         }
 
-        /* Top Navigation Bar */
+        /* Thanh điều hướng trên cùng */
         .top-navbar {
             background: #ffffff;
             backdrop-filter: blur(8px);
@@ -67,7 +67,7 @@
             height: 80px;
         }
 
-        /* Logo */
+        /* Logo thương hiệu */
         .logo {
             display: flex;
             align-items: center;
@@ -109,7 +109,7 @@
             margin-top: 2px;
         }
 
-        /* Navigation Menu */
+        /* Menu điều hướng */
         .nav-menu {
             display: flex;
             align-items: center;
@@ -150,7 +150,7 @@
             color: var(--ocean-blue);
         }
 
-        /* User Section */
+        /* Phần người dùng */
         .user-section {
             display: flex;
             align-items: center;
@@ -257,7 +257,7 @@
             transform: rotate(180deg);
         }
 
-        /* User Dropdown */
+        /* Menu thả xuống người dùng */
         .user-dropdown {
             position: absolute;
             top: 100%;
@@ -330,7 +330,7 @@
             color: #ff4757;
         }
 
-        /* Main Content */
+        /* Nội dung chính */
         .main-content {
             flex: 1;
             max-width: 1400px;
@@ -339,7 +339,7 @@
             width: 100%;
         }
 
-        /* Footer */
+        /* Chân trang */
         .footer {
             background: #f8fafc;
             color: var(--text-dark);
@@ -423,7 +423,7 @@
             color: var(--text-medium);
         }
 
-        /* Responsive */
+        /* Thiết kế đáp ứng (Responsive) */
         @@media (max-width: 1024px) {
             .navbar-content {
                 padding: 0 20px;
@@ -456,7 +456,7 @@
             }
         }
 
-        /* Animations */
+        /* Hiệu ứng hoạt hình */
         @@keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -475,7 +475,7 @@
 </head>
 <body>
     <div class="customer-container">
-        <!-- Top Navigation -->
+        <!-- Thanh điều hướng trên cùng -->
         <header class="top-navbar">
             <div class="navbar-content">
                 <a href="@Url.Action("Index", "Home", new { area = "Customer" })" class="logo">
@@ -561,12 +561,12 @@
             </div>
         </header>
 
-        <!-- Main Content -->
+        <!-- Nội dung chính -->
         <main class="main-content">
             @RenderBody()
         </main>
 
-        <!-- Footer -->
+        <!-- Chân trang -->
         <footer class="footer">
             <div class="footer-content">
                 <div class="footer-section">
@@ -620,7 +620,7 @@
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Active menu based on current URL
+        // Kích hoạt menu dựa trên URL hiện tại
         $(document).ready(function() {
             var currentUrl = window.location.href;
             $('.nav-menu a').each(function() {

@@ -62,7 +62,7 @@
                         <input type="text" id="searchInput" value="@ViewBag.Search" placeholder="Tìm kiếm theo tên, email, số điện thoại">
                     </div>
                     <div class="filter-group">
-                        <!-- Role Dropdown -->
+                        <!-- Dropdown Vai trò -->
                         <div class="custom-dropdown" id="roleDropdownWrapper">
                             <button class="dropdown-btn">
                                 <span class="selected-text" id="roleText">
@@ -79,7 +79,7 @@
                             <input type="hidden" id="roleFilter" value="@ViewBag.Role">
                         </div>
 
-                        <!-- Status Dropdown -->
+                        <!-- Dropdown Trạng thái -->
                         <div class="custom-dropdown" id="statusDropdownWrapper">
                             <button class="dropdown-btn">
                                 <span class="selected-text" id="statusText">
@@ -183,7 +183,7 @@
                         </table>
                     </div>
 
-                    <!-- Pagination Controls -->
+                    <!-- Điều khiển phân trang -->
                     if (ViewBag.TotalPages > 1)
                     {
                         <div class="pagination-wrapper">
@@ -307,9 +307,9 @@
             </div>
             <div class="modal-body">
                 <div class="detail-grid" id="userDetails">
-                    <!-- Content loaded via JS -->
+                    <!-- Nội dung được tải qua JS -->
                 </div>
-                <!-- Booking History Section -->
+                <!-- Phần Lịch sử đặt phòng -->
                 <div id="bookingHistorySection" style="margin-top: 20px; display: none; border-top: 1px solid #eee; padding-top: 15px;">
                     <h4 style="margin-bottom: 15px; font-size: 16px; color: #111827;">Lịch sử đặt phòng gần đây</h4>
                     <div class="table-responsive">
@@ -529,7 +529,7 @@
                     min-width: 180px;
                 }
 
-            /* Custom Dropdown Styles */
+            /* Style Dropdown tùy chỉnh */
             .custom-dropdown {
                 position: relative;
                 display: inline-block;
@@ -567,7 +567,7 @@
                 transition: all 0.3s ease;
             }
 
-            /* Active state logic */
+            /* Logic trạng thái active */
             .custom-dropdown.active .dropdown-content {
                 display: block;
                 opacity: 1;
@@ -759,7 +759,7 @@
                 }
             }
 
-            /* Modal Styles */
+            /* Style Modal */
             .modal {
                 display: none;
                 position: fixed;
@@ -890,7 +890,7 @@
                 color: white;
             }
 
-            /* Pagination Styles */
+            /* Style Phân trang */
             .pagination-wrapper {
                 display: flex;
                 justify-content: center;
@@ -949,22 +949,22 @@
     @section scripts {
         <script>
             $(document).ready(function() {
-                // Auto focus search input
+                // Tự động focus vào input tìm kiếm
                 $('#searchInput').focus();
 
                 var $usersTable = $('#usersTable');
                 var hasTable = $usersTable.length > 0;
 
-                // Search functionality - auto search with debounce
+                // Chức năng tìm kiếm - tự động tìm kiếm với debounce
                 var searchTimeout;
                 $('#searchInput').on('input', function() {
                     clearTimeout(searchTimeout);
                     searchTimeout = setTimeout(function() {
                         performSearch();
-                    }, 500); // 500ms delay
+                    }, 500); // Trễ 500ms
                 });
 
-                // Toggle Dropdowns
+                // Chuyển đổi Dropdown
                 $('.dropdown-btn').on('click', function(e) {
                     e.stopPropagation();
                     var $parent = $(this).parent();
@@ -972,14 +972,14 @@
                     $parent.toggleClass('active');
                 });
 
-                // Close dropdowns when clicking outside
+                // Đóng dropdown khi click ra ngoài
                 $(document).on('click', function(e) {
                     if (!$(e.target).closest('.custom-dropdown').length) {
                         $('.custom-dropdown').removeClass('active');
                     }
                 });
 
-                // Handle Custom Dropdown Selection
+                // Xử lý chọn Dropdown tùy chỉnh
                 $('.filter-option').on('click', function() {
                     var type = $(this).data('type');
                     var value = $(this).data('value');
@@ -993,7 +993,7 @@
                         $('#statusText').text(text);
                     }
                     
-                    // Close dropdown
+                    // Đóng dropdown
                     $(this).closest('.custom-dropdown').removeClass('active');
                     
                     performSearch();
@@ -1058,7 +1058,7 @@
                     .fail(showAjaxError);
                 });
 
-                // Close modals when clicking outside
+                // Đóng modal khi click ra ngoài
                 window.onclick = function(event) {
                     if (event.target.className === 'modal') {
                         event.target.style.display = 'none';
@@ -1067,11 +1067,11 @@
             });
 
             function filterTable() {
-                // This function is no longer needed - using server-side filtering
+                // Hàm này không còn cần thiết - dùng lọc phía server
                 performSearch();
             }
 
-            // Modal management
+            // Quản lý Modal
             var currentUserId = '';
             var isEditMode = false;
 
@@ -1079,7 +1079,7 @@
                 isEditMode = false;
                 document.getElementById('modalTitle').textContent = 'Thêm người dùng mới';
                 document.getElementById('userForm').reset();
-                // Enable email for new user
+                // Bật email cho người dùng mới
                 document.getElementById('email').readOnly = false;
                 document.getElementById('maNguoiDung').value = '';
                 document.getElementById('passwordGroup').style.display = 'block';
@@ -1095,7 +1095,7 @@
                 document.getElementById('viewModal').style.display = 'none';
             }
 
-            // View User Details
+            // Xem chi tiết người dùng
             function viewUser(id) {
                 currentUserId = id;
                 var url = '@Url.Action("GetUserDetails", "Home65130650", new { area = "Admin" })';
@@ -1125,7 +1125,7 @@
                             $('#userDetails').html(html);
 
                             
-                            // Populate booking history
+                            // Điền lịch sử đặt phòng
                             if (d.bookings && d.bookings.length > 0) {
                                 var historyHtml = '';
                                 d.bookings.forEach(function(b) {
@@ -1159,7 +1159,7 @@
                     .fail(showAjaxError);
             }
 
-            // Edit User
+            // Chỉnh sửa người dùng
             function editUser(id) {
                 isEditMode = true;
                 currentUserId = id;
@@ -1178,13 +1178,13 @@
                             document.getElementById('maNguoiDung').value = d.maNguoiDung;
                             document.getElementById('hoTen').value = d.hoTen;
                             document.getElementById('email').value = d.email;
-                            // Disable email editing
+                            // Vô hiệu hóa chỉnh sửa email
                             document.getElementById('email').readOnly = true;
                             document.getElementById('soDienThoai').value = d.soDienThoai || '';
                             document.getElementById('gioiTinh').value = d.gioiTinh || '';
 
                             if (d.ngaySinh) {
-                                // Ensure date is yyyy-MM-dd
+                                // Đảm bảo ngày có định dạng yyyy-MM-dd
                                 document.getElementById('ngaySinh').value = d.ngaySinh;
                             } else {
                                 document.getElementById('ngaySinh').value = '';
@@ -1202,7 +1202,7 @@
                     .fail(showAjaxError);
             }
 
-            // Toggle Status
+            // Chuyển đổi trạng thái
             function toggleStatus(id) {
                 if(confirm('Bạn có chắc chắn muốn thay đổi trạng thái tài khoản này?')) {
                     var url = '@Url.Action("ToggleUserStatus", "Home65130650", new { area = "Admin" })';
@@ -1224,7 +1224,7 @@
                 }
             }
 
-            // Reset Password
+            // Đặt lại mật khẩu
             function resetPassword() {
                 var newPwd = prompt('Nhập mật khẩu mới (ít nhất 8 ký tự):');
                 if(newPwd) {

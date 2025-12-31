@@ -64,7 +64,7 @@ namespace Project_65130650
             routes.MapRoute(
                 name: "Home",
                 url: "",
-                defaults: new { controller = "Home", action = "Index" }
+                defaults: new { controller = "Dashboard65130650", action = "Index" }
             );
 
             /**
@@ -74,7 +74,7 @@ namespace Project_65130650
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Dashboard65130650", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

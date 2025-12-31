@@ -16,7 +16,7 @@
 
 @section Styles {
     <style>
-        /* Stats Cards */
+        /* Thẻ thống kê */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -94,7 +94,7 @@
             font-weight: 500;
         }
 
-        /* Booking Cards */
+        /* Thẻ đặt phòng */
         .booking-card {
             background: white;
             border-radius: 24px;
@@ -291,7 +291,7 @@
             cursor: not-allowed;
         }
 
-        /* Empty State */
+        /* Trạng thái trống */
         .empty-state {
             text-align: center;
             padding: 80px 20px;
@@ -340,7 +340,7 @@
             box-shadow: 0 12px 24px rgba(14, 165, 233, 0.3);
         }
 
-        /* Pagination */
+        /* Phân trang */
         .pagination-container {
             display: flex;
             justify-content: center;
@@ -601,7 +601,7 @@
             }
         }
 
-        /* Animation */
+        /* Hoạt ảnh */
         .reveal {
             opacity: 0;
             transform: translateY(20px);
@@ -618,13 +618,13 @@
 }
 
 <div class="py-12 px-4 max-w-6xl mx-auto">
-    <!-- Header -->
+    <!-- Tiêu đề -->
     <div class="mb-10 reveal">
         <h1 class="text-4xl font-bold text-slate-900 font-outfit mb-3">Đơn đặt phòng của tôi</h1>
         <p class="text-slate-500">Theo dõi và quản lý tất cả các lần đặt phòng của bạn tại Shearaton.</p>
     </div>
 
-    <!-- Stats Cards -->
+    <!-- Thẻ thống kê -->
     <div class="stats-grid reveal" style="animation-delay: 0.1s">
         <a href="@Url.Action("MyBookings", new { status = "all" })" class="stat-card all @(currentStatus == "all" ? "active" : "")">
             <div class="stat-icon">
@@ -675,7 +675,7 @@
         </a>
     </div>
 
-    <!-- Bookings List -->
+    <!-- Danh sách đặt phòng -->
     <div class="reveal" style="animation-delay: 0.2s">
         @if (Model != null && Model.Any())
         {
@@ -828,7 +828,7 @@
                 </div>
             }
 
-            <!-- Pagination -->
+            <!-- Phân trang -->
             if (ViewBag.TotalPages > 1)
             {
                 <div class="pagination-container">
@@ -976,11 +976,11 @@
 
 @section Scripts {
     <script>
-        // Show booking details modal
+        // Hiển thị modal chi tiết đặt phòng
         function showBookingDetails(bookingId) {
             document.getElementById('bookingDetailModal').classList.add('show');
             
-            // Fetch booking details
+            // Tải chi tiết đặt phòng
             fetch('@Url.Action("GetBookingDetails", "Home65130650")' + '?id=' + bookingId)
                 .then(response => response.json())
                 .then(result => {
@@ -1153,7 +1153,7 @@
             document.getElementById('bookingDetailModal').classList.remove('show');
         }
 
-        // Cancel booking
+        // Hủy đặt phòng
         function confirmCancelBooking(bookingId) {
             document.getElementById('cancelBookingId').value = bookingId;
             document.getElementById('cancelReason').value = '';
@@ -1225,7 +1225,7 @@
             return `${day}/${month}/${year}`;
         }
 
-        // Close modal on overlay click
+        // Đóng modal khi click vào overlay
         document.querySelectorAll('.modal-overlay').forEach(modal => {
             modal.addEventListener('click', function(e) {
                 if (e.target === this) {

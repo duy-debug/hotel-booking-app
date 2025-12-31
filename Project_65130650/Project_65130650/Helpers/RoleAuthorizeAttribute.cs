@@ -7,7 +7,7 @@ namespace Project_65130650.Helpers
 {
     public class RoleAuthorizeAttribute : AuthorizeAttribute
     {
-        public string RedirectController { get; set; } = "Home";
+        public string RedirectController { get; set; } = "Dashboard65130650";
         public string RedirectAction { get; set; } = "Index";
         public string RedirectArea { get; set; } = "";
 

@@ -4,10 +4,10 @@
 }
 
 <div class="rooms-page">
-    <!-- Page Header -->
+    <!-- Tiêu đề trang -->
     <div class="page-header">
         <nav class="breadcrumb">
-            <a href="@Url.Action("Index", "Home")"><i class="fas fa-home"></i> Trang chủ</a>
+            <a href="@Url.Action("Index", "Dashboard65130650")"><i class="fas fa-home"></i> Trang chủ</a>
             <span class="separator"><i class="fas fa-chevron-right"></i></span>
             <span class="current">Tất cả phòng</span>
         </nav>
@@ -15,10 +15,10 @@
         <p class="subtitle">Tìm thấy <strong>@Model.TotalItems</strong> loại phòng phù hợp</p>
     </div>
 
-    <!-- Search & Filter Bar (Horizontal) -->
+    <!-- Thanh Tìm kiếm & Bộ lọc (Ngang) -->
     <div class="filter-bar">
         <form method="get" action="@Url.Action("Index", "Room65130650")" class="filter-form" id="filterForm">
-            <!-- Search Box -->
+            <!-- Hộp tìm kiếm -->
             <div class="filter-item search-item">
                 <div class="search-input-wrapper">
                     <i class="fas fa-search"></i>
@@ -26,7 +26,7 @@
                 </div>
             </div>
 
-            <!-- Filter: Ngày nhận & trả -->
+            <!-- Bộ lọc: Ngày nhận & trả -->
             <div class="filter-item">
                 <label><i class="fas fa-calendar-alt"></i> Nhận phòng</label>
                 <div class="date-input-wrapper">
@@ -41,7 +41,7 @@
                 </div>
             </div>
 
-            <!-- Filter: Loại phòng - Custom Dropdown -->
+            <!-- Bộ lọc: Loại phòng - Dropdown tùy chỉnh -->
             <div class="filter-item">
                 <label><i class="fas fa-door-open"></i> Loại phòng</label>
                 <div class="custom-dropdown" data-name="loaiPhong">
@@ -62,7 +62,7 @@
                 </div>
             </div>
 
-            <!-- Filter: Trạng thái - Custom Dropdown -->
+            <!-- Bộ lọc: Trạng thái - Dropdown tùy chỉnh -->
             <div class="filter-item">
                 <label><i class="fas fa-info-circle"></i> Trạng thái</label>
                 <div class="custom-dropdown" data-name="status">
@@ -93,7 +93,7 @@
                 </div>
             </div>
 
-            <!-- Filter: Giá từ - Custom Dropdown -->
+            <!-- Bộ lọc: Giá từ - Dropdown tùy chỉnh -->
             <div class="filter-item">
                 <label><i class="fas fa-tag"></i> Giá từ</label>
                 <div class="custom-dropdown" data-name="minPrice">
@@ -112,7 +112,7 @@
                 </div>
             </div>
 
-            <!-- Filter: Giá đến - Custom Dropdown -->
+            <!-- Bộ lọc: Giá đến - Dropdown tùy chỉnh -->
             <div class="filter-item">
                 <label><i class="fas fa-tag"></i> Giá đến</label>
                 <div class="custom-dropdown" data-name="maxPrice">
@@ -131,7 +131,7 @@
                 </div>
             </div>
 
-            <!-- Filter: Số người - Custom Dropdown -->
+            <!-- Bộ lọc: Số người - Dropdown tùy chỉnh -->
             <div class="filter-item">
                 <label><i class="fas fa-users"></i> Số người</label>
                 <div class="custom-dropdown" data-name="minCapacity">
@@ -149,10 +149,10 @@
                 </div>
             </div>
 
-            <!-- Hidden input for sortOrder -->
+            <!-- Input ẩn cho sortOrder -->
             <input type="hidden" name="sortOrder" id="sortOrderInput" value="@Model.SortOrder" />
 
-            <!-- Buttons -->
+            <!-- Các nút -->
             <div class="filter-item filter-buttons">
                 <button type="submit" class="btn-filter">
                     <i class="fas fa-search"></i> Tìm kiếm
@@ -164,7 +164,7 @@
         </form>
     </div>
 
-    <!-- Sort Bar -->
+    <!-- Thanh sắp xếp -->
     <div class="sort-bar">
         <span class="sort-label"><i class="fas fa-sort"></i> Sắp xếp:</span>
         <div class="sort-buttons">
@@ -183,7 +183,7 @@
         </div>
     </div>
 
-    <!-- Room Grid -->
+    <!-- Lưới phòng -->
     <div class="rooms-grid-container">
         @if (Model.Rooms.Any())
         {
@@ -262,7 +262,7 @@
                                 <div class="room-actions">
                                     @if (room.TrangThaiHienThi == "Còn trống")
                                     {
-                                        <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong, checkIn = Model.CheckIn?.ToString("yyyy-MM-dd"), checkOut = Model.CheckOut?.ToString("yyyy-MM-dd"), autoOpenBooking = true })" 
+                                        <a href="@Url.Action("RoomDetail", "Dashboard65130650", new { id = room.MaLoaiPhong, checkIn = Model.CheckIn?.ToString("yyyy-MM-dd"), checkOut = Model.CheckOut?.ToString("yyyy-MM-dd"), autoOpenBooking = true })" 
                                            class="btn-book btn-book-now-shared"
                                            data-id="@room.MaLoaiPhong"
                                            data-name="@room.TenLoaiPhong"
@@ -279,7 +279,7 @@
                                             <i class="fas fa-ban"></i> @(room.TrangThaiHienThi == "Bảo trì" ? "Đặt phòng" : "Đặt phòng")
                                         </button>
                                     }
-                                    <a href="@Url.Action("RoomDetail", "Home", new { id = room.MaLoaiPhong, checkIn = Model.CheckIn?.ToString("yyyy-MM-dd"), checkOut = Model.CheckOut?.ToString("yyyy-MM-dd") })" class="btn-detail">
+                                    <a href="@Url.Action("RoomDetail", "Dashboard65130650", new { id = room.MaLoaiPhong, checkIn = Model.CheckIn?.ToString("yyyy-MM-dd"), checkOut = Model.CheckOut?.ToString("yyyy-MM-dd") })" class="btn-detail">
                                         <i class="fas fa-eye"></i> Chi tiết
                                     </a>
                                 </div>
@@ -332,7 +332,7 @@
         }
     </div>
 
-    <!-- Back Button -->
+    <!-- Nút quay lại -->
     <div class="back-section">
         <button onclick="window.history.back()" class="btn-back">
             <i class="fas fa-arrow-left"></i>
@@ -347,7 +347,7 @@
             padding: 20px 0;
         }
 
-        /* Page Header */
+        /* Tiêu đề trang */
         .page-header {
             margin-bottom: 24px;
         }
@@ -368,7 +368,7 @@
             color: #0d4ea6;
         }
 
-        /* Breadcrumb */
+        /* Thanh điều hướng */
         .breadcrumb {
             display: flex;
             align-items: center;
@@ -397,7 +397,7 @@
             color: #64748b;
         }
 
-        /* Filter Bar - Horizontal */
+        /* Thanh bộ lọc - Ngang */
         .filter-bar {
             background: #ffffff;
             border-radius: 16px;
@@ -406,7 +406,7 @@
             box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
         }
 
-        /* Sort Bar */
+        /* Thanh sắp xếp */
         .sort-bar {
             display: flex;
             align-items: center;
@@ -562,7 +562,7 @@
             width: 135px;
         }
 
-        /* Custom Dropdown */
+        /* Dropdown tùy chỉnh */
         .custom-dropdown {
             position: relative;
             min-width: 180px;
@@ -670,7 +670,7 @@
             color: #bfdbfe;
         }
 
-        /* Scrollbar for dropdown */
+        /* Thanh cuộn cho dropdown */
         .dropdown-options::-webkit-scrollbar {
             width: 6px;
         }
@@ -735,7 +735,7 @@
             color: #475569;
         }
 
-        /* Rooms Grid */
+        /* Lưới hiển thị phòng */
         .rooms-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -888,7 +888,7 @@
             background: #0b3f84;
         }
 
-        /* Pagination */
+        /* Phân trang */
         .pagination {
             display: flex;
             justify-content: center;
@@ -934,7 +934,7 @@
             color: #94a3b8;
         }
 
-        /* No Results */
+        /* Không có kết quả */
         .no-results {
             text-align: center;
             padding: 80px 40px;
@@ -999,7 +999,7 @@
                 color: #0f172a;
             }
 
-        /* Responsive */
+        /* Responsive (Thích ứng) */
         @@media (max-width: 1200px) {
             .rooms-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -1061,7 +1061,7 @@
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Custom Dropdown Logic
+            // Xử lý Logic Dropdown Tùy chỉnh
             var dropdowns = document.querySelectorAll('.custom-dropdown');
 
             dropdowns.forEach(function (dropdown) {
@@ -1070,11 +1070,11 @@
                 var hiddenInput = dropdown.querySelector('input[type="hidden"]');
                 var optionItems = dropdown.querySelectorAll('.dropdown-option');
 
-                // Toggle dropdown
+                // Bật tắt dropdown
                 selected.addEventListener('click', function (e) {
                     e.stopPropagation();
                     
-                    // Close other dropdowns
+                    // Đóng các dropdown khác
                     dropdowns.forEach(function (d) {
                         if (d !== dropdown) {
                             d.classList.remove('open');
@@ -1084,9 +1084,9 @@
                     dropdown.classList.toggle('open');
                 });
 
-                // Select option
+                // Chọn tùy chọn
                 optionItems.forEach(function (option) {
-                    // Mark selected option
+                    // Đánh dấu tùy chọn đã chọn
                     if (option.getAttribute('data-value') === hiddenInput.value) {
                         option.classList.add('selected');
                     }
@@ -1097,32 +1097,32 @@
                         var value = option.getAttribute('data-value');
                         var text = option.textContent.trim();
                         
-                        // Update hidden input
+                        // Cập nhật input ẩn
                         hiddenInput.value = value;
                         
-                        // Update displayed text
+                        // Cập nhật text hiển thị
                         selected.querySelector('span').textContent = text;
                         
-                        // Update selected state
+                        // Cập nhật trạng thái đã chọn
                         optionItems.forEach(function (o) {
                             o.classList.remove('selected');
                         });
                         option.classList.add('selected');
                         
-                        // Close dropdown
+                        // Đóng dropdown
                         dropdown.classList.remove('open');
                     });
                 });
             });
 
-            // Close dropdown when clicking outside
+            // Đóng dropdown khi click ra ngoài
             document.addEventListener('click', function () {
                 dropdowns.forEach(function (dropdown) {
                     dropdown.classList.remove('open');
                 });
             });
 
-            // Prevent dropdown from closing when clicking inside options
+            // Ngăn dropdown đóng khi click vào các tùy chọn bên trong
             document.querySelectorAll('.dropdown-options').forEach(function (options) {
                 options.addEventListener('click', function (e) {
                     e.stopPropagation();

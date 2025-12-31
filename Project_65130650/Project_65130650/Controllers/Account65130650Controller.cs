@@ -29,7 +29,7 @@ namespace Project_65130650.Controllers
             // Nếu người dùng đã đăng nhập rồi thì chuyển về trang chủ
             if (User.Identity.IsAuthenticated)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard65130650");
             }
 
             ViewBag.ReturnUrl = returnUrl;
@@ -109,7 +109,7 @@ namespace Project_65130650.Controllers
             // Xác định URL chuyển hướng dựa trên vai trò người dùng
             string redirectUrl = user.vaiTro == "Quản trị"
                 ? Url.Action("Index", "Home65130650", new { area = "Admin" })
-                : Url.Action("Index", "Home", new { area = "" });
+                : Url.Action("Index", "Dashboard65130650", new { area = "" });
 
             return Json(new { success = true, redirectUrl = redirectUrl });
         }
@@ -163,7 +163,7 @@ namespace Project_65130650.Controllers
             if (role == "Quản trị")
                 return RedirectToAction("Index", "Home65130650", new { area = "Admin" });
             
-            return RedirectToAction("Index", "Home", new { area = "" });
+            return RedirectToAction("Index", "Dashboard65130650", new { area = "" });
         }
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace Project_65130650.Controllers
                 Response.Cookies.Add(cookie);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard65130650");
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace Project_65130650.Controllers
                     // Lưu mã xác nhận và thời gian hết hạn vào Session
                     Session["ResetEmail"] = model.Email;
                     Session["ResetCode"] = verificationCode;
-                    Session["ResetCodeExpiry"] = DateTime.Now.AddMinutes(5); // Hết hạn sau 5 phút
+                    Session["ResetCodeExpiry"] = DateTime.Now.AddMinutes(1); // Hết hạn sau 1 phút
 
                     // Soạn nội dung email (Sử dụng HTML để định dạng đẹp)
                     string subject = "Mã xác nhận khôi phục mật khẩu";

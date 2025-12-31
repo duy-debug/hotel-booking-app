@@ -11,9 +11,12 @@ namespace Project_65130650.Controllers
 {
     public class Room65130650Controller : Controller
     {
+        // Khởi tạo context database
         private readonly Model65130650DbContext _db = new Model65130650DbContext();
 
-        // GET: Room
+        /// <summary>
+        /// GET: Index - Trang danh sách phòng với chức năng tìm kiếm, lọc và phân trang
+        /// </summary>
         public ActionResult Index(string search, string loaiPhong, decimal? minPrice, decimal? maxPrice, int? minCapacity, string sortOrder, string status, string checkIn, string checkOut, int page = 1)
         {
             int pageSize = 9; 
@@ -226,6 +229,9 @@ namespace Project_65130650.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Giải phóng tài nguyên database khi controller bị hủy
+        /// </summary>
         protected override void Dispose(bool disposing)
         {
             if (disposing)

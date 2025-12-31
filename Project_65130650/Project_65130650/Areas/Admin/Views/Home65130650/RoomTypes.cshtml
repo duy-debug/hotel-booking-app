@@ -24,7 +24,7 @@
                     <input type="text" id="searchInput" value="@ViewBag.Search" placeholder="Tìm kiếm loại phòng">
                 </div>
                 <div class="filter-group">
-                    <!-- Availability Custom Dropdown -->
+                    <!-- Dropdown tùy chỉnh tình trạng -->
                     <div class="custom-dropdown" id="availabilityDropdown">
                         <button class="dropdown-btn">
                             <span class="selected-text" id="availabilityText">
@@ -109,7 +109,7 @@
                     </table>
                 </div>
 
-                <!-- Pagination Controls -->
+                <!-- Điều khiển phân trang -->
                 @if (ViewBag.TotalPages > 1)
                 {
                     <div class="pagination-wrapper">
@@ -149,7 +149,7 @@
     </div>
 </div>
 
-<!-- Add/Edit Room Type Modal -->
+<!-- Modal Thêm/Sửa Loại phòng -->
 <div id="roomTypeModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -236,7 +236,7 @@
     </div>
 </div>
 
-<!-- View Detail Modal -->
+<!-- Modal Xem chi tiết -->
 <div id="viewModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
@@ -245,7 +245,7 @@
         </div>
         <div class="modal-body">
             <div id="roomTypeDetails">
-                <!-- Content loaded via JS -->
+                <!-- Nội dung được tải qua JS -->
             </div>
              <div class="text-right mt-3">
                 <button type="button" class="btn btn-secondary" onclick="closeViewModal()">Đóng</button>
@@ -275,7 +275,7 @@
         .search-box i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
         .search-box input { width: 100%; height: 46px; padding: 0 16px 0 44px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; transition: all 0.3s ease; }
 
-        /* Custom Dropdown Styles */
+        /* Style Dropdown tùy chỉnh */
         .custom-dropdown { position: relative; display: inline-block; min-width: 160px; }
         .dropdown-btn { width: 100%; height: 46px; padding: 0 16px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 14px; color: #374151; transition: all 0.2s; }
         .dropdown-content { display: none; position: absolute; background-color: white; min-width: 100%; box-shadow: 0 8px 16px rgba(0,0,0,0.1); border-radius: 8px; z-index: 100; margin-top: 5px; padding: 5px 0; border: 1px solid #f3f4f6; opacity: 0; transform: translateY(-10px); transition: all 0.3s ease; }
@@ -283,7 +283,7 @@
         .dropdown-content a { color: #374151; padding: 10px 16px; text-decoration: none; display: block; font-size: 14px; transition: background 0.2s; }
         .dropdown-content a:hover { background-color: #f0f9ff; color: #0d4ea6; }
         
-        /* Table Styles */
+        /* Style Bảng */
         .table-responsive { overflow-x: auto; }
         .data-table { width: 100%; border-collapse: collapse; }
         .data-table thead { background: #f9fafb; position: sticky; top: 0; z-index: 10; }
@@ -306,14 +306,14 @@
         .btn-icon.btn-success { background: #dcfce7; color: #16a34a; }
         .btn-icon.btn-success:hover { background: #16a34a; color: white; }
 
-        /* Pagination Styles */
+        /* Style Phân trang */
         .pagination-wrapper { display: flex; justify-content: center; align-items: center; padding: 20px 0; border-top: 1px solid #e5e7eb; margin-top: auto; }
         .pagination-controls { display: flex; gap: 4px; }
         .pagination-btn { display: flex; align-items: center; justify-content: center; min-width: 36px; height: 36px; padding: 0 8px; border: 1px solid #e5e7eb; border-radius: 6px; background: white; color: #374151; text-decoration: none; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; }
         .pagination-btn:hover { background: #f0f9ff; border-color: #0d4ea6; color: #0d4ea6; }
         .pagination-btn.current { background: #0d4ea6; border-color: #0d4ea6; color: white; }
 
-        /* Modal Styles */
+        /* Style Modal */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow: auto; }
         .modal-content { background-color: #fefefe; margin: 5% auto; padding: 0; border-radius: 12px; width: 90%; max-width: 600px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); max-height: 85vh; overflow-y: auto;}
         .modal-header { padding: 20px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; z-index: 10; }
@@ -345,7 +345,7 @@
     <script>
         var isEditMode = false;
 
-        // Populate search/filter
+        // Thực hiện tìm kiếm/lọc
         function performSearch(page = 1) {
             var search = $('#searchInput').val();
             var availability = $('#availabilityFilter').val();
@@ -361,12 +361,12 @@
                     availability: availability
                 },
                 success: function(result) {
-                    // Extract new content and update table container
+                    // Trích xuất nội dung mới và cập nhật container bảng
                     var newContent = $(result).find('#tableContainer').html();
                     if (newContent) {
                          $('#tableContainer').html(newContent);
                     } else {
-                        // Fallback if extraction fails
+                        // Fallback nếu trích xuất thất bại
                          location.reload(); 
                     }
                 },
@@ -380,7 +380,7 @@
             performSearch(page);
         }
 
-        // Search debounce
+        // Tìm kiếm Debounce
         var searchTimer;
         $('#searchInput').on('input', function() {
             clearTimeout(searchTimer);
@@ -389,7 +389,7 @@
             }, 500);
         });
 
-        // Dropdown toggle
+        // Chuyển đổi Dropdown
         $('.dropdown-btn').on('click', function(e) {
             e.stopPropagation();
             var $parent = $(this).parent();
@@ -416,7 +416,7 @@
             $(this).closest('.custom-dropdown').removeClass('active');
         });
 
-        // Modal Controls
+        // Điều khiển Modal
         function openAddModal() {
             isEditMode = false;
             document.getElementById('modalTitle').textContent = 'Thêm loại phòng mới';
@@ -442,7 +442,7 @@
             }
         }
 
-        // Preview Image on Change
+        // Xem trước ảnh khi thay đổi
         function previewImage(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -455,7 +455,7 @@
             }
         }
 
-        // Add/Update Room Type
+        // Thêm/Cập nhật Loại phòng
         $('#roomTypeForm').on('submit', function(e) {
             e.preventDefault();
             var url = isEditMode
@@ -485,7 +485,7 @@
             });
         });
 
-        // View Room Type
+        // Xem Loại phòng
         function viewRoomType(id) {
             $.ajax({
                 url: '@Url.Action("GetRoomTypeDetails", "Home65130650", new { area = "Admin" })',
@@ -495,7 +495,7 @@
                     if(res.success) {
                         var d = res.data;
                         
-                        // Handle image path logic: if just filename, assume /images/
+                        // Xử lý logic đường dẫn ảnh: nếu chỉ có tên file, giả định /images/
                         var imgSrc = d.hinhAnh;
                         if (imgSrc && !imgSrc.startsWith('/') && !imgSrc.startsWith('http')) {
                             imgSrc = '/images/' + imgSrc;
@@ -526,7 +526,7 @@
             });
         }
 
-        // Edit Room Type
+        // Chỉnh sửa Loại phòng
         function editRoomType(id) {
             isEditMode = true;
             $.ajax({
@@ -547,7 +547,7 @@
                         document.getElementById('trangThaiHoatDong').value = (d.trangThaiHoatDong === true || d.trangThaiHoatDong === 'true' || d.trangThaiHoatDong === null) ? 'true' : 'false';
                         document.getElementById('moTa').value = d.moTa || '';
                         
-                        // Handle Image Preview if exists
+                        // Xử lý xem trước ảnh nếu có
                         var imgPreview = document.getElementById('imagePreview');
                         var img = imgPreview.getElementsByTagName('img')[0];
                         
@@ -572,7 +572,7 @@
             });
         }
 
-        // Toggle Status
+        // Chuyển đổi Trạng thái
         function toggleStatus(id) {
             if (confirm('Bạn có chắc chắn muốn thay đổi trạng thái hoạt động của loại phòng này?')) {
                 $.ajax({

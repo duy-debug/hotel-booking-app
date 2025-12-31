@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Admin Compact Styles -->
+    <!-- Style Admin Gọn gàng -->
     <link rel="stylesheet" href="@Url.Content("~/Content/admin-compact.css")">
     
     <style>
@@ -42,7 +42,7 @@
             overflow-x: hidden;
         }
 
-        /* Subtle Background Accent */
+        /* Điểm nhấn nền tinh tế */
         body::before {
             content: '';
             position: fixed;
@@ -66,7 +66,7 @@
             z-index: 1;
         }
 
-        /* Sidebar */
+        /* Thanh bên */
         .sidebar {
             width: 240px;
             background: var(--sidebar-bg);
@@ -158,14 +158,14 @@
             box-shadow: 0 0 0 1px rgba(14, 165, 233, 0.2);
         }
 
-        /* Main Content */
+        /* Nội dung chính */
         .main-content {
             flex: 1;
             margin-left: 240px;
             transition: all 0.3s ease;
         }
 
-        /* Top Bar */
+        /* Thanh trên cùng */
         .top-bar {
             background: #ffffff;
             backdrop-filter: blur(8px);
@@ -300,7 +300,7 @@
             transition: transform 0.3s ease;
         }
 
-        /* Dropdown Menu */
+        /* Menu thả xuống */
         .profile-dropdown {
             position: absolute;
             top: 100%;
@@ -348,13 +348,13 @@
             padding-left: 25px;
         }
 
-        /* Content Area */
+        /* Khu vực nội dung */
         .content-area {
             padding: 20px 24px;
             min-height: calc(100vh - 60px);
         }
 
-        /* Responsive */
+        /* Thích ứng (Responsive) */
         @@media (max-width: 1024px) {
             .sidebar {
                 transform: translateX(-240px);
@@ -369,7 +369,7 @@
             }
         }
 
-        /* Animations */
+        /* Hiệu ứng hoạt hình */
         @@keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -389,7 +389,7 @@
 </head>
 <body>
     <div class="admin-container">
-        <!-- Sidebar -->
+        <!-- Thanh bên -->
         <aside class="sidebar">
             <div class="logo-section">
                 <a href="@Url.Action("Index", "Home65130650", new { area = "Admin" })" style="text-decoration: none;">
@@ -463,9 +463,9 @@
             </nav>
         </aside>
 
-        <!-- Main Content -->
+        <!-- Nội dung chính -->
         <main class="main-content">
-            <!-- Top Bar -->
+            <!-- Thanh trên cùng -->
             <header class="top-bar">
                 <div class="top-bar-left">
                     <h1>@ViewBag.Title</h1>
@@ -500,7 +500,7 @@
                 </div>
             </header>
             
-            <!-- Content Area -->
+            <!-- Khu vực nội dung -->
             <div class="content-area">
                 @RenderBody()
             </div>
@@ -516,7 +516,7 @@
         }
     </script>
     <script>
-        // Active menu item logic moved to server-side (Razor) to prevent UI jumping
+        // Logic mục menu hoạt động đã chuyển sang phía máy chủ (Razor) để ngăn giao diện bị nhảy
     </script>
     @RenderSection("scripts", required: false)
 </body>

@@ -126,7 +126,7 @@ namespace Project_65130650.Areas.Admin.Controllers
             int pageSize = 10;
             var query = _db.DatPhongs.AsQueryable();
 
-            // Filter by Search (Booking ID, Customer Name, Phone, Room Number)
+            // Lọc theo Tìm kiếm (Mã DP, Tên khách, SĐT, Số phòng)
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(dp => 
@@ -136,7 +136,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                     (dp.Phong != null && dp.Phong.soPhong.Contains(search)));
             }
 
-            // Filter by Status
+            // Lọc theo Trạng thái
             if (!string.IsNullOrEmpty(status))
             {
                 query = query.Where(dp => dp.trangThaiDatPhong == status);
@@ -144,7 +144,7 @@ namespace Project_65130650.Areas.Admin.Controllers
 
 
 
-            // Pagination
+            // Phân trang
             var totalItems = query.Count();
             var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
@@ -157,14 +157,14 @@ namespace Project_65130650.Areas.Admin.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            // Set pagination ViewBag properties
+            // Thiết lập các thuộc tính ViewBag phân trang
             ViewBag.Page = page;
             ViewBag.TotalPages = totalPages;
             ViewBag.CurrentPage = page;
             ViewBag.Search = search;
             ViewBag.Status = status;
 
-            // Stats - Count all bookings by status (not filtered)
+            // Thống kê - Đếm tất cả đơn đặt phòng theo trạng thái (không lọc)
             ViewBag.TotalBookings = _db.DatPhongs.Count();
             ViewBag.PendingBookingsCount = _db.DatPhongs.Count(dp => dp.trangThaiDatPhong == "Chờ xác nhận");
             ViewBag.ConfirmedBookingsCount = _db.DatPhongs.Count(dp => dp.trangThaiDatPhong == "Đã xác nhận");
@@ -187,7 +187,7 @@ namespace Project_65130650.Areas.Admin.Controllers
             var booking = _db.DatPhongs.Find(id);
             if (booking == null) return Json(new { success = false, error = "Không tìm thấy" }, JsonRequestBehavior.AllowGet);
 
-            // Calculate total service amount
+            // Tính tổng tiền dịch vụ
             decimal totalService = 0;
             if (booking.DichVuDatPhongs != null)
             {
@@ -207,20 +207,20 @@ namespace Project_65130650.Areas.Admin.Controllers
             {
                 success = true,
                 maDatPhong = booking.maDatPhong,
-                customerName = booking.NguoiDung?.hoTen, // Fix: JS expects customerName
-                customerPhone = booking.NguoiDung?.soDienThoai, // Fix: JS expects customerPhone
-                roomNumber = booking.Phong?.soPhong, // Fix: JS expects roomNumber
+                customerName = booking.NguoiDung?.hoTen, // Sửa: JS mong đợi customerName
+                customerPhone = booking.NguoiDung?.soDienThoai, // Sửa: JS mong đợi customerPhone
+                roomNumber = booking.Phong?.soPhong, // Sửa: JS mong đợi roomNumber
                 loaiPhong = booking.Phong?.LoaiPhong?.tenLoaiPhong,
                 roomPrice = booking.Phong?.LoaiPhong?.giaCoBan ?? 0, // Giá cơ bản/đêm
-                ngayNhanPhong = booking.ngayNhanPhong.ToString("dd/MM/yyyy"), // Fix: JS expects ngayNhanPhong
-                ngayTraPhong = booking.ngayTraPhong.ToString("dd/MM/yyyy"), // Fix: JS expects ngayTraPhong
+                ngayNhanPhong = booking.ngayNhanPhong.ToString("dd/MM/yyyy"), // Sửa: JS mong đợi ngayNhanPhong
+                ngayTraPhong = booking.ngayTraPhong.ToString("dd/MM/yyyy"), // Sửa: JS mong đợi ngayTraPhong
                 ngayHuy = booking.ngayHuy.HasValue ? booking.ngayHuy.Value.ToString("dd/MM/yyyy HH:mm") : "",
                 lyDoHuy = booking.lyDoHuy,
                 tienPhong = booking.tienPhong,
                 totalServiceAmount = totalService,
-                totalPaid = daThanhToan, // Fix: JS expects totalPaid
+                totalPaid = daThanhToan, // Sửa: JS mong đợi totalPaid
                 trangThai = booking.trangThaiDatPhong,
-                services = booking.DichVuDatPhongs?.Select(dv => new { // Fix: JS expects services
+                services = booking.DichVuDatPhongs?.Select(dv => new { // Sửa: JS mong đợi services
                     tenDichVu = dv.DichVu.tenDichVu,
                     soLuong = dv.soLuong,
                     donGia = dv.donGia,
@@ -242,10 +242,10 @@ namespace Project_65130650.Areas.Admin.Controllers
                 var booking = _db.DatPhongs.Find(id);
                 if (booking == null) return Json(new { success = false, error = "Không tìm thấy đơn đặt phòng" });
                 
-                // Allow status change logic
+                // Logic cho phép thay đổi trạng thái
                 
 
-                // VALIDATE CHECK-IN DATE
+                // KIỂM TRA NGÀY NHẬN PHÒNG
                 if (status == "Đã nhận phòng")
                 {
                     if (booking.ngayNhanPhong.Date > DateTime.Now.Date)
@@ -265,7 +265,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                     }
                 }
                 
-                // VALIDATE CHECK-OUT (MUST PAY FULLY)
+                // KIỂM TRA TRẢ PHÒNG (PHẢI THANH TOÁN ĐỦ)
                 if (status == "Đã trả phòng")
                 {
                     decimal totalService = 0;
@@ -299,7 +299,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                 booking.trangThaiDatPhong = status;
                 booking.ngayCapNhat = DateTime.Now;
 
-                // Update room status
+                // Cập nhật trạng thái phòng
                 if (booking.Phong != null)
                 {
                     if (status == "Đã nhận phòng") booking.Phong.trangThai = "Đang sử dụng";
@@ -333,8 +333,8 @@ namespace Project_65130650.Areas.Admin.Controllers
                 DateTime start = DateTime.Parse(checkIn);
                 DateTime end = DateTime.Parse(checkOut);
 
-                // Find rooms that have NO booking overlapping [start, end]
-                // Overlap: (BookStart < QueryEnd) AND (BookEnd > QueryStart)
+                // Tìm các phòng KHÔNG có đặt phòng trùng lặp trong khoảng [start, end]
+                // Trùng lặp: (Bắt đầu đặt < Kết thúc truy vấn) VÀ (Kết thúc đặt > Bắt đầu truy vấn)
                 
                 var bookedRoomIds = _db.DatPhongs
                     .Where(dp => 
@@ -371,21 +371,21 @@ namespace Project_65130650.Areas.Admin.Controllers
         /// </summary>
         private string GenerateId(string prefix, string tableName, string columnName, int padLength = 3)
         {
-            // Filter by prefix to ensure we increment the correct sequence (e.g. ignore NV001 when generating KHxxx)
+            // Lọc theo tiền tố để đảm bảo tăng đúng chuỗi (ví dụ: bỏ qua NV001 khi tạo KHxxx)
             var query = $"SELECT top 1 {columnName} FROM {tableName} WHERE {columnName} LIKE '{prefix}%' ORDER BY {columnName} DESC";
             var lastId = _db.Database.SqlQuery<string>(query).FirstOrDefault();
             
             int nextNumber = 1;
             if (!string.IsNullOrEmpty(lastId) && lastId.Length > prefix.Length)
             {
-                // Extract number part correctly even if mixed length
+                // Trích xuất phần số chính xác ngay cả khi độ dài hỗn hợp
                 string numPart = lastId.Substring(prefix.Length);
                 if (int.TryParse(numPart, out int n))
                 {
                     nextNumber = n + 1;
                 }
             }
-            // Format format string dynamically based on padLength, e.g. "D2", "D3"
+            // Định dạng chuỗi động dựa trên padLength, ví dụ: "D2", "D3"
             return prefix + nextNumber.ToString("D" + padLength); 
         }
 
@@ -399,7 +399,7 @@ namespace Project_65130650.Areas.Admin.Controllers
         {
             try
             {
-                // 1. Find or create customer
+                // 1. Tìm hoặc tạo khách hàng
                 var customer = _db.NguoiDungs.FirstOrDefault(u => u.soDienThoai == sdt);
                 if (customer == null)
                 {
@@ -424,7 +424,7 @@ namespace Project_65130650.Areas.Admin.Controllers
 
                 // ... (Các phần logic khác giữ nguyên, tôi chỉ replace phần đầu và phần service)
 
-                // 2. Validate room availability again
+                // 2. Xác thực lại tính khả dụng của phòng
                 DateTime start = DateTime.Parse(checkIn);
                 DateTime end = DateTime.Parse(checkOut);
                 
@@ -454,7 +454,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                 if (days < 1) days = 1;
                 decimal totalRoomPrice = roomPrice * days;
 
-                // 2.1 Calculate Service Price beforehand to validate deposit
+                // 2.1 Tính trước giá dịch vụ để xác thực tiền đặt cọc
                 decimal totalServicePrice = 0;
                 List<DichVuDatPhong> servicesToSave = new List<DichVuDatPhong>();
 
@@ -473,7 +473,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                             decimal lineTotal = dv.giaDichVu * qty;
                             totalServicePrice += lineTotal;
 
-                            // Prepare object to save later
+                            // Chuẩn bị đối tượng để lưu sau
                             servicesToSave.Add(new DichVuDatPhong
                             {
                                 maDichVu = sid,
@@ -501,7 +501,7 @@ namespace Project_65130650.Areas.Admin.Controllers
                      return Json(new { success = false, error = $"Tiền cọc ({tienCoc:N0}đ) không được lớn hơn Tổng tiền dự kiến ({grandTotal:N0}đ)." });
                 }
 
-                // 3. Create booking
+                // 3. Tạo đơn đặt phòng
                 // Sinh mã Đặt phòng: Lấy DP cao nhất + 1
                 var bookingId = GenerateId("DP", "DatPhong", "maDatPhong");
                  
@@ -514,21 +514,21 @@ namespace Project_65130650.Areas.Admin.Controllers
                     ngayNhanPhong = start,
                     ngayTraPhong = end,
                     soKhach = soKhach,
-                    tienPhong = totalRoomPrice, // FIX: Lưu tiền phòng (Giá * Ngày)
+                    tienPhong = totalRoomPrice, // SỬA: Lưu tiền phòng (Giá * Ngày)
                     tienDatCoc = tienCoc,
-                    trangThaiDatPhong = "Đã xác nhận", // Auto confirm for walk-in
+                    trangThaiDatPhong = "Đã xác nhận", // Tự động xác nhận cho khách vãng lai
                     yeuCauDacBiet = string.IsNullOrEmpty(yeuCauDacBiet) ? "Đặt trực tiếp tại quầy" : yeuCauDacBiet,
                     nguoiTao = Session["UserId"] as string, // Lấy Admin đang đăng nhập
                     ngayCapNhat = DateTime.Now
                 };
                 _db.DatPhongs.Add(booking);
                 
-                // No longer updating room status to 'Đã đặt' here as per requirement. 
-                // Availability is handled by date overlapping logic.
+                // Không cập nhật trạng thái phòng thành 'Đã đặt' ở đây theo yêu cầu. 
+                // Tính khả dụng được xử lý bởi logic trùng lặp ngày.
                 
                 _db.SaveChanges(); // Lưu booking và cập nhật trạng thái phòng
 
-                // 3.1 Save Services
+                // 3.1 Lưu Dịch vụ
                 foreach (var svc in servicesToSave)
                 {
                     // Sinh mã Dịch vụ đặt phòng: Lấy DVD cao nhất + 1 (DVDxx -> padLength=2) để tổng <= 5 char
@@ -536,17 +536,17 @@ namespace Project_65130650.Areas.Admin.Controllers
                     svc.maDichVuDatPhong = dvId;
                     svc.maDatPhong = booking.maDatPhong;
                     _db.DichVuDatPhongs.Add(svc);
-                    _db.SaveChanges(); // Save each to increment ID correctly
+                    _db.SaveChanges(); // Lưu từng cái để tăng ID chính xác
                 }
                 
                 // 4. Create payment if deposit > 0
-                // 4. Create payment if deposit > 0
+                // 4. Tạo thanh toán nếu tiền đặt cọc > 0
                 if (tienCoc > 0)
                 {
                     // Sinh mã Thanh toán: Lấy TT cao nhất + 1
                     var paymentId = GenerateId("TT", "ThanhToan", "maThanhToan");
                     
-                     // Safety check for length 5 (database constraint)
+                     // Kiểm tra an toàn cho độ dài 5 (ràng buộc cơ sở dữ liệu)
                     if (paymentId.Length > 5) 
                     {
                          // Fallback to shorter prefix if "TT" causes overflow (e.g., T9999)
@@ -554,14 +554,14 @@ namespace Project_65130650.Areas.Admin.Controllers
                          if (paymentId.Length > 5) return Json(new { success = false, error = "Hết số phiếu chi (Mã > 5 ký tự). Vui lòng liên hệ Admin." });
                     }
 
-                    // Check nguoiXuLy exists to avoid FK violation
+                    // Kiểm tra người xử lý tồn tại để tránh vi phạm khóa ngoại
                     string currentUser = Session["UserId"] as string;
                     if (string.IsNullOrEmpty(currentUser)) currentUser = "Admin";
                     
-                    // Verify if this user actually exists in DB
+                    // Xác minh xem người dùng này có thực sự tồn tại trong DB không
                     if (!_db.NguoiDungs.Any(u => u.maNguoiDung == currentUser))
                     {
-                        // Fallback to the first available Admin
+                        // Dự phòng Admin khả dụng đầu tiên
                         var firstAdmin = _db.NguoiDungs.FirstOrDefault(u => u.vaiTro == "Quản trị");
                         currentUser = firstAdmin != null ? firstAdmin.maNguoiDung : null;
                     }
@@ -622,25 +622,25 @@ namespace Project_65130650.Areas.Admin.Controllers
                 var booking = _db.DatPhongs.Find(maDatPhong);
                 if (booking == null) return Json(new { success = false, error = "Không tìm thấy đặt phòng" });
 
-                // Generate ID using Helper
+                // Tạo ID sử dụng Helper
                 var paymentId = GenerateId("TT", "ThanhToan", "maThanhToan");
                 
-                // Safety check for length 5 (database constraint)
+                // Kiểm tra an toàn cho độ dài 5 (ràng buộc cơ sở dữ liệu)
                 if (paymentId.Length > 5) 
                 {
-                     // Fallback to shorter prefix if "TT" causes overflow (e.g., T9999)
+                     // Dự phòng tiền tố ngắn hơn nếu "TT" gây tràn (ví dụ: T9999)
                      paymentId = GenerateId("T", "ThanhToan", "maThanhToan");
                      if (paymentId.Length > 5) return Json(new { success = false, error = "Hết số phiếu chi (Mã > 5 ký tự). Vui lòng liên hệ Admin." });
                 }
 
-                // Check nguoiXuLy exists to avoid FK violation
+                // Kiểm tra người xử lý tồn tại để tránh vi phạm khóa ngoại
                 string currentUser = Session["UserId"] as string;
                 if (string.IsNullOrEmpty(currentUser)) currentUser = "Admin";
                 
-                // Verify if this user actually exists in DB
+                // Xác minh xem người dùng này có thực sự tồn tại trong DB không
                 if (!_db.NguoiDungs.Any(u => u.maNguoiDung == currentUser))
                 {
-                    // Fallback to the first available Admin
+                    // Dự phòng Admin khả dụng đầu tiên
                     var firstAdmin = _db.NguoiDungs.FirstOrDefault(u => u.vaiTro == "Quản trị");
                     currentUser = firstAdmin != null ? firstAdmin.maNguoiDung : null;
                 }
@@ -749,10 +749,10 @@ namespace Project_65130650.Areas.Admin.Controllers
             if (page < 1) page = 1;
             if (pageSize < 1) pageSize = 10;
 
-            // Get all users for statistics
+            // Lấy tất cả người dùng để thống kê
             var allUsers = _db.NguoiDungs.ToList();
             
-            // Apply filters
+            // Áp dụng bộ lọc
             var filteredUsers = allUsers.AsQueryable();
             
             if (!string.IsNullOrEmpty(search))
@@ -784,19 +784,19 @@ namespace Project_65130650.Areas.Admin.Controllers
             
             var filteredList = filteredUsers.ToList();
             
-            // Calculate statistics from all users (not filtered)
+            // Tính toán thống kê từ tất cả người dùng (không lọc)
             ViewBag.TotalUsers = allUsers.Count;
             ViewBag.TotalAdmins = allUsers.Count(u => u.vaiTro == "Quản trị");
             ViewBag.TotalCustomers = allUsers.Count(u => u.vaiTro == "Khách hàng");
             ViewBag.TotalActive = allUsers.Count(u => u.trangThaiHoatDong == true || u.trangThaiHoatDong == null);
             ViewBag.TotalInactive = allUsers.Count(u => u.trangThaiHoatDong == false);
             
-            // Preserve search parameters for view
+            // Bảo lưu tham số tìm kiếm cho view
             ViewBag.Search = search;
             ViewBag.Role = role;
             ViewBag.Status = status;
 
-            // Pagination
+            // Phân trang
             var totalUsers = filteredList.Count;
             var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
             if (page > totalPages && totalPages > 0) page = totalPages;

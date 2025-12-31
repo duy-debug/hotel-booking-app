@@ -50,7 +50,7 @@
                     <input type="text" id="searchInput" value="@ViewBag.Search" placeholder="Tìm kiếm theo mã TT, mã ĐP, tên KH...">
                 </div>
                 <div class="filter-group">
-                    <!-- Status Filter -->
+                    <!-- Bộ lọc trạng thái -->
                     <div class="custom-dropdown" id="statusDropdown">
                         <button class="dropdown-btn" type="button">
                             <span class="selected-text" id="statusText">@(string.IsNullOrEmpty(ViewBag.Status) ? "Tất cả trạng thái" : ViewBag.Status)</span>
@@ -66,7 +66,7 @@
                         <input type="hidden" id="statusFilter" value="@ViewBag.Status">
                     </div>
 
-                    <!-- Method Filter -->
+                    <!-- Bộ lọc phương thức -->
                     <div class="custom-dropdown" id="methodDropdown">
                         <button class="dropdown-btn" type="button">
                             <span class="selected-text" id="methodText">@(string.IsNullOrEmpty(ViewBag.Method) ? "Tất cả phương thức" : ViewBag.Method)</span>
@@ -164,7 +164,7 @@
                         </table>
                     </div>
 
-                    <!-- Pagination -->
+                    <!-- Phân trang -->
                     if (ViewBag.TotalPages > 1)
                     {
                         <div class="pagination-wrapper">
@@ -299,11 +299,11 @@
         </div>
         <div class="modal-body">
             <div class="detail-grid" id="paymentDetails">
-                <!-- Loaded via JS -->
+                <!-- Tải qua JS -->
             </div>
             
             <div id="actionButtons" class="text-right mt-3" style="display:none; border-top: 1px solid #eee; padding-top: 15px;">
-                <!-- Confirm / Refund buttons injected here -->
+                <!-- Nút Xác nhận/Hoàn tiền được chèn vào đây -->
             </div>
         </div>
     </div>
@@ -336,7 +336,7 @@
         .filter-group { display: flex; gap: 10px; flex-wrap: wrap; }
         .form-select, .form-control { padding: 10px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 14px; }
         
-        /* Custom Dropdown Styles */
+        /* Style Dropdown tùy chỉnh */
         .custom-dropdown {
             position: relative;
             display: inline-block;
@@ -442,7 +442,7 @@
         .detail-item label { color: #6b7280; font-size: 13px; }
         .detail-item span { color: #111827; font-weight: 500; }
 
-        /* Pagination */
+        /* Phân trang */
         .pagination-wrapper { display: flex; justify-content: center; margin-top: auto; padding-top: 20px; }
         .pagination-controls { display: flex; gap: 5px; }
         .pagination-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border: 1px solid #e5e7eb; border-radius: 4px; text-decoration: none; color: #374151; }
@@ -455,14 +455,14 @@
 
 @section Scripts {
     <script>
-        // Debounce search
+        // Tìm kiếm Debounce
         var searchTimer;
         $('#searchInput').on('input', function() {
             clearTimeout(searchTimer);
             searchTimer = setTimeout(performSearch, 500);
         });
 
-        // Custom Dropdown interaction
+        // Tương tác Dropdown tùy chỉnh
         $(document).on('click', '.dropdown-btn', function(e) {
             e.stopPropagation();
             var $dropdown = $(this).closest('.custom-dropdown');
@@ -514,7 +514,7 @@
             performSearch(page);
         }
 
-        // Modal Logic
+        // Logic Modal
         function openCreateModal() {
             $('#createPaymentForm')[0].reset();
             $('#createModal').fadeIn(200);
@@ -529,14 +529,14 @@
             $('#viewModal').fadeOut(200);
         }
 
-        // Close on outside click
+        // Đóng khi click ra ngoài
         $(window).on('click', function(e) {
             if ($(e.target).is('.modal')) {
                 $('.modal').fadeOut(200);
             }
         });
 
-        // Load Debt Info
+        // Tải thông tin công nợ
         function loadDebtInfo(maDatPhong) {
              if (!maDatPhong) {
                  $('#debtInfo').slideUp();
@@ -570,7 +570,7 @@
              });
         }
 
-        // Submit Create Payment
+        // Gửi tạo thanh toán
         $('#createPaymentForm').on('submit', function(e) {
             e.preventDefault();
             var url = '@Url.Action("CreatePayment", "Home65130650", new { area = "Admin" })';
@@ -594,7 +594,7 @@
             });
         });
 
-        // View Payment Details
+        // Xem chi tiết thanh toán
         var currentPaymentId = '';
         function viewPayment(id) {
             currentPaymentId = id;
@@ -621,7 +621,7 @@
                         `;
                         $('#paymentDetails').html(html);
                         
-                        // Setup Actions based on status
+                        // Thiết lập hành động dựa trên trạng thái
                         var actionsHtml = '';
                         if (d.trangThaiThanhToan === 'Chờ xử lý') {
                             actionsHtml = `
@@ -672,7 +672,7 @@
                     if (res.success) {
                         alert(res.message);
                         closeViewModal();
-                        performSearch(); // Refresh list
+                        performSearch(); // Làm mới danh sách
                     } else {
                         alert(res.error);
                     }

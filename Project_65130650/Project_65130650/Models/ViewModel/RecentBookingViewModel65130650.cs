@@ -15,6 +15,10 @@ namespace Project_65130650.Models.ViewModel
         public DateTime NgayNhanPhong { get; set; }
         public DateTime NgayTraPhong { get; set; }
         public string TrangThaiDatPhong { get; set; }
+
+        /// <summary>
+        /// Ngày thực hiện booking (nullable)
+        /// </summary>
         public DateTime? NgayDat { get; set; }
     }
 }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Project_65130650.Models.ViewModels
 {
+    /// <summary>
+    /// ViewModel cho trang chi tiết loại phòng, bao gồm thông tin phòng, tiện nghi và hình ảnh
+    /// </summary>
     public class RoomDetailViewModel65130650
     {
         // Thông tin loại phòng
@@ -34,12 +37,12 @@ namespace Project_65130650.Models.ViewModels
             get
             {
                 if (string.IsNullOrEmpty(HinhAnh))
-                    return new List<string> { "~/Images/phonghangsang.jpeg" }; // Default image
+                    return new List<string> { "~/Images/phonghangsang.jpeg" }; // Ảnh mặc định
 
                 var images = new List<string>(HinhAnh.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries));
                 var normalizedImages = new List<string>();
                 
-                // Normalize each image path
+                // Chuẩn hóa đường dẫn hình ảnh
                 foreach (var img in images)
                 {
                     var trimmedImg = img.Trim();

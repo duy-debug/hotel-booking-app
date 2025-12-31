@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Project_65130650.Models.ViewModels
 {
+    /// <summary>
+    /// ViewModel tổng hợp cho trang danh sách phòng (gồm data phòng, bộ lọc, phân trang)
+    /// </summary>
     public class RoomListViewModel65130650
     {
         // Danh sách phòng (hiển thị theo loại phòng)
@@ -40,6 +43,9 @@ namespace Project_65130650.Models.ViewModels
         public bool HasNextPage => CurrentPage < TotalPages;
     }
 
+    /// <summary>
+    /// ViewModel biểu diễn một item phòng trong danh sách
+    /// </summary>
     public class RoomTypeItemViewModel65130650
     {
         public string MaLoaiPhong { get; set; }
@@ -59,6 +65,9 @@ namespace Project_65130650.Models.ViewModels
         public string TrangThaiHienThi { get; set; }
     }
 
+    /// <summary>
+    /// ViewModel cho item trong dropdown bộ lọc loại phòng
+    /// </summary>
     public class LoaiPhongFilterItem65130650
     {
         public string MaLoaiPhong { get; set; }

@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace Project_65130650.Models
 {
+    /// <summary>
+    /// Context kết nối cơ sở dữ liệu chính của ứng dụng
+    /// </summary>
     public partial class Model65130650DbContext : DbContext
     {
         public Model65130650DbContext()
